@@ -68,6 +68,16 @@ Implement deterministic event schemas, an LMSR-style AMM and compact limit-order
 
 All four can agree on simple JSON event envelopes for later integration, but no Wave 1 MVP depends on another repository. Each project should ship seeded fixtures, deterministic commands, invariant tests, and one end-to-end demo before adding adapters.
 
+## Published implementations
+
+The following repositories have passed an independent Codex review, their declared local quality gates, and a real end-to-end demo before publication:
+
+- [`entitlement-aware-ai-router`](https://github.com/shanyukollipara/entitlement-aware-ai-router) — 50 deterministic tests plus coverage, type, lint, validation, build, and routing demo gates.
+- [`local-privacy-egress-gateway`](https://github.com/shanyukollipara/local-privacy-egress-gateway) — 35 security-focused tests plus format, lint, type, packaging, and blocked/redacted egress demo gates.
+- [`screen-reader-regression-lab`](https://github.com/shanyukollipara/screen-reader-regression-lab) — 26 semantic interaction tests plus format, lint, type, build, and two-regression demo gates.
+- [`counterfactual-market-amm`](https://github.com/shanyukollipara/counterfactual-market-amm) — 29 mechanism/accounting tests plus deterministic 5,000-event data, type, lint, and counterfactual replay gates.
+- [`verifiable-agent-trail`](https://github.com/shanyukollipara/verifiable-agent-trail) — 30 integrity and replay tests plus format, lint, type, selective-disclosure, and tamper-detection demo gates.
+
 ## Full ranking
 
 | Rank | Repository | Domain | Score | Wave |
