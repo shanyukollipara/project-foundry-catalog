@@ -1,12 +1,12 @@
 # Project Foundry Catalog
 
-An offline-curated catalog of **100 technically deep, useful CS student projects**: exactly 10 projects in each of 10 domains. These are scoped as buildable systems with a concrete local vertical slice—not CRUD shells, generic dashboards, product clones, shallow model wrappers, or concepts that need a paid API to become demonstrable.
+An offline-curated catalog of **170 technically deep, useful CS student projects**: exactly 10 projects in each of 17 domains. These are scoped as buildable systems with a concrete local vertical slice—not CRUD shells, generic dashboards, product clones, shallow model wrappers, or concepts that need a paid API to become demonstrable.
 
 The machine-readable source of truth is [`catalog/projects.json`](catalog/projects.json). No application code is included in this repository.
 
 ## Quality bar and scoring
 
-Every entry must have a real user and problem, a differentiating technical thesis, 3–6 architectural components, at least three hard engineering problems, a runnable local-first MVP, a test strategy, and explicit data/API and safety constraints. An MVP must work from synthetic, local, or openly available data without an account secret. The catalog deliberately excludes the existing Robinhood agentic backtester.
+Every entry must have a real user and problem, a differentiating technical thesis, 3–6 architectural components, at least three hard engineering problems, a runnable local-first MVP, a deterministic demo, a test strategy, and explicit data/API and safety constraints. New extension entries also carry four numbered implementation milestones, an explicit dependency policy, a concrete risk, and a non-goal inside the existing schema fields. An MVP must work from synthetic, local, or openly available data without an account secret. The catalog deliberately excludes the existing Robinhood agentic backtester.
 
 Scores use a 1–10 scale:
 
@@ -24,7 +24,7 @@ weighted_score = 0.35 × usefulness_score
                + 0.15 × portfolio_signal_score
 ```
 
-Projects are ordered by descending weighted score; equal scores use ascending `repo_slug` as a deterministic tiebreaker. The weights reward software worth keeping while preserving a hard technical bar. A lower-ranked project can still be the better choice for a particular student's background or intended specialty.
+Ranks are append-only publication identifiers. The original 1–100 cohort retains its published order (which used descending weighted score and ascending `repo_slug` as its deterministic tiebreaker); the seven-domain extension occupies ranks 101–170 in stable ten-project domain cohorts and does not renumber the original catalog. Scores remain directly comparable across all entries, but rank is not a global score sort after the extension. The weights reward software worth keeping while preserving a hard technical bar. A lower-ranked project can still be the better choice for a particular student's background or intended specialty.
 
 ## Domain coverage
 
@@ -38,6 +38,13 @@ Projects are ordered by descending weighted score; equal scores use ascending `r
 - **Accessibility/personal computing:** nonvisual regression testing, adaptive input, private assistive computing, AAC, attention, and sensory access.
 - **Education/research tooling:** reproducibility, claim provenance, notebook state, misconception diagnosis, data lineage, and benchmark integrity.
 - **Climate/civic/local infrastructure:** energy, transit, water, public budgets, buildings, logistics, air, resilience, meetings, and heat.
+- **Programming languages/compilers:** incremental semantics, effect systems, verified rewrites, parsing recovery, ABI analysis, hygiene, and language-server determinism.
+- **Operating systems/runtime systems:** syscall virtualization, process replay, CPU and cache scheduling, runtime pressure control, isolation, and portable snapshots.
+- **Robotics/embedded systems:** calibration, estimation, real-time planning, runtime assurance, firmware updates, tactile sensing, and deterministic hardware simulation.
+- **Computational science/engineering:** adaptive discretization, interval analysis, uncertainty, sparse solvers, reproducible sampling, inverse problems, and conservation.
+- **Media/graphics systems:** codecs, color, procedural geometry, text shaping, audio restoration, GPU scheduling, spatial audio, and causal rendering diffs.
+- **Geospatial systems:** offline map matching, terrain visibility, topology repair, robust routing, raster storage, positioning, generalization, and uncertain geometry.
+- **Health/bioinformatics systems:** variant representation, temporal schedule verification, signal quality, provenance-safe timelines, private queries, and synthetic biological benchmarks.
 
 ## Build Wave 1
 
@@ -183,20 +190,101 @@ The following repositories have passed an independent Codex review, their declar
 | 98 | `sensory-environment-mapper` | accessibility/personal computing | 8.20 | |
 | 99 | `learned-index-benchlab` | databases/search | 8.15 | |
 | 100 | `phishing-behavior-range` | security/privacy | 7.85 | |
+| 101 | `incremental-query-compiler` | programming languages/compilers | 9.10 | |
+| 102 | `effect-capability-checker` | programming languages/compilers | 9.10 | |
+| 103 | `verified-bytecode-optimizer` | programming languages/compilers | 8.70 | |
+| 104 | `grammar-repair-parser` | programming languages/compilers | 8.65 | |
+| 105 | `profile-guided-wasm-specializer` | programming languages/compilers | 8.90 | |
+| 106 | `refactoring-proof-engine` | programming languages/compilers | 9.05 | |
+| 107 | `macro-expansion-debugger` | programming languages/compilers | 8.65 | |
+| 108 | `memory-layout-abi-auditor` | programming languages/compilers | 9.00 | |
+| 109 | `deterministic-language-server-core` | programming languages/compilers | 9.10 | |
+| 110 | `binary-lifting-analysis-lab` | programming languages/compilers | 8.70 | |
+| 111 | `userspace-kernel-sandbox` | operating systems/runtime systems | 9.05 | |
+| 112 | `deterministic-process-replayer` | operating systems/runtime systems | 9.20 | |
+| 113 | `scheduler-tail-latency-lab` | operating systems/runtime systems | 9.00 | |
+| 114 | `page-cache-policy-lab` | operating systems/runtime systems | 8.65 | |
+| 115 | `priority-inversion-explorer` | operating systems/runtime systems | 9.10 | |
+| 116 | `zero-copy-pipeline-profiler` | operating systems/runtime systems | 8.60 | |
+| 117 | `process-snapshot-migrator` | operating systems/runtime systems | 8.70 | |
+| 118 | `sandboxed-driver-runtime` | operating systems/runtime systems | 9.05 | |
+| 119 | `runtime-memory-pressure-controller` | operating systems/runtime systems | 8.90 | |
+| 120 | `syscall-contract-miner` | operating systems/runtime systems | 8.80 | |
+| 121 | `sensor-fusion-calibration-bench` | robotics/embedded systems | 9.05 | |
+| 122 | `real-time-motion-planner` | robotics/embedded systems | 9.05 | |
+| 123 | `fault-tolerant-robot-supervisor` | robotics/embedded systems | 9.15 | |
+| 124 | `embedded-power-budget-profiler` | robotics/embedded systems | 9.00 | |
+| 125 | `deterministic-hardware-loop-lab` | robotics/embedded systems | 8.85 | |
+| 126 | `multi-robot-coverage-simulator` | robotics/embedded systems | 8.70 | |
+| 127 | `safe-firmware-update-prover` | robotics/embedded systems | 9.60 | |
+| 128 | `tactile-signal-decoder` | robotics/embedded systems | 8.45 | |
+| 129 | `visual-inertial-odometry-lab` | robotics/embedded systems | 8.85 | |
+| 130 | `constraint-robot-calibrator` | robotics/embedded systems | 8.75 | |
+| 131 | `adaptive-pde-mesh-workbench` | computational science/engineering | 8.85 | |
+| 132 | `interval-numerics-auditor` | computational science/engineering | 9.25 | |
+| 133 | `differentiable-physics-checker` | computational science/engineering | 8.70 | |
+| 134 | `uncertainty-propagation-engine` | computational science/engineering | 9.35 | |
+| 135 | `sparse-solver-autotuner` | computational science/engineering | 8.95 | |
+| 136 | `reproducible-monte-carlo-kernel` | computational science/engineering | 9.10 | |
+| 137 | `inverse-problem-regularization-lab` | computational science/engineering | 9.10 | |
+| 138 | `conservation-law-simulator` | computational science/engineering | 8.55 | |
+| 139 | `floating-point-stability-forensics` | computational science/engineering | 8.95 | |
+| 140 | `multiphysics-coupling-orchestrator` | computational science/engineering | 8.85 | |
+| 141 | `perceptual-video-encoder-lab` | media/graphics systems | 8.70 | |
+| 142 | `color-pipeline-verifier` | media/graphics systems | 9.15 | |
+| 143 | `procedural-geometry-compiler` | media/graphics systems | 8.90 | |
+| 144 | `font-shaping-conformance-lab` | media/graphics systems | 9.05 | |
+| 145 | `audio-restoration-workbench` | media/graphics systems | 9.00 | |
+| 146 | `gpu-framegraph-scheduler` | media/graphics systems | 9.25 | |
+| 147 | `media-provenance-watermark-lab` | media/graphics systems | 8.65 | |
+| 148 | `spatial-audio-renderer` | media/graphics systems | 8.90 | |
+| 149 | `texture-streaming-simulator` | media/graphics systems | 8.65 | |
+| 150 | `scene-difference-renderer` | media/graphics systems | 8.90 | |
+| 151 | `offline-map-matching-engine` | geospatial systems | 8.80 | |
+| 152 | `terrain-visibility-planner` | geospatial systems | 8.75 | |
+| 153 | `geospatial-topology-repair` | geospatial systems | 9.05 | |
+| 154 | `evacuation-accessibility-router` | geospatial systems | 8.95 | |
+| 155 | `spatiotemporal-raster-cube` | geospatial systems | 9.05 | |
+| 156 | `gps-drift-corrector` | geospatial systems | 8.80 | |
+| 157 | `map-generalization-compiler` | geospatial systems | 8.90 | |
+| 158 | `indoor-positioning-fusion-lab` | geospatial systems | 8.75 | |
+| 159 | `boundary-uncertainty-engine` | geospatial systems | 8.75 | |
+| 160 | `offline-geofence-query-engine` | geospatial systems | 9.00 | |
+| 161 | `genome-variant-normalizer` | health/bioinformatics systems | 9.25 | |
+| 162 | `medication-schedule-verifier` | health/bioinformatics systems | 9.35 | |
+| 163 | `physiological-signal-quality-lab` | health/bioinformatics systems | 9.00 | |
+| 164 | `clinical-timeline-reconciler` | health/bioinformatics systems | 9.10 | |
+| 165 | `pedigree-consistency-checker` | health/bioinformatics systems | 9.10 | |
+| 166 | `sequencing-error-simulator` | health/bioinformatics systems | 8.65 | |
+| 167 | `protein-motif-search-engine` | health/bioinformatics systems | 8.75 | |
+| 168 | `medical-image-deid-auditor` | health/bioinformatics systems | 9.15 | |
+| 169 | `outbreak-nowcast-simulator` | health/bioinformatics systems | 8.80 | |
+| 170 | `wearable-anomaly-explainer` | health/bioinformatics systems | 9.00 | |
 
 ## Data shape
 
-`catalog/projects.json` contains catalog metadata, the canonical domain list, Wave 1 slugs, and the ranked `projects` array. Every project contains all requested narrative, architecture, MVP, safety, estimate, score, rank, and selection fields. Array fields are used for target users, components, hard parts, and stretch goals so downstream tools do not need to parse comma-separated prose.
+`catalog/projects.json` contains catalog metadata, the canonical 17-domain list, Wave 1 slugs, and the append-only ranked `projects` array. Every project contains all requested narrative, architecture, MVP, safety, estimate, score, rank, and selection fields. Array fields are used for target users, components, hard parts, and stretch goals so downstream tools do not need to parse comma-separated prose. To preserve the exact established object schema, extension milestones live in `local_first_mvp`, dependency policies and data plans live in `data_and_api_constraints`, and risks/non-goals live in `misuse_or_safety_notes`.
 
 ## Validation contract
 
 The catalog is intended to satisfy these machine-checkable invariants:
 
-- valid JSON with exactly 100 project objects;
-- exactly 10 projects in each canonical domain;
+- valid JSON with exactly 170 project objects;
+- exactly 17 canonical domains and exactly 10 projects in each;
+- unique project names, slugs, and ranks, with contiguous ranks 1–170;
+- the original ranks 1–100 matching the committed semantic SHA-256 baseline;
+- the exact canonical field set on every project and populated required values;
 - globally unique lowercase kebab-case repository slugs;
 - 3–6 architecture components and at least 3 technically hard parts per project;
 - integer component scores from 1 through 10 and positive integer build-day estimates;
-- weighted scores equal to the published formula and projects sorted by score/tiebreaker;
-- contiguous ranks 1–100; and
+- weighted scores equal to the published formula;
+- 3–5 numbered milestones, explicit dependency policy, risk, non-goal, and `build_wave_1=false` on every extension entry;
+- no forbidden shallow project categories;
+- a 170-row README ranking synchronized to the JSON while all published implementation links remain present; and
 - exactly four Wave 1 entries, matching the top-level Wave 1 slug list.
+
+Run the dependency-free deterministic check with:
+
+```sh
+node scripts/validate-catalog.mjs
+```

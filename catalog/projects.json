@@ -6,7 +6,7 @@
     "maximum": 10
   },
   "weighting_formula": "weighted_score = 0.35 * usefulness_score + 0.30 * technical_depth_score + 0.20 * feasibility_score + 0.15 * portfolio_signal_score",
-  "ranking_tiebreaker": "weighted_score descending, then repo_slug ascending",
+  "ranking_tiebreaker": "append-only publication rank; ranks 1-100 retain their original weighted_score descending then repo_slug ascending order; ranks 101-170 are stable ten-project domain cohorts",
   "domains": [
     "distributed systems",
     "security/privacy",
@@ -17,7 +17,14 @@
     "markets/fintech",
     "accessibility/personal computing",
     "education/research tooling",
-    "climate/civic/local infrastructure"
+    "climate/civic/local infrastructure",
+    "programming languages/compilers",
+    "operating systems/runtime systems",
+    "robotics/embedded systems",
+    "computational science/engineering",
+    "media/graphics systems",
+    "geospatial systems",
+    "health/bioinformatics systems"
   ],
   "build_wave_1": [
     "entitlement-aware-ai-router",
@@ -4533,6 +4540,3156 @@
       "weighted_score": 7.85,
       "build_wave_1": false,
       "rank": 100
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "incremental-query-compiler",
+      "name": "Incremental Query Compiler",
+      "one_sentence": "A compiler kernel that memoizes semantic queries, tracks fine-grained dependencies, and invalidates only facts affected by an edit.",
+      "concrete_problem": "Whole-module recompilation makes interactive tooling slow, while ad hoc caches silently return stale types and diagnostics.",
+      "target_users": [
+        "compiler engineers",
+        "language-tooling students",
+        "IDE authors"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "A red-green dependency graph records verified query inputs and produces an invalidation proof for every reused result.",
+      "architecture": [
+        "lossless syntax tree",
+        "semantic query engine",
+        "dependency graph",
+        "revisioned memo store",
+        "invalidation explainer"
+      ],
+      "technically_hard_parts": [
+        "cycle-safe queries",
+        "stable node identity",
+        "minimal invalidation",
+        "deterministic parallel evaluation"
+      ],
+      "local_first_mvp": "Compile a bundled language, edit one generic definition, and show identical output with only the dependent type and code-generation queries recomputed. Milestones: 1) parse and type baseline; 2) add revisioned query cache; 3) implement dependency invalidation; 4) replay the edit fixture.",
+      "stretch_goals": [
+        "cross-process cache",
+        "distributed query tracing",
+        "profile-guided invalidation"
+      ],
+      "demo_story": "A one-line edit invalidates 14 of 8,000 queries, and a proof explains every cache hit and miss.",
+      "test_strategy": "Golden diagnostics; randomized edit sequences against clean rebuilds; dependency-cycle fixtures; parallel determinism checks.",
+      "data_and_api_constraints": "Data plan: Bundled source corpus and generated edit traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Cache evidence must never be represented as a proof of source correctness. Risk: Unsound reuse caused by missed dependencies or unstable identities. Non-goal: a production optimizing compiler or language package manager.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 101
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "effect-capability-checker",
+      "name": "Effect Capability Checker",
+      "one_sentence": "A static analysis engine that infers file, network, process, and clock effects and verifies them against explicit capability contracts.",
+      "concrete_problem": "Libraries can perform ambient I/O that is invisible in type signatures and discovered only after integration or sandbox failure.",
+      "target_users": [
+        "language designers",
+        "plugin-platform authors",
+        "security-minded developers"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Row-polymorphic effect inference is paired with counterexample call paths and least-authority contract suggestions.",
+      "architecture": [
+        "typed core IR",
+        "effect constraint generator",
+        "row unifier",
+        "capability policy checker",
+        "counterexample renderer"
+      ],
+      "technically_hard_parts": [
+        "polymorphic effect inference",
+        "higher-order call resolution",
+        "useful minimal counterexamples",
+        "sound escape handling"
+      ],
+      "local_first_mvp": "Analyze bundled plugins, reject one hidden network effect, and infer a narrower contract for a file-only formatter. Milestones: 1) lower source to IR; 2) infer closed effects; 3) add polymorphic rows; 4) verify policy and explanations.",
+      "stretch_goals": [
+        "gradual-effect annotations",
+        "WASM component policies",
+        "proof-carrying packages"
+      ],
+      "demo_story": "A seemingly pure formatter is rejected because a transitive helper reads the clock and opens a socket.",
+      "test_strategy": "Type-soundness fixtures; mutation tests for hidden effects; differential checks against an interpreter; counterexample minimization tests.",
+      "data_and_api_constraints": "Data plan: Synthetic programs and local fixtures only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Policies should complement runtime sandboxing because native or reflective code can evade static analysis. Risk: False confidence at foreign-function and reflection boundaries. Non-goal: malware detection or automatic permission approval.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 102
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "verified-bytecode-optimizer",
+      "name": "Verified Bytecode Optimizer",
+      "one_sentence": "A stack-bytecode optimizer that emits machine-checkable equivalence certificates for every local rewrite.",
+      "concrete_problem": "Optimizer bugs can silently change program behavior, and ordinary regression suites cover only a fraction of instruction sequences.",
+      "target_users": [
+        "compiler students",
+        "VM implementers",
+        "formal-methods engineers"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Each peephole rewrite carries a symbolic transition proof checked by a small independent verifier.",
+      "architecture": [
+        "bytecode parser",
+        "symbolic stack semantics",
+        "rewrite e-graph",
+        "certificate emitter",
+        "minimal proof checker"
+      ],
+      "technically_hard_parts": [
+        "undefined-behavior modeling",
+        "stack-shape equivalence",
+        "proof extraction",
+        "rewrite termination"
+      ],
+      "local_first_mvp": "Optimize a bundled numeric program, verify every rewrite offline, and reject a deliberately unsound strength reduction. Milestones: 1) define executable semantics; 2) implement baseline rewrites; 3) emit equivalence certificates; 4) inject and catch a bad rule.",
+      "stretch_goals": [
+        "superoptimization",
+        "proof compression",
+        "SSA lowering certificates"
+      ],
+      "demo_story": "The optimizer removes 31 percent of instructions while the verifier pinpoints one corrupted certificate step.",
+      "test_strategy": "Exhaustive short-program enumeration; property-based semantic equivalence; malformed-certificate fuzzing; golden optimization traces.",
+      "data_and_api_constraints": "Data plan: Generated bytecode and bundled programs. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The verifier covers the modeled VM only and must make undefined behavior explicit. Risk: A mismatch between concrete VM behavior and symbolic semantics. Non-goal: native-code optimization or full language verification.",
+      "estimated_build_days": 23,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 103
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "grammar-repair-parser",
+      "name": "Grammar Repair Parser",
+      "one_sentence": "An error-correcting parser that finds low-cost token repairs and preserves ambiguous alternatives for IDE-quality recovery.",
+      "concrete_problem": "Conventional parsers cascade after an early syntax error, obscuring the actionable diagnostic and breaking downstream tooling.",
+      "target_users": [
+        "parser authors",
+        "IDE developers",
+        "language-course students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Weighted graph search over parser configurations returns bounded minimal repairs with stability across nearby edits.",
+      "architecture": [
+        "grammar compiler",
+        "generalized parser",
+        "repair search engine",
+        "ambiguity forest",
+        "diagnostic ranker"
+      ],
+      "technically_hard_parts": [
+        "search-space control",
+        "nullable-cycle handling",
+        "repair minimality",
+        "diagnostic stability"
+      ],
+      "local_first_mvp": "Parse a corrupted configuration language, recover three intended constructs, and compare the repair cost with a known oracle. Milestones: 1) compile grammar tables; 2) retain parse forest; 3) add weighted repair search; 4) rank deterministic diagnostics.",
+      "stretch_goals": [
+        "learned cost model",
+        "incremental forest reuse",
+        "multilingual diagnostics"
+      ],
+      "demo_story": "Deleting one delimiter produces one local insertion suggestion instead of 27 cascading errors.",
+      "test_strategy": "Grammar conformance suite; exhaustive small-error optimality checks; fuzzed malformed inputs; edit-stability snapshots.",
+      "data_and_api_constraints": "Data plan: Bundled grammars and generated corruptions. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Repair suggestions must remain proposals and never silently modify security-sensitive source. Risk: Combinatorial blowups on highly ambiguous grammars. Non-goal: natural-language grammar correction or automatic code execution.",
+      "estimated_build_days": 19,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 104
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "profile-guided-wasm-specializer",
+      "name": "Profile-Guided WebAssembly Specializer",
+      "one_sentence": "An offline WebAssembly transformer that specializes hot call paths under a strict code-size and validation budget.",
+      "concrete_problem": "Portable modules often retain generic dispatch and bounds checks that dominate small edge workloads.",
+      "target_users": [
+        "WASM runtime developers",
+        "performance engineers",
+        "systems students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Deterministic trace profiles drive guarded cloning decisions whose speed, size, and fallback costs are reported together.",
+      "architecture": [
+        "WASM decoder",
+        "deterministic profiler",
+        "specialization planner",
+        "IR rewriter",
+        "reference validator"
+      ],
+      "technically_hard_parts": [
+        "structured-control rewriting",
+        "guard correctness",
+        "profile bias control",
+        "size-speed optimization"
+      ],
+      "local_first_mvp": "Profile a bundled interpreter, specialize two hot signatures, and reproduce the same output with a measured instruction reduction. Milestones: 1) decode and validate modules; 2) collect replayable profiles; 3) plan guarded clones; 4) rewrite and benchmark fixture.",
+      "stretch_goals": [
+        "multi-value specialization",
+        "SIMD cost model",
+        "proof-producing transforms"
+      ],
+      "demo_story": "A generic dispatch loop becomes two guarded fast paths while cold inputs still take the original code.",
+      "test_strategy": "Differential execution; official-style validation fixtures; adversarial profile shifts; size-budget and determinism checks.",
+      "data_and_api_constraints": "Data plan: Bundled WASM modules and synthetic traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Optimized artifacts must preserve validation and expose profile assumptions. Risk: Over-specialization that regresses unseen workloads. Non-goal: a browser JIT or remote optimization service.",
+      "estimated_build_days": 21,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 105
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "refactoring-proof-engine",
+      "name": "Refactoring Proof Engine",
+      "one_sentence": "A source-to-source refactoring engine that proves binding and control-flow obligations before applying a patch.",
+      "concrete_problem": "Textual refactors can capture names, alter evaluation order, or cross exception boundaries while still compiling.",
+      "target_users": [
+        "tooling engineers",
+        "large-codebase maintainers",
+        "program-analysis students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Every edit is gated by explicit alpha-equivalence, dominance, and effect-order obligations with a human-readable failure witness.",
+      "architecture": [
+        "scope graph",
+        "control-flow graph",
+        "effect summary engine",
+        "rewrite planner",
+        "obligation checker"
+      ],
+      "technically_hard_parts": [
+        "hygienic renaming",
+        "exceptional control flow",
+        "alias-sensitive moves",
+        "minimal failure witnesses"
+      ],
+      "local_first_mvp": "Inline and extract functions in bundled programs, safely refuse one effect-reordering case, and verify unchanged interpreter traces. Milestones: 1) build scope and CFG models; 2) implement rename proofs; 3) add extract and inline obligations; 4) run differential traces.",
+      "stretch_goals": [
+        "proof replay in CI",
+        "API migration rules",
+        "incremental scope graphs"
+      ],
+      "demo_story": "The engine accepts a cross-file rename but refuses an extraction that would move a write before a possible throw.",
+      "test_strategy": "Metamorphic refactor tests; interpreter trace equivalence; adversarial shadowing corpus; obligation mutation tests.",
+      "data_and_api_constraints": "Data plan: Bundled typed-language corpus and generated scope graphs. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Passing modeled obligations does not guarantee behavior outside the supported language subset. Risk: Unsound alias or effect summaries authorizing a semantic change. Non-goal: automatic style cleanup or arbitrary-language support.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 106
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "macro-expansion-debugger",
+      "name": "Macro Expansion Debugger",
+      "one_sentence": "A hygienic macro tracer that reconstructs expansion phases, scope marks, and source origins as a reversible execution history.",
+      "concrete_problem": "Macro errors surface in generated code far from the invocation and hide which phase introduced a captured or malformed identifier.",
+      "target_users": [
+        "language implementers",
+        "macro authors",
+        "compiler-course students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "A provenance DAG supports step-back expansion and scope-identity queries without flattening generated syntax to text.",
+      "architecture": [
+        "syntax-object model",
+        "hygiene mark engine",
+        "phase evaluator",
+        "provenance DAG",
+        "time-travel inspector"
+      ],
+      "technically_hard_parts": [
+        "phase separation",
+        "source-span preservation",
+        "scope-set comparison",
+        "compact reversible traces"
+      ],
+      "local_first_mvp": "Expand a bundled DSL, step backward from an unbound identifier, and identify the exact transformer that dropped its scope mark. Milestones: 1) model hygienic syntax; 2) record expansion events; 3) build reverse traversal; 4) ship failing macro fixture.",
+      "stretch_goals": [
+        "trace slicing",
+        "cross-module phases",
+        "editor protocol adapter"
+      ],
+      "demo_story": "Selecting a generated identifier reveals its three ancestors and the phase where binding identity diverged.",
+      "test_strategy": "Golden expansion traces; alpha-renaming properties; cyclic-expansion limits; provenance round-trip checks.",
+      "data_and_api_constraints": "Data plan: Bundled macros and generated syntax objects. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Expansion traces may contain source secrets and should remain local by default. Risk: Trace volume overwhelming users or leaking generated literals. Non-goal: executing untrusted native macros without a sandbox.",
+      "estimated_build_days": 18,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 107
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "memory-layout-abi-auditor",
+      "name": "Memory Layout ABI Auditor",
+      "one_sentence": "A cross-language layout engine that computes records, padding, calling conventions, and binary-compatibility witnesses from declarative ABIs.",
+      "concrete_problem": "Foreign-function interfaces fail subtly when compilers disagree about alignment, bitfields, enum width, or aggregate passing.",
+      "target_users": [
+        "systems programmers",
+        "FFI maintainers",
+        "compiler backend students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Symbolic layout constraints produce byte-level witnesses and smallest-breaking-change explanations across ABI versions.",
+      "architecture": [
+        "ABI description DSL",
+        "layout constraint solver",
+        "calling-convention model",
+        "debug-info importer",
+        "compatibility witness generator"
+      ],
+      "technically_hard_parts": [
+        "bitfield packing",
+        "recursive type layouts",
+        "platform calling rules",
+        "minimal incompatibility explanation"
+      ],
+      "local_first_mvp": "Compare bundled C and Rust-like declarations for two target ABIs and expose a one-byte padding change that breaks a call boundary. Milestones: 1) encode scalar rules; 2) solve aggregate layouts; 3) model function passing; 4) diff ABI fixture versions.",
+      "stretch_goals": [
+        "Swift interop model",
+        "symbol versioning",
+        "header generator"
+      ],
+      "demo_story": "A harmless-looking field reorder changes register classification, and the auditor renders the exact affected bytes.",
+      "test_strategy": "Compiler-layout golden files; randomized structure generation; DWARF cross-checks; endianness and packing fixtures.",
+      "data_and_api_constraints": "Data plan: Bundled ABI specifications and synthetic debug metadata. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Results must identify modeled compiler versions rather than promise universal binary compatibility. Risk: Incomplete vendor rules producing a false compatibility claim. Non-goal: binary patching or decompiling proprietary programs.",
+      "estimated_build_days": 20,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 108
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "deterministic-language-server-core",
+      "name": "Deterministic Language Server Core",
+      "one_sentence": "A scheduler and snapshot engine that makes asynchronous language-server results reproducible under rapid edits and cancellation.",
+      "concrete_problem": "Language servers race document versions, background indexing, and cancellation, causing ghost diagnostics and irreproducible bugs.",
+      "target_users": [
+        "IDE infrastructure engineers",
+        "language-server authors",
+        "concurrency students"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "A virtual-time scheduler records causal snapshot dependencies and systematically explores response reorderings.",
+      "architecture": [
+        "versioned document store",
+        "priority work scheduler",
+        "cancellation algebra",
+        "result publication gate",
+        "schedule explorer"
+      ],
+      "technically_hard_parts": [
+        "snapshot isolation",
+        "cancellation races",
+        "fair prioritization",
+        "schedule-state reduction"
+      ],
+      "local_first_mvp": "Replay a seeded burst of edits and prove that stale completions can never publish, then expose the same bug in a naive server. Milestones: 1) implement snapshots; 2) add cancellable tasks; 3) gate publication by version; 4) explore seeded schedules.",
+      "stretch_goals": [
+        "multi-root fairness",
+        "persistent indexes",
+        "latency budget proofs"
+      ],
+      "demo_story": "Two hundred response schedules produce one stable diagnostic set while the naive baseline emits three stale results.",
+      "test_strategy": "Model-based scheduler tests; exhaustive bounded interleavings; cancellation fuzzing; deterministic transcript hashes.",
+      "data_and_api_constraints": "Data plan: Generated documents and local protocol fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The core should not transmit source text or telemetry. Risk: State-space explosion hiding rare publication races. Non-goal: a full IDE or language-specific semantic engine.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 109
+    },
+    {
+      "domain": "programming languages/compilers",
+      "repo_slug": "binary-lifting-analysis-lab",
+      "name": "Binary Lifting Analysis Lab",
+      "one_sentence": "A defensive binary-analysis workbench that lifts a small executable format into typed SSA and validates control-flow recovery against an emulator.",
+      "concrete_problem": "Students and defenders cannot easily tell whether a recovered control-flow graph actually matches opaque machine-code behavior.",
+      "target_users": [
+        "reverse-engineering students",
+        "malware analysts",
+        "compiler researchers"
+      ],
+      "why_now": "Language tooling is moving into editors, build systems, and sandboxes where incremental correctness and explainability matter as much as peak throughput.",
+      "differentiator": "Every lifted block is differentially executed against a constrained emulator, with counterexample inputs for mismatches.",
+      "architecture": [
+        "bounded instruction decoder",
+        "CFG recovery engine",
+        "typed SSA lifter",
+        "symbolic input generator",
+        "differential emulator"
+      ],
+      "technically_hard_parts": [
+        "indirect branch recovery",
+        "flag semantics",
+        "memory aliasing",
+        "counterexample minimization"
+      ],
+      "local_first_mvp": "Lift bundled toy binaries, recover an indirect jump table, and catch a deliberately incorrect carry-flag translation. Milestones: 1) decode safe fixture ISA; 2) recover CFG; 3) lift into SSA; 4) differentially check blocks.",
+      "stretch_goals": [
+        "abstract interpretation",
+        "calling-convention recovery",
+        "proof certificates"
+      ],
+      "demo_story": "The lab produces a three-instruction counterexample showing where the lifted and concrete executions diverge.",
+      "test_strategy": "Instruction semantic vectors; fuzzed decoder inputs; block-level differential execution; resource-limit tests.",
+      "data_and_api_constraints": "Data plan: Purpose-built open fixture binaries for a toy ISA only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Keep the format intentionally limited and exclude exploit generation, packing, or stealth features. Risk: Malformed inputs escaping decoder resource bounds. Non-goal: an operational malware toolkit or proprietary binary decompiler.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 110
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "userspace-kernel-sandbox",
+      "name": "Userspace Kernel Sandbox",
+      "one_sentence": "A deterministic userspace kernel that runs untrusted processes against virtual files, clocks, sockets, and resource quotas.",
+      "concrete_problem": "Testing sandbox policy against the host kernel is unsafe, nondeterministic, and difficult to inspect after a violation.",
+      "target_users": [
+        "sandbox authors",
+        "systems students",
+        "plugin-runtime maintainers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "A syscall-state machine emits replayable capability decisions and contains every effect inside a content-addressed virtual machine image.",
+      "architecture": [
+        "syscall ABI shim",
+        "virtual filesystem",
+        "virtual clock and sockets",
+        "capability kernel",
+        "event replay log"
+      ],
+      "technically_hard_parts": [
+        "syscall fidelity",
+        "path traversal resistance",
+        "deterministic blocking semantics",
+        "quota accounting"
+      ],
+      "local_first_mvp": "Run a hostile fixture that attempts traversal, fork flooding, and outbound traffic; reproduce the exact denials without touching the host. Milestones: 1) implement process ABI; 2) virtualize files and time; 3) add capabilities and quotas; 4) replay adversarial fixture.",
+      "stretch_goals": [
+        "WASI adapter",
+        "snapshot restore",
+        "capability proof export"
+      ],
+      "demo_story": "A plugin reads its granted file but receives stable denials for parent traversal and network access, all replayed byte-for-byte.",
+      "test_strategy": "Syscall conformance vectors; path-fuzz corpus; deterministic scheduling tests; quota and escape mutation tests.",
+      "data_and_api_constraints": "Data plan: Generated filesystem images and purpose-built hostile fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The sandbox must be labeled educational until independently hardened and should run inside an existing OS sandbox. Risk: A syscall semantic gap enabling host escape or misleading policy results. Non-goal: replacing a production hypervisor or analyzing real malware.",
+      "estimated_build_days": 25,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 111
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "deterministic-process-replayer",
+      "name": "Deterministic Process Replayer",
+      "one_sentence": "A record/replay runtime that captures nondeterministic system-call results and schedules to reproduce native process failures offline.",
+      "concrete_problem": "Concurrency failures disappear when rerun because thread order, time, randomness, and external reads change.",
+      "target_users": [
+        "runtime engineers",
+        "debugger authors",
+        "systems developers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Selective happens-before logging and divergence detection keep traces compact while identifying the first unrecorded dependency.",
+      "architecture": [
+        "process interposition layer",
+        "nondeterminism recorder",
+        "schedule controller",
+        "snapshot store",
+        "divergence analyzer"
+      ],
+      "technically_hard_parts": [
+        "low-overhead ordering capture",
+        "signal replay",
+        "shared-memory races",
+        "trace divergence localization"
+      ],
+      "local_first_mvp": "Record a bundled multithreaded crash once, replay it ten times, then mutate an input and locate the first divergent event. Milestones: 1) capture external results; 2) control thread turns; 3) restore file snapshots; 4) diagnose replay divergence.",
+      "stretch_goals": [
+        "reverse debugging",
+        "hardware-counter capture",
+        "trace slicing"
+      ],
+      "demo_story": "An intermittent use-after-close fails at the same instruction on every replay with no network access.",
+      "test_strategy": "Replay hash stability; seeded signal races; file mutation fixtures; trace corruption and partial-write tests.",
+      "data_and_api_constraints": "Data plan: Bundled native fixtures and generated schedules. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Recorded traces can contain sensitive memory and file data and require explicit retention controls. Risk: Unsupported shared-memory interactions causing silent replay drift. Non-goal: full-machine virtualization or stealth process monitoring.",
+      "estimated_build_days": 26,
+      "usefulness_score": 10,
+      "technical_depth_score": 10,
+      "feasibility_score": 6,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.2,
+      "build_wave_1": false,
+      "rank": 112
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "scheduler-tail-latency-lab",
+      "name": "Scheduler Tail-Latency Lab",
+      "one_sentence": "A discrete-event CPU scheduler laboratory that explains tail latency under priorities, affinity, preemption, and mixed workloads.",
+      "concrete_problem": "Average throughput hides starvation and deadline misses caused by scheduler choices under bursty contention.",
+      "target_users": [
+        "OS students",
+        "runtime engineers",
+        "latency-sensitive service teams"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Counterfactual replay compares identical arrival traces across policies and attributes each delay to a scheduling decision.",
+      "architecture": [
+        "workload trace model",
+        "discrete-event kernel",
+        "scheduler plugin API",
+        "causal wait attribution",
+        "counterfactual comparator"
+      ],
+      "technically_hard_parts": [
+        "event ordering",
+        "multicore affinity",
+        "priority inversion accounting",
+        "fair policy comparison"
+      ],
+      "local_first_mvp": "Replay one deterministic mixed workload through CFS-like, priority, and deadline policies and explain the worst request in each. Milestones: 1) build event kernel; 2) implement baseline policies; 3) attribute wait intervals; 4) compare fixed trace.",
+      "stretch_goals": [
+        "NUMA model",
+        "energy objective",
+        "real trace importer"
+      ],
+      "demo_story": "A policy with better mean latency loses at p99 because an interactive task repeatedly waits behind cache-warm batch work.",
+      "test_strategy": "Queueing-theory sanity checks; golden schedules; randomized policy invariants; counterfactual trace identity checks.",
+      "data_and_api_constraints": "Data plan: Generated workload traces with fixed seeds. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Simulation conclusions must disclose the simplified hardware and workload assumptions. Risk: A misleading performance claim from an unrealistic workload model. Non-goal: tuning the user's host scheduler or benchmarking unrelated hardware.",
+      "estimated_build_days": 18,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 113
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "page-cache-policy-lab",
+      "name": "Page Cache Policy Lab",
+      "one_sentence": "A trace-driven page-cache simulator that models readahead, writeback, memory pressure, and application hints.",
+      "concrete_problem": "Cache hit rate alone cannot explain stalls caused by dirty-page throttling, scan resistance, and poor readahead.",
+      "target_users": [
+        "storage engineers",
+        "database students",
+        "OS performance analysts"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "A byte-accurate event model attributes latency and write amplification while testing the same trace against replacement policies.",
+      "architecture": [
+        "block trace format",
+        "page-state machine",
+        "replacement policy API",
+        "readahead model",
+        "writeback simulator"
+      ],
+      "technically_hard_parts": [
+        "dirty-page ordering",
+        "adaptive readahead",
+        "scan detection",
+        "bounded-memory accounting"
+      ],
+      "local_first_mvp": "Replay a database-plus-backup trace and show why LRU beats CLOCK on hits yet loses on p99 writeback stalls. Milestones: 1) define page events; 2) implement replacement baselines; 3) model readahead and writeback; 4) produce causal comparison.",
+      "stretch_goals": [
+        "compressed-cache model",
+        "NUMA page migration",
+        "learned admission policy"
+      ],
+      "demo_story": "A sequential scan stops evicting the database working set after the adaptive policy recognizes one-way reuse.",
+      "test_strategy": "Known cache traces; conservation invariants; randomized eviction oracles; sensitivity analysis across cache sizes.",
+      "data_and_api_constraints": "Data plan: Bundled synthetic block traces; optional user-supplied anonymized traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Trace collection must exclude file contents and clearly separate simulation from host-kernel behavior. Risk: Overfitting a policy to one synthetic access pattern. Non-goal: a kernel module or automatic host tuning daemon.",
+      "estimated_build_days": 19,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 114
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "priority-inversion-explorer",
+      "name": "Priority Inversion Explorer",
+      "one_sentence": "A model checker for real-time task graphs that finds priority inversions and tests inheritance and ceiling protocols.",
+      "concrete_problem": "Lock interactions can make a high-priority task miss a deadline even when CPU utilization appears safe.",
+      "target_users": [
+        "embedded-runtime engineers",
+        "real-time students",
+        "safety-system reviewers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Partial-order reduction produces a minimal blocking schedule and a protocol-specific remedy rather than a single simulated trace.",
+      "architecture": [
+        "task/lock DSL",
+        "timed transition system",
+        "partial-order reducer",
+        "blocking analyzer",
+        "protocol simulator"
+      ],
+      "technically_hard_parts": [
+        "timed state exploration",
+        "nested locks",
+        "minimal counterexamples",
+        "sound reduction of independent steps"
+      ],
+      "local_first_mvp": "Model three tasks and two locks, find a deadline miss, then prove bounded blocking after enabling priority inheritance. Milestones: 1) parse timed task graphs; 2) explore lock schedules; 3) minimize failing trace; 4) compare mitigation protocols.",
+      "stretch_goals": [
+        "multiprocessor protocols",
+        "interrupt modeling",
+        "response-time proof export"
+      ],
+      "demo_story": "The explorer reduces 80,000 interleavings to a seven-step schedule showing a medium task extending a low task's lock hold.",
+      "test_strategy": "Textbook schedule goldens; bounded exhaustive exploration; reduction equivalence tests; randomized lock graphs.",
+      "data_and_api_constraints": "Data plan: Generated task sets and bundled real-time examples. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "A bounded model result is not certification for deployed safety-critical software. Risk: State reduction accidentally removing a deadline-violating schedule. Non-goal: controlling real machinery or certifying a real-time OS.",
+      "estimated_build_days": 20,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 115
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "zero-copy-pipeline-profiler",
+      "name": "Zero-Copy Pipeline Profiler",
+      "one_sentence": "A local profiler that reconstructs buffer ownership, copies, cache movement, and backpressure across a streaming process pipeline.",
+      "concrete_problem": "High-throughput pipelines often spend more time copying and retaining buffers than performing useful transformations.",
+      "target_users": [
+        "media-runtime authors",
+        "systems performance engineers",
+        "network-service developers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Ownership events form a buffer lineage graph that distinguishes required copies from avoidable serialization and lifetime extension.",
+      "architecture": [
+        "allocation interposer",
+        "buffer identity tracker",
+        "pipeline event schema",
+        "lineage graph engine",
+        "cost estimator"
+      ],
+      "technically_hard_parts": [
+        "identity across slices",
+        "cross-thread ownership",
+        "sampling bias correction",
+        "copy-cost attribution"
+      ],
+      "local_first_mvp": "Profile a bundled producer-filter-writer pipeline, replace one copy with shared ownership, and verify lower bytes moved without corruption. Milestones: 1) instrument allocations; 2) track buffer lineage; 3) attribute copy and wait costs; 4) validate zero-copy rewrite.",
+      "stretch_goals": [
+        "kernel splice tracking",
+        "GPU buffer lineage",
+        "live backpressure hints"
+      ],
+      "demo_story": "The profiler shows that one convenience conversion accounts for 62 percent of bytes moved and proves the optimized buffer lifetime.",
+      "test_strategy": "Synthetic buffer workloads; lineage conservation properties; sampled-versus-full comparisons; race instrumentation tests.",
+      "data_and_api_constraints": "Data plan: Generated byte streams; no payload bytes retained in traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Instrumentation should hash identities and avoid capturing user content. Risk: Profiler overhead distorting the ownership pattern it reports. Non-goal: a general-purpose CPU profiler or automatic unsafe-code rewriter.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.6,
+      "build_wave_1": false,
+      "rank": 116
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "process-snapshot-migrator",
+      "name": "Process Snapshot Migrator",
+      "one_sentence": "A userspace runtime that snapshots a constrained process and restores it across intentionally different virtual machine layouts.",
+      "concrete_problem": "Checkpoint formats entangle memory addresses, open resources, and runtime versions, making portable recovery brittle.",
+      "target_users": [
+        "runtime researchers",
+        "edge-computing students",
+        "fault-tolerance engineers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Relocatable object graphs and explicit resource recipes separate logical state from host-specific handles.",
+      "architecture": [
+        "cooperative checkpoint API",
+        "heap graph serializer",
+        "resource recipe registry",
+        "relocating restorer",
+        "compatibility verifier"
+      ],
+      "technically_hard_parts": [
+        "pointer swizzling",
+        "consistent thread quiescence",
+        "resource rebinding",
+        "versioned snapshot compatibility"
+      ],
+      "local_first_mvp": "Pause a bundled worker mid-computation, restore it with a shifted heap and remapped virtual file, and produce the identical final digest. Milestones: 1) define safe points; 2) serialize heap graph; 3) rebind virtual resources; 4) restore across layout change.",
+      "stretch_goals": [
+        "incremental snapshots",
+        "encrypted deduplication",
+        "cross-architecture IR state"
+      ],
+      "demo_story": "A worker resumes at iteration 50,001 in a differently based address space and matches the uninterrupted result.",
+      "test_strategy": "Snapshot round trips; randomized object graphs; interrupted-write recovery; incompatible-version rejection tests.",
+      "data_and_api_constraints": "Data plan: Generated process state and virtual resources only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Snapshots may contain secrets and require encryption and explicit deletion controls. Risk: Missing an alias or unsafe point and restoring inconsistent state. Non-goal: transparent migration of arbitrary native applications.",
+      "estimated_build_days": 25,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 117
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "sandboxed-driver-runtime",
+      "name": "Sandboxed Driver Runtime",
+      "one_sentence": "A capability-scoped userspace driver host with message validation, crash containment, and deterministic virtual devices.",
+      "concrete_problem": "A faulty peripheral driver can corrupt privileged state even when it only needs a narrow register and interrupt interface.",
+      "target_users": [
+        "OS security students",
+        "device-runtime authors",
+        "embedded platform teams"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Typed shared-memory rings and revocable device capabilities make driver effects replayable and independently fuzzable.",
+      "architecture": [
+        "virtual device bus",
+        "typed ring transport",
+        "capability mapper",
+        "driver supervisor",
+        "fault injector"
+      ],
+      "technically_hard_parts": [
+        "memory isolation",
+        "DMA range validation",
+        "interrupt ordering",
+        "crash-safe device reset"
+      ],
+      "local_first_mvp": "Run a storage driver against a virtual device, inject malformed completions and a crash, and recover without losing committed blocks. Milestones: 1) build virtual bus; 2) define validated transport; 3) isolate driver process; 4) inject crash and recover.",
+      "stretch_goals": [
+        "network-device model",
+        "formal ring protocol",
+        "live upgrade"
+      ],
+      "demo_story": "A corrupted DMA descriptor is rejected at the boundary and a restarted driver reconstructs its queue from device state.",
+      "test_strategy": "Protocol state-machine tests; descriptor fuzzing; crash injection at every transition; capability revocation checks.",
+      "data_and_api_constraints": "Data plan: Purpose-built virtual devices and generated I/O traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The educational runtime must not claim production-grade isolation or directly access physical devices. Risk: A protocol validation gap allowing out-of-range memory access. Non-goal: shipping hardware drivers or bypassing OS device security.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 118
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "runtime-memory-pressure-controller",
+      "name": "Runtime Memory-Pressure Controller",
+      "one_sentence": "A feedback controller that coordinates caches, heaps, and queues under a shared memory budget using measured reclaim cost.",
+      "concrete_problem": "Independent subsystems overcommit memory and react too late, producing synchronized eviction, GC pauses, and queue collapse.",
+      "target_users": [
+        "runtime maintainers",
+        "database engineers",
+        "performance students"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Online system identification estimates each subsystem's latency-versus-memory curve before allocating reclaim targets.",
+      "architecture": [
+        "pressure signal model",
+        "subsystem adapter API",
+        "cost-curve estimator",
+        "budget controller",
+        "replay simulator"
+      ],
+      "technically_hard_parts": [
+        "delayed feedback stability",
+        "nonstationary cost curves",
+        "fair budget allocation",
+        "oscillation detection"
+      ],
+      "local_first_mvp": "Drive three simulated caches with a fixed burst trace and show the controller avoiding the eviction-GC oscillation of threshold baselines. Milestones: 1) model subsystem responses; 2) implement baseline controllers; 3) estimate reclaim curves; 4) replay adversarial burst.",
+      "stretch_goals": [
+        "multi-process coordination",
+        "robust MPC policy",
+        "cgroup adapter"
+      ],
+      "demo_story": "The controller yields memory early from a cheap cache and prevents a 400-millisecond heap pause.",
+      "test_strategy": "Control-theory stability fixtures; trace replays; randomized phase shifts; invariant checks on budgets and reclaim rates.",
+      "data_and_api_constraints": "Data plan: Generated pressure traces and local adapters. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Automatic tuning must default to observation mode before it can change real process limits. Risk: An unstable feedback loop amplifying latency or causing out-of-memory failure. Non-goal: an OS-wide memory killer or opaque machine-learning tuner.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 119
+    },
+    {
+      "domain": "operating systems/runtime systems",
+      "repo_slug": "syscall-contract-miner",
+      "name": "System Call Contract Miner",
+      "one_sentence": "A trace-analysis engine that infers phase-aware syscall contracts and validates new executions against the smallest stable policy.",
+      "concrete_problem": "Flat allowlists grant startup privileges forever and fail to express argument, path, or protocol-state constraints.",
+      "target_users": [
+        "sandbox maintainers",
+        "packagers",
+        "security engineers"
+      ],
+      "why_now": "Local runtimes increasingly host untrusted extensions and latency-sensitive workloads, making isolation, scheduling, and resource evidence practical portfolio problems.",
+      "differentiator": "Automata learning merges equivalent execution states while retaining path and argument predicates with counterexample-guided refinement.",
+      "architecture": [
+        "normalized syscall tracer",
+        "predicate learner",
+        "state-machine inference",
+        "policy minimizer",
+        "violation explainer"
+      ],
+      "technically_hard_parts": [
+        "trace generalization",
+        "state merging",
+        "argument abstraction",
+        "avoiding underfit and overfit policies"
+      ],
+      "local_first_mvp": "Learn a contract from bundled server traces, reject an injected post-startup file open, and accept a held-out valid rotation sequence. Milestones: 1) normalize traces; 2) infer predicate automaton; 3) minimize policy; 4) validate held-out and attack fixtures.",
+      "stretch_goals": [
+        "seccomp exporter",
+        "active trace generation",
+        "probabilistic anomaly layer"
+      ],
+      "demo_story": "The learned contract permits configuration reads only before the listen transition and explains the violating state.",
+      "test_strategy": "Train/holdout trace splits; mutation attacks; automaton minimality checks; deterministic inference across trace orderings.",
+      "data_and_api_constraints": "Data plan: Synthetic syscall traces from bundled fixture programs. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Inferred policy requires human review and cannot prove unseen valid behavior or malicious intent. Risk: An overfit contract denying legitimate recovery or an underfit one granting excess authority. Non-goal: deploying host enforcement or profiling third-party users.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 120
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "sensor-fusion-calibration-bench",
+      "name": "Sensor-Fusion Calibration Bench",
+      "one_sentence": "A factor-graph bench that jointly estimates sensor bias, clock offset, and rigid transforms from replayed motion traces.",
+      "concrete_problem": "Fusion pipelines fail when calibration and time alignment errors masquerade as estimator noise.",
+      "target_users": [
+        "robotics students",
+        "sensor-platform engineers",
+        "autonomy researchers"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Observability analysis identifies which calibration parameters the recorded motion can and cannot determine before optimization.",
+      "architecture": [
+        "timestamped sensor log",
+        "factor graph builder",
+        "robust nonlinear solver",
+        "observability analyzer",
+        "trajectory evaluator"
+      ],
+      "technically_hard_parts": [
+        "gauge freedom handling",
+        "clock-state coupling",
+        "robust loss selection",
+        "uncertainty estimation"
+      ],
+      "local_first_mvp": "Recover a camera-IMU transform and 18-millisecond clock offset from a seeded trajectory, then flag one unobservable axis. Milestones: 1) parse synthetic logs; 2) solve fixed calibration; 3) add clock and bias states; 4) report observability and error.",
+      "stretch_goals": [
+        "rolling-shutter model",
+        "online recalibration",
+        "multi-camera rigs"
+      ],
+      "demo_story": "The bench reduces trajectory drift while refusing to invent a translation component unsupported by the motion.",
+      "test_strategy": "Known-parameter recovery; Jacobian finite differences; noise sweeps; degenerate-motion fixtures; solver determinism tests.",
+      "data_and_api_constraints": "Data plan: Generated trajectories and bundled sensor logs. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Calibration uncertainty must be surfaced before any downstream physical use. Risk: A locally converged but physically wrong calibration. Non-goal: controlling real vehicles or replacing certified calibration procedures.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 121
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "real-time-motion-planner",
+      "name": "Real-Time Motion Planner",
+      "one_sentence": "A deterministic kinodynamic planner that balances collision risk, control limits, and replanning deadlines in a simulated workspace.",
+      "concrete_problem": "Geometric paths can be dynamically impossible, while optimal planners often miss real-time deadlines.",
+      "target_users": [
+        "robotics engineers",
+        "motion-planning students",
+        "warehouse-automation researchers"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Anytime search emits a feasible trajectory first and a replayable certificate of each cost improvement within a fixed compute budget.",
+      "architecture": [
+        "robot dynamics model",
+        "signed-distance map",
+        "kinodynamic sampler",
+        "anytime search",
+        "trajectory validator"
+      ],
+      "technically_hard_parts": [
+        "dynamics-feasible sampling",
+        "narrow passages",
+        "deadline-bounded refinement",
+        "continuous collision checking"
+      ],
+      "local_first_mvp": "Plan a bounded-acceleration robot through moving obstacles, replay identical expansion order, and safely stop when a deadline expires. Milestones: 1) implement dynamics and collision; 2) find first feasible path; 3) add anytime refinement; 4) enforce deadline-safe fallback.",
+      "stretch_goals": [
+        "belief-space planning",
+        "multi-robot constraints",
+        "formal barrier checks"
+      ],
+      "demo_story": "The planner returns a safe coarse path at 20 milliseconds and improves it twice before the 80-millisecond budget.",
+      "test_strategy": "Analytic obstacle fixtures; trajectory dynamics checks; seeded-search determinism; adversarial narrow-passage benchmarks.",
+      "data_and_api_constraints": "Data plan: Generated maps and simulated dynamics only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Simulation does not establish real-world safety; outputs must never directly drive hardware. Risk: Discretization missing a collision between validation samples. Non-goal: autonomous deployment or human-safety certification.",
+      "estimated_build_days": 25,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 122
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "fault-tolerant-robot-supervisor",
+      "name": "Fault-Tolerant Robot Supervisor",
+      "one_sentence": "A runtime assurance state machine that detects sensor and actuator faults and switches a simulated robot into provably bounded fallback modes.",
+      "concrete_problem": "Nominal controllers behave unpredictably when sensors freeze, commands saturate, or timing deadlines slip.",
+      "target_users": [
+        "embedded-control engineers",
+        "robotics safety students",
+        "test teams"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Temporal monitors combine fault isolation with control-barrier checks and emit the shortest trace that forced a mode transition.",
+      "architecture": [
+        "timed event bus",
+        "fault detector bank",
+        "mode automaton",
+        "safety-envelope checker",
+        "trace minimizer"
+      ],
+      "technically_hard_parts": [
+        "fault distinguishability",
+        "timed transitions",
+        "chattering prevention",
+        "safe degraded control"
+      ],
+      "local_first_mvp": "Replay a line-following robot, inject frozen steering and delayed range data, and verify bounded-stop transitions. Milestones: 1) model modes and envelopes; 2) add sensor monitors; 3) implement fallback controllers; 4) inject and minimize failures.",
+      "stretch_goals": [
+        "redundant sensor voting",
+        "runtime proof logs",
+        "hybrid-system reachability"
+      ],
+      "demo_story": "A frozen range sensor is isolated in six samples and the supervisor enters a speed-limited mode before stopping.",
+      "test_strategy": "Temporal logic monitor tests; fault injection matrix; mode-transition coverage; safety-envelope property checks.",
+      "data_and_api_constraints": "Data plan: Simulated robot traces and generated faults. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "This educational supervisor is not certified and must not control physical equipment. Risk: A correlated fault evading detectors until the safety margin is exhausted. Non-goal: general autonomous behavior or hardware deployment.",
+      "estimated_build_days": 23,
+      "usefulness_score": 10,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.15,
+      "build_wave_1": false,
+      "rank": 123
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "embedded-power-budget-profiler",
+      "name": "Embedded Power-Budget Profiler",
+      "one_sentence": "An instruction-and-peripheral energy model that attributes battery cost to firmware tasks under real-time constraints.",
+      "concrete_problem": "Firmware teams optimize average current without knowing which wakeups, buses, or retry paths consume the energy budget.",
+      "target_users": [
+        "embedded developers",
+        "IoT researchers",
+        "battery-powered device teams"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Trace alignment joins CPU states, peripheral transactions, and task deadlines into causal energy lineages with uncertainty bounds.",
+      "architecture": [
+        "firmware trace decoder",
+        "component energy models",
+        "task attribution graph",
+        "battery simulator",
+        "budget analyzer"
+      ],
+      "technically_hard_parts": [
+        "overlapping component cost",
+        "sleep-transition accounting",
+        "model calibration",
+        "uncertainty propagation"
+      ],
+      "local_first_mvp": "Replay a sensor-node trace and show that one retry timer, not sampling, causes the projected battery shortfall. Milestones: 1) define trace schema; 2) calibrate component models; 3) attribute energy to tasks; 4) simulate budget fix.",
+      "stretch_goals": [
+        "thermal coupling",
+        "solar harvesting",
+        "hardware trace adapter"
+      ],
+      "demo_story": "Changing exponential backoff from fixed polling extends simulated service life by 19 percent without missed deadlines.",
+      "test_strategy": "Energy conservation checks; known waveform fixtures; calibration cross-validation; uncertainty and timing regression tests.",
+      "data_and_api_constraints": "Data plan: Bundled measured-style traces and synthetic component curves. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Energy predictions must include confidence ranges and never claim hardware accuracy without measurement. Risk: Incorrect component models producing false battery-life estimates. Non-goal: remote device telemetry or battery-health diagnosis.",
+      "estimated_build_days": 19,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 124
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "deterministic-hardware-loop-lab",
+      "name": "Deterministic Hardware-in-the-Loop Lab",
+      "one_sentence": "A virtual-time harness that couples firmware binaries to simulated sensors, buses, interrupts, and physical plants.",
+      "concrete_problem": "Firmware integration failures depend on interrupt timing and plant dynamics that ordinary unit tests cannot reproduce.",
+      "target_users": [
+        "firmware engineers",
+        "controls students",
+        "embedded CI maintainers"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "A single event clock advances CPU, peripherals, and plant models with exhaustive jitter schedules around critical boundaries.",
+      "architecture": [
+        "firmware emulator",
+        "virtual peripheral bus",
+        "plant integrator",
+        "event scheduler",
+        "fault/jitter explorer"
+      ],
+      "technically_hard_parts": [
+        "multi-rate time synchronization",
+        "interrupt determinism",
+        "stable plant integration",
+        "bounded timing exploration"
+      ],
+      "local_first_mvp": "Boot bundled controller firmware, close the loop on a motor model, and reproduce an overcurrent bug under one interrupt jitter schedule. Milestones: 1) emulate timer and bus; 2) couple plant model; 3) synchronize virtual time; 4) explore seeded jitter.",
+      "stretch_goals": [
+        "analog co-simulation",
+        "coverage-guided fault injection",
+        "multi-MCU buses"
+      ],
+      "demo_story": "The lab finds a 12-microsecond interrupt window that delays current limiting and replays it exactly.",
+      "test_strategy": "Peripheral protocol goldens; integrator convergence checks; schedule exploration; deterministic snapshot hashes.",
+      "data_and_api_constraints": "Data plan: Open fixture firmware and generated plant parameters. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The harness cannot substitute for electrical, thermal, or destructive hardware testing. Risk: Simulation-model mismatch hiding a physical failure mode. Non-goal: flashing or controlling attached hardware.",
+      "estimated_build_days": 26,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 6,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.85,
+      "build_wave_1": false,
+      "rank": 125
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "multi-robot-coverage-simulator",
+      "name": "Multi-Robot Coverage Simulator",
+      "one_sentence": "A decentralized coverage simulator that measures completeness, interference, and recovery under limited local communication.",
+      "concrete_problem": "Simple partitioning fails when robots drop out, localization drifts, or communication partitions split shared map state.",
+      "target_users": [
+        "swarm-robotics students",
+        "warehouse researchers",
+        "search-planning engineers"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Eventual map fusion and auctioned frontier ownership are evaluated against identical fault schedules with duplicate-work accounting.",
+      "architecture": [
+        "occupancy-grid world",
+        "local frontier planner",
+        "peer map CRDT",
+        "task auction protocol",
+        "fault replay engine"
+      ],
+      "technically_hard_parts": [
+        "conflicting map fusion",
+        "partition-tolerant allocation",
+        "coverage proof bounds",
+        "collision-free local plans"
+      ],
+      "local_first_mvp": "Cover a seeded maze with four agents, partition communications, remove one agent, and still reach a verifiable coverage threshold. Milestones: 1) build local mapping; 2) add frontier planning; 3) coordinate ownership; 4) replay partition and dropout.",
+      "stretch_goals": [
+        "continuous-space maps",
+        "heterogeneous agents",
+        "energy-aware auctions"
+      ],
+      "demo_story": "After a partition heals, agents merge evidence and avoid revisiting 93 percent of already observed cells.",
+      "test_strategy": "Coverage oracle; communication permutation tests; fault-schedule replay; collision and duplicate-work invariants.",
+      "data_and_api_constraints": "Data plan: Generated maps and simulated sensors only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Do not infer real search-and-rescue readiness from a grid simulation. Risk: Map inconsistency creating uncovered regions that appear complete. Non-goal: real drone control or surveillance.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 126
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "safe-firmware-update-prover",
+      "name": "Safe Firmware Update Prover",
+      "one_sentence": "A state-machine verifier for dual-bank firmware updates under power loss, rollback, version skew, and key rotation.",
+      "concrete_problem": "A rare interruption during update can brick a device or leave it running an unauthenticated image.",
+      "target_users": [
+        "embedded security engineers",
+        "bootloader authors",
+        "formal-methods students"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Exhaustive transition exploration checks recoverability and anti-rollback invariants for every injected reset point.",
+      "architecture": [
+        "flash-layout DSL",
+        "boot/update state machine",
+        "power-loss injector",
+        "signature/version model",
+        "counterexample checker"
+      ],
+      "technically_hard_parts": [
+        "atomic metadata design",
+        "wear-aware flash semantics",
+        "key rotation recovery",
+        "state-space reduction"
+      ],
+      "local_first_mvp": "Verify a bundled dual-bank protocol, discover a bricking sequence, patch the metadata order, and exhaust every reset boundary. Milestones: 1) encode flash semantics; 2) model update protocol; 3) inject reset at writes; 4) repair and reverify invariants.",
+      "stretch_goals": [
+        "delta updates",
+        "threshold recovery keys",
+        "proof artifact export"
+      ],
+      "demo_story": "A three-step counterexample shows a reset between version commit and image validation; the revised protocol eliminates it.",
+      "test_strategy": "Bounded model checking; flash fault matrices; invariant mutation tests; reference boot traces.",
+      "data_and_api_constraints": "Data plan: Synthetic images, generated keys, and virtual flash only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Cryptographic modeling must not be presented as a substitute for audited primitives or hardware testing. Risk: An omitted flash behavior invalidating the recoverability proof. Non-goal: building deployable bootloader signing infrastructure.",
+      "estimated_build_days": 22,
+      "usefulness_score": 10,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.6,
+      "build_wave_1": false,
+      "rank": 127
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "tactile-signal-decoder",
+      "name": "Tactile Signal Decoder",
+      "one_sentence": "A streaming decoder that reconstructs contact location, force, and slip events from noisy tactile sensor arrays.",
+      "concrete_problem": "Raw taxel grids drift, cross-couple, and saturate, making stable grasp feedback difficult to obtain.",
+      "target_users": [
+        "robotics researchers",
+        "prosthetics engineers",
+        "signal-processing students"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "A physics-constrained latent contact model separates baseline drift from real contact and reports calibrated uncertainty.",
+      "architecture": [
+        "taxel stream format",
+        "drift/noise calibrator",
+        "contact inverse solver",
+        "slip detector",
+        "uncertainty tracker"
+      ],
+      "technically_hard_parts": [
+        "ill-posed contact inversion",
+        "online baseline correction",
+        "low-latency slip detection",
+        "uncertainty calibration"
+      ],
+      "local_first_mvp": "Decode a bundled grasp trace, localize two contacts, and detect incipient slip before the synthetic object moves. Milestones: 1) calibrate baseline; 2) solve static contacts; 3) add streaming filter; 4) detect and score slip.",
+      "stretch_goals": [
+        "learned material models",
+        "3D curved surfaces",
+        "event-camera fusion"
+      ],
+      "demo_story": "The decoder rejects a temperature drift as non-contact while identifying a moving shear pattern four frames early.",
+      "test_strategy": "Synthetic contact ground truth; noise and drift sweeps; latency budgets; uncertainty coverage tests.",
+      "data_and_api_constraints": "Data plan: Generated tactile arrays and bundled anonymous fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Outputs are research estimates and must not command prosthetic or industrial hardware. Risk: Sensor drift being misclassified as a safety-critical contact event. Non-goal: medical diagnosis or closed-loop physical control.",
+      "estimated_build_days": 22,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.45,
+      "build_wave_1": false,
+      "rank": 128
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "visual-inertial-odometry-lab",
+      "name": "Visual-Inertial Odometry Lab",
+      "one_sentence": "A reproducible sliding-window visual-inertial estimator with explicit marginalization and failure diagnostics.",
+      "concrete_problem": "VIO implementations can look accurate while silently accumulating inconsistency from linearization, scale, or timing errors.",
+      "target_users": [
+        "robotics students",
+        "AR systems engineers",
+        "estimation researchers"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "The lab exposes observability, covariance consistency, and marginalization error alongside trajectory accuracy.",
+      "architecture": [
+        "feature-track importer",
+        "IMU preintegrator",
+        "sliding-window graph",
+        "marginalization engine",
+        "consistency evaluator"
+      ],
+      "technically_hard_parts": [
+        "preintegration Jacobians",
+        "gauge freedoms",
+        "stable marginalization",
+        "outlier-robust optimization"
+      ],
+      "local_first_mvp": "Run a bundled synthetic room trajectory, lose visual features briefly, and recover scale while reporting consistency bounds. Milestones: 1) implement IMU propagation; 2) add visual factors; 3) marginalize old states; 4) evaluate dropout recovery.",
+      "stretch_goals": [
+        "rolling shutter",
+        "loop closure",
+        "event sensors"
+      ],
+      "demo_story": "During a two-second textureless segment, inertial uncertainty grows honestly and contracts when tracked geometry returns.",
+      "test_strategy": "Jacobian checks; generated ground truth; dropout/noise sweeps; normalized estimation error consistency tests.",
+      "data_and_api_constraints": "Data plan: Synthetic image features and IMU logs; no camera or cloud service required. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Location traces can be sensitive and should stay local; simulation results are not navigation assurance. Risk: Overconfident covariance hiding estimator divergence. Non-goal: face analysis, surveillance, or vehicle control.",
+      "estimated_build_days": 26,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 6,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.85,
+      "build_wave_1": false,
+      "rank": 129
+    },
+    {
+      "domain": "robotics/embedded systems",
+      "repo_slug": "constraint-robot-calibrator",
+      "name": "Constraint-Based Robot Calibrator",
+      "one_sentence": "A kinematic calibration solver that estimates joint offsets and link parameters while enforcing physical identifiability constraints.",
+      "concrete_problem": "Robot calibration can fit measurements closely yet produce nonphysical parameters that fail outside the calibration poses.",
+      "target_users": [
+        "robot-arm developers",
+        "manufacturing researchers",
+        "controls students"
+      ],
+      "why_now": "Affordable sensors and microcontrollers make rigorous estimation, control, and firmware safety demonstrable entirely with simulation and recorded local fixtures.",
+      "differentiator": "Symbolic identifiability analysis selects informative poses before a constrained robust optimizer estimates parameters.",
+      "architecture": [
+        "kinematic chain DSL",
+        "symbolic sensitivity engine",
+        "pose experiment planner",
+        "constrained optimizer",
+        "holdout evaluator"
+      ],
+      "technically_hard_parts": [
+        "parameter identifiability",
+        "pose-set design",
+        "nonconvex optimization",
+        "uncertainty propagation"
+      ],
+      "local_first_mvp": "Recover seeded joint offsets from noisy end-effector measurements and show why a coplanar pose set cannot identify one link twist. Milestones: 1) parse kinematic chains; 2) analyze sensitivities; 3) select pose set; 4) solve and validate calibration.",
+      "stretch_goals": [
+        "elastic joints",
+        "camera extrinsics",
+        "optimal experiment sequencing"
+      ],
+      "demo_story": "Adding two automatically selected poses reduces holdout error while the solver keeps link lengths physically valid.",
+      "test_strategy": "Known-parameter recovery; finite-difference sensitivities; degenerate-pose fixtures; holdout and noise robustness tests.",
+      "data_and_api_constraints": "Data plan: Generated robot models and synthetic measurements. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Calibration results are not safe for physical actuation without independent measurement and limits. Risk: Nonidentifiable parameters receiving falsely precise estimates. Non-goal: driving real robots or replacing metrology equipment.",
+      "estimated_build_days": 21,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 130
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "adaptive-pde-mesh-workbench",
+      "name": "Adaptive PDE Mesh Workbench",
+      "one_sentence": "A finite-element workbench that refines and coarsens meshes from residual error estimates while preserving reproducible solver traces.",
+      "concrete_problem": "Uniform meshes waste computation in smooth regions and still miss localized features without trustworthy error estimates.",
+      "target_users": [
+        "computational-science students",
+        "simulation engineers",
+        "numerical-methods researchers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Every adaptation step records estimator contributions and maps them to known analytic error on bundled PDEs.",
+      "architecture": [
+        "mesh topology kernel",
+        "finite-element assembler",
+        "sparse linear solver",
+        "residual estimator",
+        "adaptive refinement engine"
+      ],
+      "technically_hard_parts": [
+        "conforming local refinement",
+        "boundary-condition transfer",
+        "reliable error estimation",
+        "deterministic sparse assembly"
+      ],
+      "local_first_mvp": "Solve a Poisson problem with a sharp corner singularity, adapt four times, and beat a uniform mesh at equal degrees of freedom. Milestones: 1) assemble baseline FEM; 2) compute residual estimator; 3) refine conformingly; 4) compare error-cost curves.",
+      "stretch_goals": [
+        "higher-order elements",
+        "goal-oriented estimates",
+        "parallel partitioning"
+      ],
+      "demo_story": "The mesh concentrates cells near the singular corner and reaches the target error with one fifth the unknowns.",
+      "test_strategy": "Manufactured solutions; convergence-rate checks; mesh topology properties; sparse-solver residual and determinism tests.",
+      "data_and_api_constraints": "Data plan: Generated meshes and analytic manufactured solutions. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Numerical results must state discretization, tolerance, and estimator assumptions. Risk: A flawed estimator concentrating refinement in the wrong region. Non-goal: production structural certification or cloud-scale multiphysics.",
+      "estimated_build_days": 26,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 6,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.85,
+      "build_wave_1": false,
+      "rank": 131
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "interval-numerics-auditor",
+      "name": "Interval Numerics Auditor",
+      "one_sentence": "A static-and-dynamic analyzer that bounds floating-point expressions with interval and affine arithmetic and searches for unstable regions.",
+      "concrete_problem": "A formula can pass sampled tests yet overflow, cancel, or lose significant digits in a narrow valid input range.",
+      "target_users": [
+        "scientific programmers",
+        "safety reviewers",
+        "numerical-analysis students"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Branch-and-bound counterexample search links conservative error intervals to concrete high-error inputs.",
+      "architecture": [
+        "expression IR",
+        "IEEE-754 semantics",
+        "interval/affine evaluator",
+        "range splitter",
+        "counterexample minimizer"
+      ],
+      "technically_hard_parts": [
+        "rounding-mode soundness",
+        "dependency explosion",
+        "branch sensitivity",
+        "tight witness generation"
+      ],
+      "local_first_mvp": "Audit bundled quadratic and geodesic formulas, find catastrophic cancellation, and verify stable rewrites over declared domains. Milestones: 1) parse numeric expressions; 2) propagate sound intervals; 3) split uncertain domains; 4) find and validate stable rewrite.",
+      "stretch_goals": [
+        "mixed-precision planner",
+        "Taylor models",
+        "SMT proof export"
+      ],
+      "demo_story": "The auditor narrows a million-point domain to a tiny interval where the textbook quadratic formula loses nine digits.",
+      "test_strategy": "MPFR-style oracle comparisons; exhaustive small formats; enclosure properties; rewrite equivalence and witness tests.",
+      "data_and_api_constraints": "Data plan: Generated numeric domains and bundled formulas. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Bounds are only as sound as modeled functions, ranges, and hardware rounding semantics. Risk: Unsound library-function bounds producing false assurance. Non-goal: automatically changing production scientific code.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.25,
+      "build_wave_1": false,
+      "rank": 132
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "differentiable-physics-checker",
+      "name": "Differentiable Physics Checker",
+      "one_sentence": "A local checker that compares analytic, automatic, and finite-difference gradients through contact-rich physics simulations.",
+      "concrete_problem": "Optimization can converge on incorrect gradients when collisions, clamps, and solver iterations introduce hidden discontinuities.",
+      "target_users": [
+        "simulation researchers",
+        "robot-learning students",
+        "optimization engineers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Event-aware perturbation identifies which physical transition invalidates an otherwise plausible derivative.",
+      "architecture": [
+        "differentiable integrator",
+        "contact event detector",
+        "gradient backends",
+        "perturbation scheduler",
+        "mismatch explainer"
+      ],
+      "technically_hard_parts": [
+        "nonsmooth contact derivatives",
+        "solver-unroll stability",
+        "finite-difference step choice",
+        "event-boundary localization"
+      ],
+      "local_first_mvp": "Differentiate a bouncing-body objective, expose the impact-time discontinuity, and validate a smooth regime against three gradient methods. Milestones: 1) implement smooth integrator; 2) add gradient backends; 3) detect contact events; 4) localize mismatch fixture.",
+      "stretch_goals": [
+        "implicit differentiation",
+        "frictional contact",
+        "adjoint memory planner"
+      ],
+      "demo_story": "The checker shows exact agreement before impact and pins the post-impact gradient error to one event-time branch.",
+      "test_strategy": "Analytic systems; dual-number properties; step-size sweeps; event-boundary and solver-tolerance regression tests.",
+      "data_and_api_constraints": "Data plan: Generated trajectories and analytic physical systems. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Gradient agreement does not validate the underlying physical model. Risk: Treating a nonsmooth event as differentiable and optimizing an artifact. Non-goal: training remote models or controlling physical systems.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 133
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "uncertainty-propagation-engine",
+      "name": "Uncertainty Propagation Engine",
+      "one_sentence": "A typed computation graph that propagates correlated uncertainty using linearization, polynomial chaos, and deterministic sampling.",
+      "concrete_problem": "Engineering spreadsheets commonly combine uncertain inputs as independent scalars and produce unjustifiably precise outputs.",
+      "target_users": [
+        "research engineers",
+        "metrology students",
+        "scientific-software authors"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Named uncertainty sources preserve covariance lineage and compare approximation error across propagation methods.",
+      "architecture": [
+        "unit-aware expression graph",
+        "correlation registry",
+        "propagation backends",
+        "sensitivity analyzer",
+        "report artifact generator"
+      ],
+      "technically_hard_parts": [
+        "correlation preservation",
+        "nonlinear tail behavior",
+        "unit-safe derivatives",
+        "deterministic quasi-random sampling"
+      ],
+      "local_first_mvp": "Propagate shared calibration error through a bundled thermal model and show why independent-error assumptions understate output variance. Milestones: 1) build unit-aware graph; 2) add linear propagation; 3) implement deterministic sampling; 4) compare correlated fixture.",
+      "stretch_goals": [
+        "polynomial chaos",
+        "Bayesian network import",
+        "global sensitivity indices"
+      ],
+      "demo_story": "Two measurements sharing one sensor yield a confidence interval 2.4 times wider than the naive independent calculation.",
+      "test_strategy": "Closed-form distribution cases; dimensional-analysis properties; sampling convergence checks; covariance PSD tests.",
+      "data_and_api_constraints": "Data plan: Synthetic measurements and declared distributions. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Reports must distinguish model uncertainty, measurement uncertainty, and unmodeled error. Risk: Invalid distribution assumptions creating precise but meaningless intervals. Non-goal: regulatory uncertainty certification or replacing domain review.",
+      "estimated_build_days": 20,
+      "usefulness_score": 10,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.35,
+      "build_wave_1": false,
+      "rank": 134
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "sparse-solver-autotuner",
+      "name": "Sparse Solver Autotuner",
+      "one_sentence": "A reproducible planner that selects ordering, preconditioner, and solver parameters from matrix structure under time and memory budgets.",
+      "concrete_problem": "The same sparse system can vary by orders of magnitude depending on choices that generic defaults cannot explain.",
+      "target_users": [
+        "HPC students",
+        "simulation developers",
+        "numerical-library engineers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Structural features and short probe runs feed an auditable search whose selected configuration includes a counterfactual cost report.",
+      "architecture": [
+        "matrix feature extractor",
+        "solver backend adapters",
+        "budgeted experiment scheduler",
+        "performance model",
+        "selection explainer"
+      ],
+      "technically_hard_parts": [
+        "fair cold-cache measurement",
+        "failure-aware search",
+        "fill-in prediction",
+        "generalization under scaling"
+      ],
+      "local_first_mvp": "Tune five bundled matrix families, select within a strict memory limit, and replay the exact decision from stored probe evidence. Milestones: 1) implement solver baselines; 2) extract structural features; 3) schedule probe budget; 4) select and explain configuration.",
+      "stretch_goals": [
+        "GPU backends",
+        "online retuning",
+        "symbolic fill proofs"
+      ],
+      "demo_story": "The tuner rejects the fastest small probe because projected fill exceeds memory, choosing a stable iterative alternative.",
+      "test_strategy": "Known matrix families; residual correctness; repeated timing statistics; budget invariants and held-out scale tests.",
+      "data_and_api_constraints": "Data plan: Generated and openly redistributable sparse matrices. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Performance conclusions must record hardware and variance and never trade away residual correctness. Risk: Benchmark noise or matrix leakage overfitting the selection policy. Non-goal: remote benchmark services or proprietary solver integration.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.95,
+      "build_wave_1": false,
+      "rank": 135
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "reproducible-monte-carlo-kernel",
+      "name": "Reproducible Monte Carlo Kernel",
+      "one_sentence": "A parallel sampling kernel with splittable random streams, variance reduction, and bitwise replay across worker counts.",
+      "concrete_problem": "Parallel simulations often change results when task count or scheduling changes, complicating debugging and scientific comparison.",
+      "target_users": [
+        "scientific programmers",
+        "risk-model students",
+        "simulation framework authors"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Counter-based streams bind samples to logical work IDs while deterministic reductions make concurrency topology irrelevant.",
+      "architecture": [
+        "counter-based RNG",
+        "sample assignment planner",
+        "variance-reduction library",
+        "reproducible reducer",
+        "run manifest"
+      ],
+      "technically_hard_parts": [
+        "stream independence",
+        "floating-point reduction order",
+        "adaptive stopping",
+        "variance estimator correctness"
+      ],
+      "local_first_mvp": "Estimate a bundled rare-event probability on one and eight workers and obtain identical samples, estimate, and stopping point. Milestones: 1) implement splittable streams; 2) bind logical sample IDs; 3) add stable reduction; 4) verify adaptive stopping replay.",
+      "stretch_goals": [
+        "quasi-Monte Carlo",
+        "rare-event splitting",
+        "GPU-stable reductions"
+      ],
+      "demo_story": "A worker crash and retry changes execution order but not one bit of the final estimate or confidence interval.",
+      "test_strategy": "RNG statistical batteries; worker-count metamorphic tests; analytic Monte Carlo cases; crash/retry replay properties.",
+      "data_and_api_constraints": "Data plan: Generated samples and analytic benchmark distributions. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Reproducibility does not compensate for biased models or inadequate tail sampling. Risk: Correlated substreams invalidating uncertainty estimates. Non-goal: live financial risk decisions or distributed cloud execution.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 136
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "inverse-problem-regularization-lab",
+      "name": "Inverse-Problem Regularization Lab",
+      "one_sentence": "A solver laboratory that exposes identifiability, regularization paths, and uncertainty for ill-posed linear and nonlinear inverse problems.",
+      "concrete_problem": "Inverse solvers can fit observations while amplifying noise into physically implausible hidden parameters.",
+      "target_users": [
+        "imaging students",
+        "scientific researchers",
+        "optimization engineers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Singular-spectrum diagnostics and synthetic-truth tests connect each regularization choice to recoverable information.",
+      "architecture": [
+        "forward-model DSL",
+        "noise generator",
+        "regularized solver suite",
+        "hyperparameter selector",
+        "identifiability visualizer"
+      ],
+      "technically_hard_parts": [
+        "ill-conditioning diagnosis",
+        "constraint handling",
+        "hyperparameter selection",
+        "posterior uncertainty approximation"
+      ],
+      "local_first_mvp": "Reconstruct a seeded blurred signal, compare three regularizers, and reveal a component the measurements cannot identify. Milestones: 1) define forward operators; 2) implement regularized solvers; 3) trace solution paths; 4) evaluate recoverability fixture.",
+      "stretch_goals": [
+        "total variation",
+        "nonlinear adjoints",
+        "ensemble uncertainty"
+      ],
+      "demo_story": "A lower residual solution is rejected because it reconstructs high-frequency energy outside the operator's observable spectrum.",
+      "test_strategy": "Manufactured truth; adjoint consistency; discrepancy-principle fixtures; noise sensitivity and singular-spectrum checks.",
+      "data_and_api_constraints": "Data plan: Generated signals and open mathematical operators. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Reconstructions must disclose prior and regularization assumptions, especially for scientific interpretation. Risk: A visually convincing but nonidentifiable reconstruction being treated as evidence. Non-goal: medical image diagnosis or automatic scientific claims.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 137
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "conservation-law-simulator",
+      "name": "Conservation-Law Simulator",
+      "one_sentence": "A finite-volume simulator that tracks mass, momentum, and entropy budgets across shocks and adaptive time steps.",
+      "concrete_problem": "Numerical solutions can look plausible while leaking conserved quantities or selecting nonphysical shock solutions.",
+      "target_users": [
+        "fluid-dynamics students",
+        "numerical-methods educators",
+        "simulation engineers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Each update emits a local flux ledger so global conservation failures can be traced to cells and boundary rules.",
+      "architecture": [
+        "structured mesh",
+        "Riemann solvers",
+        "finite-volume integrator",
+        "CFL controller",
+        "conservation ledger"
+      ],
+      "technically_hard_parts": [
+        "shock-capturing stability",
+        "positivity preservation",
+        "boundary flux semantics",
+        "adaptive-step accounting"
+      ],
+      "local_first_mvp": "Run a shock tube and dam-break fixture, compare flux schemes, and pinpoint a deliberately broken boundary's mass leak. Milestones: 1) implement scalar advection; 2) add Riemann fluxes; 3) enforce CFL and positivity; 4) audit shock fixtures.",
+      "stretch_goals": [
+        "unstructured meshes",
+        "shallow-water source terms",
+        "parallel domain decomposition"
+      ],
+      "demo_story": "The ledger accounts for every unit of mass and localizes a 0.3 percent loss to one boundary update.",
+      "test_strategy": "Exact Riemann comparisons; convergence tests; conservation/positivity properties; perturbed-boundary mutation tests.",
+      "data_and_api_constraints": "Data plan: Generated initial conditions and analytic reference cases. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The educational solver is not validated for engineering safety calculations. Risk: A stable-looking scheme violating entropy or positivity constraints. Non-goal: weather prediction or certified fluid engineering.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.55,
+      "build_wave_1": false,
+      "rank": 138
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "floating-point-stability-forensics",
+      "name": "Floating-Point Stability Forensics",
+      "one_sentence": "A trace debugger that attributes numerical divergence to rounding, cancellation, conditioning, and reduction order.",
+      "concrete_problem": "When two platforms disagree, raw output diffs do not reveal whether the cause is benign rounding or an unstable algorithm.",
+      "target_users": [
+        "scientific developers",
+        "compiler engineers",
+        "reproducibility reviewers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Shadow high-precision execution and operation-level error lineage identify the first amplified rounding contribution.",
+      "architecture": [
+        "instrumented numeric IR",
+        "shadow precision evaluator",
+        "error lineage graph",
+        "condition estimator",
+        "trace slicer"
+      ],
+      "technically_hard_parts": [
+        "efficient shadow execution",
+        "transcendental alignment",
+        "error attribution",
+        "distinguishing sensitivity from bugs"
+      ],
+      "local_first_mvp": "Replay a chaotic recurrence and a stable solver, then explain why equal initial ULP differences grow in only one case. Milestones: 1) instrument numeric operations; 2) run shadow precision; 3) construct error lineage; 4) slice two divergence fixtures.",
+      "stretch_goals": [
+        "mixed-precision suggestions",
+        "GPU trace import",
+        "stochastic arithmetic"
+      ],
+      "demo_story": "The tool traces a six-digit final discrepancy back to one subtractive cancellation followed by an ill-conditioned solve.",
+      "test_strategy": "Exact-rational small cases; known unstable formulas; cross-order reductions; lineage mutation and determinism tests.",
+      "data_and_api_constraints": "Data plan: Bundled numeric programs and generated inputs. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Error attribution is diagnostic evidence, not a proof that a scientific conclusion is valid. Risk: Instrumentation or math-library mismatch being blamed on user code. Non-goal: platform certification or automatic numerical rewrites.",
+      "estimated_build_days": 20,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.95,
+      "build_wave_1": false,
+      "rank": 139
+    },
+    {
+      "domain": "computational science/engineering",
+      "repo_slug": "multiphysics-coupling-orchestrator",
+      "name": "Multiphysics Coupling Orchestrator",
+      "one_sentence": "A local co-simulation kernel that couples independently stepped thermal, electrical, and mechanical models with convergence guarantees.",
+      "concrete_problem": "Naive sequential coupling can oscillate or invent energy when subsystems use incompatible time scales and state conventions.",
+      "target_users": [
+        "simulation framework authors",
+        "engineering students",
+        "numerical coupling researchers"
+      ],
+      "why_now": "Reproducible local solvers can now expose numerical stability, uncertainty, and conservation instead of hiding them behind remote simulation services.",
+      "differentiator": "Contracted ports carry units, conservation semantics, and rollback checkpoints for adaptive fixed-point coupling.",
+      "architecture": [
+        "typed model ports",
+        "multi-rate scheduler",
+        "checkpoint/rollback layer",
+        "coupling solver",
+        "energy-balance auditor"
+      ],
+      "technically_hard_parts": [
+        "multi-rate synchronization",
+        "algebraic loop convergence",
+        "rollback consistency",
+        "cross-domain energy accounting"
+      ],
+      "local_first_mvp": "Couple a battery, thermal mass, and motor model; trigger thermal throttling and reproduce a stable energy ledger. Milestones: 1) define unit-safe ports; 2) schedule two model rates; 3) iterate coupled states; 4) audit conservation and rollback.",
+      "stretch_goals": [
+        "FMI importer",
+        "waveform relaxation",
+        "distributed co-simulation"
+      ],
+      "demo_story": "The orchestrator detects unstable loose coupling, halves the macro step, and converges without losing subsystem state.",
+      "test_strategy": "Manufactured coupled systems; unit mismatch rejection; convergence-order checks; rollback and energy conservation properties.",
+      "data_and_api_constraints": "Data plan: Bundled analytic component models only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Coupled outputs inherit every component model's assumptions and are not certification evidence. Risk: A converged numerical coupling masking an invalid physical interface. Non-goal: industrial plant control or proprietary simulator integration.",
+      "estimated_build_days": 25,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 6,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.85,
+      "build_wave_1": false,
+      "rank": 140
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "perceptual-video-encoder-lab",
+      "name": "Perceptual Video Encoder Lab",
+      "one_sentence": "A deterministic block-video encoder laboratory that allocates bits from motion, texture, and perceptual error under a fixed budget.",
+      "concrete_problem": "Codec experiments optimize average distortion while hiding temporal artifacts, rate-control instability, and decoder cost.",
+      "target_users": [
+        "video engineers",
+        "multimedia students",
+        "performance researchers"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "A transparent rate-distortion planner exposes every block decision and compares objective metrics with temporal artifact probes.",
+      "architecture": [
+        "frame/block model",
+        "motion estimator",
+        "transform quantizer",
+        "rate controller",
+        "perceptual evaluator"
+      ],
+      "technically_hard_parts": [
+        "motion search complexity",
+        "bit-exact entropy coding",
+        "buffer-constrained rate control",
+        "temporal quality measurement"
+      ],
+      "local_first_mvp": "Encode three generated clips at one fixed size, compare allocation policies, and reproduce identical bytes and quality traces. Milestones: 1) build intra codec; 2) add motion compensation; 3) implement constrained rate control; 4) evaluate deterministic clips.",
+      "stretch_goals": [
+        "B-frame search",
+        "saliency models",
+        "SIMD kernels"
+      ],
+      "demo_story": "The perceptual policy preserves moving text at the cost of low-salience texture without exceeding the byte budget.",
+      "test_strategy": "Decode round trips; bitstream golden files; rate-budget invariants; synthetic motion and temporal artifact fixtures.",
+      "data_and_api_constraints": "Data plan: Procedurally generated clips and redistributable test patterns. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Quality metrics must not be presented as universal human preference. Risk: Metric gaming producing worse visible artifacts despite a higher score. Non-goal: a production-standard codec or copyrighted media distribution.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 141
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "color-pipeline-verifier",
+      "name": "Color Pipeline Verifier",
+      "one_sentence": "A color-management engine that symbolically and numerically verifies transforms, gamut mapping, tone curves, and quantization.",
+      "concrete_problem": "Media pipelines silently mix transfer functions, primaries, and numeric ranges, causing clipped highlights and hue shifts.",
+      "target_users": [
+        "graphics engineers",
+        "photography-tool authors",
+        "display students"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "A typed color graph rejects invalid composition and generates adversarial colors that maximize round-trip error.",
+      "architecture": [
+        "typed color-space graph",
+        "matrix/curve compiler",
+        "gamut mapper",
+        "error optimizer",
+        "test-chart renderer"
+      ],
+      "technically_hard_parts": [
+        "chromatic adaptation",
+        "nonlinear inverse curves",
+        "gamut boundary search",
+        "quantization error bounds"
+      ],
+      "local_first_mvp": "Verify an HDR-to-SDR fixture, find the worst hue shift, and compare two mappings with an exact transform manifest. Milestones: 1) encode color types; 2) compose transforms; 3) search error extrema; 4) render and audit fixed chart.",
+      "stretch_goals": [
+        "ICC subset importer",
+        "spectral colors",
+        "metamer analysis"
+      ],
+      "demo_story": "The verifier catches a double-applied transfer curve and produces the input color with maximum visible error.",
+      "test_strategy": "Reference color vectors; transform round trips; monotonicity properties; high-precision differential tests.",
+      "data_and_api_constraints": "Data plan: Generated charts and published color-space constants. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Rendered appearance still depends on calibrated hardware; reports must separate numeric from perceptual claims. Risk: Incorrect reference constants invalidating every downstream result. Non-goal: display calibration or automatic artistic grading.",
+      "estimated_build_days": 20,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.15,
+      "build_wave_1": false,
+      "rank": 142
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "procedural-geometry-compiler",
+      "name": "Procedural Geometry Compiler",
+      "one_sentence": "A compiler for signed-distance and constructive-solid geometry that optimizes evaluation while preserving topology checks.",
+      "concrete_problem": "Complex procedural models become slow and numerically fragile when expression trees repeat work or combine near-degenerate surfaces.",
+      "target_users": [
+        "graphics programmers",
+        "CAD researchers",
+        "compiler students"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "E-graph rewrites are gated by interval bounds and sampled topology witnesses before emitting vectorized kernels.",
+      "architecture": [
+        "geometry DSL",
+        "expression e-graph",
+        "interval bound engine",
+        "kernel code generator",
+        "topology validator"
+      ],
+      "technically_hard_parts": [
+        "distance-bound preservation",
+        "degenerate intersections",
+        "rewrite cost modeling",
+        "robust surface extraction"
+      ],
+      "local_first_mvp": "Compile a bundled mechanical part, reduce evaluator work, and reject one algebraic rewrite that changes a thin feature. Milestones: 1) parse geometry DSL; 2) interpret reference model; 3) optimize with bounds; 4) extract and validate mesh.",
+      "stretch_goals": [
+        "automatic differentiation",
+        "GPU kernel target",
+        "exact predicates"
+      ],
+      "demo_story": "The compiler doubles ray-march throughput while a topology witness preserves every connected component.",
+      "test_strategy": "Reference interpreter differential tests; random point bounds; mesh topology checks; adversarial thin-feature fixtures.",
+      "data_and_api_constraints": "Data plan: Procedurally generated models only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Topology sampling has limits and must not imply manufacturing validity. Risk: An optimization erasing a feature between sampled witnesses. Non-goal: production CAD certification or fabrication control.",
+      "estimated_build_days": 23,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 143
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "font-shaping-conformance-lab",
+      "name": "Font Shaping Conformance Lab",
+      "one_sentence": "A text-shaping engine and differential harness for scripts, bidi ordering, fallback, and variable-font axes.",
+      "concrete_problem": "Text can render with missing marks, reordered glyphs, or cursor errors even when every character exists in a font.",
+      "target_users": [
+        "text-engine developers",
+        "internationalization engineers",
+        "typography students"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Cluster and provenance traces connect Unicode input through shaping substitutions to caret positions and rendered glyphs.",
+      "architecture": [
+        "Unicode segmenter",
+        "bidi resolver",
+        "OpenType subset engine",
+        "font fallback planner",
+        "conformance trace viewer"
+      ],
+      "technically_hard_parts": [
+        "grapheme clustering",
+        "contextual substitutions",
+        "bidi caret mapping",
+        "variation interpolation"
+      ],
+      "local_first_mvp": "Shape bundled Arabic, Devanagari, emoji, and mixed-direction fixtures and localize an injected cluster-boundary bug. Milestones: 1) segment and reorder text; 2) apply shaping tables; 3) map clusters and carets; 4) run multilingual conformance corpus.",
+      "stretch_goals": [
+        "vertical text",
+        "color glyphs",
+        "incremental paragraph layout"
+      ],
+      "demo_story": "A broken mark attachment is traced to one lookup while logical selection still round-trips to the original text.",
+      "test_strategy": "Published Unicode-style vectors; differential shaping fixtures; cluster round trips; malformed-font fuzzing.",
+      "data_and_api_constraints": "Data plan: Bundled open fonts and generated strings. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Test coverage must include community review and cannot declare a script universally correct from a small corpus. Risk: Malformed fonts causing parser exploits or incorrect script rendering. Non-goal: a full office editor or font piracy tool.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 144
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "audio-restoration-workbench",
+      "name": "Audio Restoration Workbench",
+      "one_sentence": "An offline spectral restoration engine that removes clicks, hum, and dropouts while preserving an auditable edit mask.",
+      "concrete_problem": "Black-box cleanup can erase quiet transients or invent content without showing where the signal changed.",
+      "target_users": [
+        "audio archivists",
+        "DSP students",
+        "podcast preservation teams"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Every repaired sample is linked to a detector confidence, local signal model, and reversible difference track.",
+      "architecture": [
+        "streaming STFT",
+        "artifact detectors",
+        "local signal reconstructor",
+        "edit-mask ledger",
+        "quality evaluator"
+      ],
+      "technically_hard_parts": [
+        "transient-versus-click separation",
+        "phase-consistent reconstruction",
+        "long hum tracking",
+        "confidence calibration"
+      ],
+      "local_first_mvp": "Restore a generated recording with seeded defects, export the reversible edit mask, and score recovery against clean ground truth. Milestones: 1) implement spectral analysis; 2) detect three artifact classes; 3) reconstruct masked regions; 4) audit against known clean signal.",
+      "stretch_goals": [
+        "wow/flutter correction",
+        "multichannel coherence",
+        "real-time preview"
+      ],
+      "demo_story": "The tool removes 40 clicks and mains hum while preserving a seeded snare transient that a threshold baseline deletes.",
+      "test_strategy": "Synthetic corruption recovery; perfect-reconstruction checks; phase and latency tests; false-positive transient corpus.",
+      "data_and_api_constraints": "Data plan: Generated audio and public-domain impulse fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Restoration provenance must remain attached; reconstructed audio should not be represented as an untouched original. Risk: Over-restoration removing meaningful or evidentiary sound. Non-goal: voice impersonation, speaker identification, or copyright circumvention.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 145
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "gpu-framegraph-scheduler",
+      "name": "GPU Framegraph Scheduler",
+      "one_sentence": "A simulator and compiler that schedules rendering passes, resource lifetimes, barriers, and queue overlap under memory limits.",
+      "concrete_problem": "Manual render graphs waste memory or introduce synchronization bugs that appear only under specific pass overlaps.",
+      "target_users": [
+        "graphics engineers",
+        "game-engine students",
+        "GPU systems researchers"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Constraint-based aliasing and queue scheduling emit a proof trace for every reuse and synchronization edge.",
+      "architecture": [
+        "framegraph DSL",
+        "resource lifetime analyzer",
+        "barrier synthesizer",
+        "memory alias planner",
+        "multi-queue scheduler"
+      ],
+      "technically_hard_parts": [
+        "hazard detection",
+        "interval aliasing",
+        "queue synchronization",
+        "multiobjective schedule search"
+      ],
+      "local_first_mvp": "Compile a deferred-rendering fixture, reduce peak virtual memory, and reject an intentionally missing write-to-read barrier. Milestones: 1) parse pass dependencies; 2) infer hazards; 3) allocate aliased resources; 4) schedule queues under budget.",
+      "stretch_goals": [
+        "hardware timing importer",
+        "transient heap defragmentation",
+        "async compute heuristics"
+      ],
+      "demo_story": "The compiler overlaps compute and graphics while proving that two aliased images never have live ranges in common.",
+      "test_strategy": "Small-graph exhaustive oracles; hazard mutation tests; allocation invariants; schedule determinism and budget tests.",
+      "data_and_api_constraints": "Data plan: Synthetic framegraphs; no GPU or vendor API required. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Simulator timing estimates must not be presented as measurements from real hardware. Risk: An incomplete hazard model authorizing unsafe aliasing. Non-goal: a game engine or proprietary shader compiler.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.25,
+      "build_wave_1": false,
+      "rank": 146
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "media-provenance-watermark-lab",
+      "name": "Media Provenance Watermark Lab",
+      "one_sentence": "A local laboratory for fragile and robust image watermarks that measures tamper localization, survivability, and false attribution.",
+      "concrete_problem": "Watermark claims often ignore recompression, cropping, collision rates, and the difference between integrity signals and authorship proof.",
+      "target_users": [
+        "media-forensics students",
+        "archival engineers",
+        "provenance researchers"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Deterministic attack suites compare signed fragile tiles with spread-spectrum marks and explicitly model inconclusive outcomes.",
+      "architecture": [
+        "image transform pipeline",
+        "watermark embedders",
+        "signed manifest format",
+        "attack generator",
+        "detection/calibration evaluator"
+      ],
+      "technically_hard_parts": [
+        "robust synchronization",
+        "tamper localization",
+        "false-positive calibration",
+        "keyed signal design"
+      ],
+      "local_first_mvp": "Embed marks in generated images, apply a fixed edit suite, localize one splice, and demonstrate one unavoidable ambiguous case. Milestones: 1) implement two watermark schemes; 2) sign local manifest; 3) generate edit attacks; 4) measure detection and uncertainty.",
+      "stretch_goals": [
+        "video temporal marks",
+        "print-scan channel",
+        "selective disclosure manifests"
+      ],
+      "demo_story": "A crop survives robust detection, a local splice breaks only affected fragile tiles, and a heavy resize is reported inconclusive.",
+      "test_strategy": "Known-edit corpus; wrong-key tests; collision simulations; calibration curves; malformed-manifest fuzzing.",
+      "data_and_api_constraints": "Data plan: Generated images and local ephemeral keys. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Watermarks do not prove truth, consent, or ownership and can be removed or forged outside modeled attacks. Risk: Overstating detection as definitive attribution. Non-goal: DRM, covert tracking, or claims about real-world authorship.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 147
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "spatial-audio-renderer",
+      "name": "Spatial Audio Renderer",
+      "one_sentence": "A real-time binaural renderer that models head motion, room reflections, and filter transitions with bounded latency.",
+      "concrete_problem": "Naive spatial audio clicks during filter changes, collapses externalization, or exceeds latency budgets as sources increase.",
+      "target_users": [
+        "audio-engine developers",
+        "XR students",
+        "acoustics researchers"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Partitioned convolution and perceptually bounded update scheduling make every latency-quality tradeoff measurable and replayable.",
+      "architecture": [
+        "HRTF dataset loader",
+        "head-pose interpolator",
+        "partitioned convolver",
+        "early-reflection model",
+        "latency budget scheduler"
+      ],
+      "technically_hard_parts": [
+        "phase-safe filter interpolation",
+        "real-time convolution",
+        "pose prediction",
+        "artifact-free source virtualization"
+      ],
+      "local_first_mvp": "Render a generated eight-source scene through a fixed head-motion trace and verify no discontinuities or deadline overruns. Milestones: 1) render static source; 2) add partitioned convolution; 3) interpolate head motion; 4) schedule multi-source budget.",
+      "stretch_goals": [
+        "personalized HRTF fitting",
+        "higher-order ambisonics",
+        "GPU convolution"
+      ],
+      "demo_story": "A rapid 90-degree turn updates direction smoothly while the scheduler degrades distant reflections before missing a deadline.",
+      "test_strategy": "Impulse-response goldens; continuity properties; fixed-budget deadline simulation; energy and channel-separation tests.",
+      "data_and_api_constraints": "Data plan: Bundled synthetic/open impulse responses and generated audio. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Hearing comfort varies; demos need conservative levels and no medical spatial-hearing claims. Risk: Filter transitions creating loud artifacts or excessive levels. Non-goal: hearing diagnosis or biometric head tracking.",
+      "estimated_build_days": 23,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 148
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "texture-streaming-simulator",
+      "name": "Texture Streaming Simulator",
+      "one_sentence": "A trace-driven texture residency planner that predicts visible quality, I/O bursts, and memory pressure across camera paths.",
+      "concrete_problem": "Streaming systems either overfetch textures or reveal blurry and missing detail during fast camera movement.",
+      "target_users": [
+        "graphics systems students",
+        "engine developers",
+        "performance engineers"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Screen-space error and future-view uncertainty are evaluated against identical camera traces with exact residency accounting.",
+      "architecture": [
+        "virtual texture model",
+        "camera/visibility tracer",
+        "residency cache",
+        "prefetch planner",
+        "quality-stall evaluator"
+      ],
+      "technically_hard_parts": [
+        "visibility prediction",
+        "mip dependency management",
+        "I/O deadline scheduling",
+        "cache thrash control"
+      ],
+      "local_first_mvp": "Replay a seeded flythrough, compare LRU and predictive streaming, and explain every visible mip miss. Milestones: 1) model virtual pages; 2) implement cache baseline; 3) add predictive prefetch; 4) replay camera stress trace.",
+      "stretch_goals": [
+        "mesh streaming",
+        "learned path predictor",
+        "multi-tier storage"
+      ],
+      "demo_story": "The predictive policy cuts visible misses without exceeding the same 256-megabyte budget and avoids one prefetch storm.",
+      "test_strategy": "Residency invariants; optimal small-trace oracle; adversarial camera cuts; deterministic I/O and quality metrics.",
+      "data_and_api_constraints": "Data plan: Procedural scenes and generated camera paths. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Simulation quality estimates must be validated before informing shipped content budgets. Risk: A predictor optimized to smooth traces failing on abrupt camera cuts. Non-goal: asset distribution or a complete rendering engine.",
+      "estimated_build_days": 19,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 149
+    },
+    {
+      "domain": "media/graphics systems",
+      "repo_slug": "scene-difference-renderer",
+      "name": "Scene Difference Renderer",
+      "one_sentence": "A semantic renderer that attributes pixel differences between scene revisions to geometry, material, lighting, and sampling changes.",
+      "concrete_problem": "Screenshot diffs flag millions of pixels but do not identify which scene dependency caused a visual regression.",
+      "target_users": [
+        "rendering engineers",
+        "visual-test authors",
+        "technical artists"
+      ],
+      "why_now": "Modern media pipelines need transparent quality, color, timing, and memory tradeoffs that can be explored locally with generated assets.",
+      "differentiator": "Per-pixel provenance buffers and deterministic sampling form a causal diff graph rather than a thresholded image overlay.",
+      "architecture": [
+        "deterministic path tracer",
+        "scene dependency graph",
+        "provenance buffers",
+        "alignment engine",
+        "causal diff classifier"
+      ],
+      "technically_hard_parts": [
+        "stable sampling",
+        "occlusion attribution",
+        "indirect-light causality",
+        "noise-versus-change separation"
+      ],
+      "local_first_mvp": "Render two bundled scene versions and attribute a wall color shift to one material while ignoring controlled Monte Carlo noise. Milestones: 1) build deterministic renderer; 2) record pixel provenance; 3) align scene entities; 4) classify revision differences.",
+      "stretch_goals": [
+        "raster pipeline adapter",
+        "temporal animation diffs",
+        "minimal changed-subgraph extraction"
+      ],
+      "demo_story": "The report traces a 12,000-pixel change through indirect illumination to a single altered emissive surface.",
+      "test_strategy": "Analytic scenes; identical-scene null tests; mutation matrix by dependency type; sampling convergence checks.",
+      "data_and_api_constraints": "Data plan: Procedural scenes and generated textures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Attribution depends on the renderer's modeled light transport and should expose unresolved mixed causes. Risk: Misclassifying sampling noise or indirect effects as a direct asset defect. Non-goal: artistic quality judgment or copyrighted asset analysis.",
+      "estimated_build_days": 22,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 150
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "offline-map-matching-engine",
+      "name": "Offline Map-Matching Engine",
+      "one_sentence": "A probabilistic map matcher that aligns noisy, sparse GPS traces to a local road graph with uncertainty and alternate paths.",
+      "concrete_problem": "GPS samples jump between parallel roads and tunnels, making naive nearest-edge matching produce impossible routes.",
+      "target_users": [
+        "mobility researchers",
+        "field-app developers",
+        "transportation students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "A hidden Markov model combines topology, speed, and heading while retaining calibrated ambiguity rather than forcing one route.",
+      "architecture": [
+        "local road-graph store",
+        "spatial candidate index",
+        "transition model",
+        "Viterbi/beam solver",
+        "uncertainty evaluator"
+      ],
+      "technically_hard_parts": [
+        "candidate pruning",
+        "network-distance transitions",
+        "long sampling gaps",
+        "probability calibration"
+      ],
+      "local_first_mvp": "Match a generated downtown trip with a tunnel gap and report two plausible routes until later samples resolve the ambiguity. Milestones: 1) index local graph; 2) score emission candidates; 3) add network transitions; 4) evaluate noisy fixed traces.",
+      "stretch_goals": [
+        "multimodal networks",
+        "online particle filter",
+        "privacy-preserving trace summaries"
+      ],
+      "demo_story": "The engine avoids snapping across a divided highway and delays commitment through a 45-second GPS gap.",
+      "test_strategy": "Synthetic ground truth; noise/dropout sweeps; graph-disconnection fixtures; posterior calibration and determinism tests.",
+      "data_and_api_constraints": "Data plan: Generated road networks plus optionally downloaded open extracts prepared in advance. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Location traces are sensitive; processing and outputs stay local and support deliberate deletion. Risk: Overconfident matching creating a false record of where someone traveled. Non-goal: live tracking, surveillance, or turn-by-turn navigation.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 151
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "terrain-visibility-planner",
+      "name": "Terrain Visibility Planner",
+      "one_sentence": "A tiled terrain engine that computes line-of-sight, radio viewsheds, and route exposure with error bounds.",
+      "concrete_problem": "Coarse or inconsistent elevation sampling can create false visible corridors and hide terrain occlusion.",
+      "target_users": [
+        "field-network planners",
+        "geospatial students",
+        "outdoor safety researchers"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Hierarchical horizon envelopes accelerate queries while returning uncertainty caused by cell resolution and elevation error.",
+      "architecture": [
+        "raster pyramid store",
+        "geodesic ray marcher",
+        "horizon envelope index",
+        "uncertainty model",
+        "exposure-aware route solver"
+      ],
+      "technically_hard_parts": [
+        "earth-curvature geometry",
+        "tile-boundary continuity",
+        "conservative occlusion bounds",
+        "multiobjective routing"
+      ],
+      "local_first_mvp": "Compute a viewshed on a generated ridge, route between two points, and explain where terrain uncertainty changes exposure classification. Milestones: 1) load tiled elevation; 2) implement exact baseline rays; 3) build horizon index; 4) plan and audit exposure route.",
+      "stretch_goals": [
+        "vegetation model",
+        "Fresnel zones",
+        "incremental moving-observer queries"
+      ],
+      "demo_story": "The indexed result matches the baseline while marking three boundary cells uncertain instead of falsely visible.",
+      "test_strategy": "Analytic terrain surfaces; brute-force ray oracle; tile seam tests; resolution and uncertainty sensitivity checks.",
+      "data_and_api_constraints": "Data plan: Generated terrain and bundled open elevation samples. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Visibility and radio estimates are simplified and must not guide hazardous field operations without validation. Risk: Resolution error being mistaken for guaranteed cover or connectivity. Non-goal: military targeting or real emergency dispatch.",
+      "estimated_build_days": 21,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 152
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "geospatial-topology-repair",
+      "name": "Geospatial Topology Repair Engine",
+      "one_sentence": "A constraint solver that repairs polygon gaps, overlaps, self-intersections, and dangling networks while preserving provenance.",
+      "concrete_problem": "Independent map edits create tiny topology defects that break routing, area totals, and spatial joins.",
+      "target_users": [
+        "GIS engineers",
+        "mapping organizations",
+        "computational-geometry students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Repairs minimize weighted vertex movement and emit reversible operations plus proof checks for each restored invariant.",
+      "architecture": [
+        "robust geometry predicates",
+        "planar arrangement builder",
+        "topology constraint graph",
+        "repair optimizer",
+        "provenance patch log"
+      ],
+      "technically_hard_parts": [
+        "exact geometric predicates",
+        "near-coincident features",
+        "minimal repair selection",
+        "attribute-boundary preservation"
+      ],
+      "local_first_mvp": "Repair a bundled parcel mesh with seeded defects, restore area and adjacency invariants, and replay every vertex change. Milestones: 1) detect robust intersections; 2) build topology constraints; 3) optimize minimal edits; 4) verify and replay repair patch.",
+      "stretch_goals": [
+        "3D surfaces",
+        "streaming repair",
+        "human constraint annotations"
+      ],
+      "demo_story": "The engine closes a microscopic gap without moving a legally fixed boundary and explains the alternative it rejected.",
+      "test_strategy": "Generated defect corpus; exact-predicate properties; area/adjacency conservation; patch inversion and idempotence tests.",
+      "data_and_api_constraints": "Data plan: Synthetic geometries and openly licensed miniature fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Repairs are technical suggestions and must not redefine legal or political boundaries. Risk: A minimal geometric repair violating real-world ownership or jurisdiction meaning. Non-goal: editing authoritative cadastral records automatically.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 153
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "evacuation-accessibility-router",
+      "name": "Evacuation Accessibility Router",
+      "one_sentence": "A robust routing engine that plans evacuation paths under uncertain closures, mobility constraints, and facility capacity.",
+      "concrete_problem": "Shortest paths can direct people toward stairs, steep grades, fragile links, or shelters that become unavailable.",
+      "target_users": [
+        "emergency-planning researchers",
+        "accessibility advocates",
+        "routing students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Scenario-based regret optimization produces accessible alternatives and explains which uncertain closure changes each recommendation.",
+      "architecture": [
+        "multimodal street graph",
+        "accessibility constraint model",
+        "closure scenario generator",
+        "robust route solver",
+        "capacity simulator"
+      ],
+      "technically_hard_parts": [
+        "uncertain edge availability",
+        "grade and transfer constraints",
+        "shared capacity effects",
+        "interpretable route robustness"
+      ],
+      "local_first_mvp": "Route three synthetic travelers through a seeded flood scenario, close one bridge, and retain feasible accessible alternatives. Milestones: 1) model traveler constraints; 2) implement deterministic routing; 3) add closure scenarios; 4) simulate capacity and compare regret.",
+      "stretch_goals": [
+        "household coordination",
+        "contraflow simulation",
+        "offline printable route packets"
+      ],
+      "demo_story": "A wheelchair route remains step-free after the nominal bridge closes, while the system flags its remaining curb uncertainty.",
+      "test_strategy": "Small-graph optimal oracles; constraint mutation tests; closure scenario replays; capacity and accessibility invariants.",
+      "data_and_api_constraints": "Data plan: Generated city graph and fictional facilities only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "This is planning research, not real-time emergency guidance; uncertainty and data age must be prominent. Risk: Stale or incomplete accessibility data directing someone into danger. Non-goal: live dispatch, surveillance, or replacing official emergency instructions.",
+      "estimated_build_days": 24,
+      "usefulness_score": 10,
+      "technical_depth_score": 9,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.95,
+      "build_wave_1": false,
+      "rank": 154
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "spatiotemporal-raster-cube",
+      "name": "Spatiotemporal Raster Cube",
+      "one_sentence": "An embedded array store for chunked spatial-time rasters with predicate pushdown, pyramids, and crash-safe updates.",
+      "concrete_problem": "Local environmental datasets exceed memory and make region/time queries expensive when stored as loose images.",
+      "target_users": [
+        "earth-science students",
+        "field researchers",
+        "geospatial tool authors"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "A workload-aware chunk index jointly optimizes spatial windows, time slices, compression, and incremental pyramid maintenance.",
+      "architecture": [
+        "chunked raster format",
+        "space-time index",
+        "compression codecs",
+        "query planner",
+        "incremental pyramid engine"
+      ],
+      "technically_hard_parts": [
+        "chunk-shape optimization",
+        "nodata semantics",
+        "crash-safe metadata",
+        "multi-resolution consistency"
+      ],
+      "local_first_mvp": "Load a generated year of temperature grids, query one watershed and month, append a correction, and verify affected pyramid chunks only. Milestones: 1) write chunk format; 2) index spatial-time ranges; 3) plan window queries; 4) update crash-safely and maintain pyramids.",
+      "stretch_goals": [
+        "vector-raster joins",
+        "adaptive chunking",
+        "parallel scans"
+      ],
+      "demo_story": "A correction rewrites 11 of 12,000 chunks and every zoom level remains numerically consistent after simulated power loss.",
+      "test_strategy": "Array oracle comparisons; randomized windows; crash-point injection; compression round trips and pyramid consistency checks.",
+      "data_and_api_constraints": "Data plan: Generated rasters and optionally user-supplied open datasets. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Metadata should not imply scientific validity or hide nodata and resampling choices. Risk: Silent nodata or coordinate mistakes corrupting aggregate results. Non-goal: a cloud data warehouse or map-tile web service.",
+      "estimated_build_days": 25,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 155
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "gps-drift-corrector",
+      "name": "GPS Drift Corrector",
+      "one_sentence": "A local trajectory smoother that fuses GNSS, inertial, and motion constraints while detecting multipath and clock jumps.",
+      "concrete_problem": "Urban GNSS drift creates impossible jumps and biased distance estimates that simple smoothing cannot distinguish from real motion.",
+      "target_users": [
+        "field researchers",
+        "fitness-device developers",
+        "positioning students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Switchable robust factors isolate measurement faults and retain a time-varying confidence envelope around the corrected path.",
+      "architecture": [
+        "trajectory log schema",
+        "motion/preintegration model",
+        "robust factor graph",
+        "fault-state detector",
+        "uncertainty exporter"
+      ],
+      "technically_hard_parts": [
+        "multipath outlier modeling",
+        "clock discontinuities",
+        "gauge handling",
+        "consistent covariance estimation"
+      ],
+      "local_first_mvp": "Correct a generated walk through an urban canyon, identify two multipath bursts, and recover distance within a known tolerance. Milestones: 1) parse synchronized sensors; 2) solve nominal trajectory; 3) add switchable fault factors; 4) calibrate uncertainty on seeded path.",
+      "stretch_goals": [
+        "barometer fusion",
+        "map constraints",
+        "online fixed-lag mode"
+      ],
+      "demo_story": "The corrector resists a 40-meter jump without flattening a real turn and exposes higher uncertainty during the canyon.",
+      "test_strategy": "Synthetic truth; outlier/dropout matrix; Jacobian checks; covariance coverage and distance-error tests.",
+      "data_and_api_constraints": "Data plan: Generated sensor traces; all location processing remains on device. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Corrected paths remain sensitive personal data and should not be shared by default. Risk: Smoothing fabricating a plausible route the person did not take. Non-goal: people tracking, law-enforcement inference, or safety navigation.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 156
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "map-generalization-compiler",
+      "name": "Map Generalization Compiler",
+      "one_sentence": "A constraint-driven compiler that simplifies roads, rivers, and polygons across zoom levels without breaking topology or identity.",
+      "concrete_problem": "Independent simplification creates crossings, collapsed features, and visual hierarchy changes between map scales.",
+      "target_users": [
+        "cartographic engineers",
+        "GIS students",
+        "offline-map developers"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Multi-feature constraints preserve shared boundaries and network connectivity while optimizing perceptual error under a vertex budget.",
+      "architecture": [
+        "feature graph importer",
+        "robust simplification kernels",
+        "topology constraint solver",
+        "scale hierarchy store",
+        "error evaluator"
+      ],
+      "technically_hard_parts": [
+        "shared-boundary simplification",
+        "network connectivity",
+        "feature collapse rules",
+        "cross-scale stability"
+      ],
+      "local_first_mvp": "Generalize a generated coastal town through four scales and prove no road disconnects or parcel gaps appear. Milestones: 1) build feature topology; 2) implement constrained simplification; 3) create scale hierarchy; 4) verify cross-scale fixtures.",
+      "stretch_goals": [
+        "label placement",
+        "river-network ordering",
+        "incremental tile rebuilds"
+      ],
+      "demo_story": "The compiler removes 88 percent of vertices while one landmark island persists and shared parcel borders remain identical.",
+      "test_strategy": "Topology invariants; Hausdorff bounds; randomized shared edges; cross-level identity and deterministic-output tests.",
+      "data_and_api_constraints": "Data plan: Generated vector maps and open miniature fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Generalization encodes editorial choices and should not erase culturally or politically important features silently. Risk: A technically valid simplification distorting important geographic meaning. Non-goal: a hosted map product or automatic authoritative-map publication.",
+      "estimated_build_days": 23,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 157
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "indoor-positioning-fusion-lab",
+      "name": "Indoor Positioning Fusion Lab",
+      "one_sentence": "A privacy-preserving positioning lab that fuses inertial steps, local radio fingerprints, and floor-plan constraints offline.",
+      "concrete_problem": "Indoor location drifts rapidly without GPS, while cloud fingerprint services expose sensitive movement histories.",
+      "target_users": [
+        "indoor-navigation researchers",
+        "mobile-systems students",
+        "privacy-focused app developers"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "A particle smoother quantifies ambiguity between rooms and supports leave-one-device-out calibration tests.",
+      "architecture": [
+        "floor-plan graph",
+        "step/heading detector",
+        "radio fingerprint index",
+        "particle filter/smoother",
+        "calibration evaluator"
+      ],
+      "technically_hard_parts": [
+        "device-specific signal bias",
+        "floor-transition inference",
+        "particle degeneracy",
+        "uncertainty calibration"
+      ],
+      "local_first_mvp": "Replay a generated office walk, lose radio samples for one corridor, and recover the correct room with an honest ambiguity interval. Milestones: 1) model floor plan; 2) implement inertial propagation; 3) add local fingerprints; 4) smooth and evaluate dropout trace.",
+      "stretch_goals": [
+        "ultrawideband model",
+        "collaborative anonymous mapping",
+        "barometric floors"
+      ],
+      "demo_story": "The estimate splits across two parallel halls and resolves only after a stair transition, rather than snapping early.",
+      "test_strategy": "Synthetic path truth; sensor bias sweeps; dropout scenarios; particle diversity and confidence coverage tests.",
+      "data_and_api_constraints": "Data plan: Generated fingerprints and floor plans; no device identifiers or network queries. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Indoor movement data is highly sensitive; the lab must avoid identity inference and remote telemetry. Risk: Fingerprint bias producing confident room-level mislocation. Non-goal: employee monitoring or emergency-grade navigation.",
+      "estimated_build_days": 22,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 158
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "boundary-uncertainty-engine",
+      "name": "Boundary Uncertainty Engine",
+      "one_sentence": "A probabilistic geometry engine that carries survey-point and transformation uncertainty into areas, overlaps, and adjacency claims.",
+      "concrete_problem": "Crisp polygons hide measurement uncertainty, making tiny overlaps or area differences appear more authoritative than the source data.",
+      "target_users": [
+        "surveying researchers",
+        "GIS analysts",
+        "spatial-statistics students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Correlated control-point errors propagate through geometry operations into confidence bands and ambiguous-topology events.",
+      "architecture": [
+        "uncertain coordinate model",
+        "transformation covariance engine",
+        "probabilistic predicates",
+        "sampling/linearization backends",
+        "ambiguity reporter"
+      ],
+      "technically_hard_parts": [
+        "correlated spatial error",
+        "near-degenerate predicates",
+        "nonlinear area propagation",
+        "stable probability estimates"
+      ],
+      "local_first_mvp": "Propagate a seeded survey network into two parcel polygons and show that an apparent overlap is not statistically resolved. Milestones: 1) model coordinate covariance; 2) propagate transforms; 3) implement uncertain predicates; 4) evaluate seeded boundary fixture.",
+      "stretch_goals": [
+        "geodetic datum uncertainty",
+        "robust confidence regions",
+        "Bayesian control networks"
+      ],
+      "demo_story": "The engine replaces a binary 0.4-square-meter overlap claim with a calibrated probability and dominant error source.",
+      "test_strategy": "Closed-form linear cases; Monte Carlo cross-checks; covariance PSD properties; near-boundary convergence tests.",
+      "data_and_api_constraints": "Data plan: Synthetic survey networks and generated geometries. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Outputs are analytical uncertainty, not legal determinations about land or jurisdiction. Risk: Users treating probability estimates as authoritative boundary decisions. Non-goal: legal surveying or editing public land records.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 159
+    },
+    {
+      "domain": "geospatial systems",
+      "repo_slug": "offline-geofence-query-engine",
+      "name": "Offline Geofence Query Engine",
+      "one_sentence": "An embedded spatiotemporal index for privacy-preserving point, trajectory, and dwell queries over complex local geofences.",
+      "concrete_problem": "Mobile geofence engines trade correctness for battery and mishandle holes, antimeridian wrapping, uncertainty, and rapid boundary crossings.",
+      "target_users": [
+        "mobile systems engineers",
+        "field-app developers",
+        "computational-geometry students"
+      ],
+      "why_now": "Offline geospatial computation is valuable for field work, resilience, and privacy, and it offers deep problems in topology, indexing, uncertainty, and routing.",
+      "differentiator": "Hierarchical conservative bounds minimize exact checks while a trajectory automaton gives deterministic entry, exit, and dwell semantics.",
+      "architecture": [
+        "spherical geometry kernel",
+        "hierarchical cell index",
+        "uncertain-point filter",
+        "trajectory event automaton",
+        "query benchmark"
+      ],
+      "technically_hard_parts": [
+        "antimeridian/pole geometry",
+        "boundary uncertainty",
+        "event debouncing",
+        "memory-latency tradeoffs"
+      ],
+      "local_first_mvp": "Replay a generated route through nested fences, cross the antimeridian, and produce stable entry/dwell events entirely offline. Milestones: 1) implement robust spherical predicates; 2) build spatial index; 3) define trajectory semantics; 4) replay edge-case corpus.",
+      "stretch_goals": [
+        "energy-aware query batching",
+        "3D altitude volumes",
+        "encrypted local event log"
+      ],
+      "demo_story": "A noisy path grazing a polygon hole produces one calibrated uncertain event instead of repeated enter-exit chatter.",
+      "test_strategy": "Exact geometry oracle; randomized spherical polygons; jittered trajectory properties; index false-negative and determinism tests.",
+      "data_and_api_constraints": "Data plan: Generated routes and synthetic fences only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Geofencing can enable surveillance; keep data local and exclude covert background tracking features. Risk: Boundary mistakes or uncertainty suppression triggering harmful location actions. Non-goal: advertising surveillance, law enforcement, or remote location collection.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 160
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "genome-variant-normalizer",
+      "name": "Genome Variant Normalizer",
+      "one_sentence": "A reference-aware engine that canonicalizes small genetic variants and proves equivalence across shifted, split, and merged representations.",
+      "concrete_problem": "The same biological variant appears in incompatible textual forms, breaking joins and inflating comparison disagreements.",
+      "target_users": [
+        "bioinformatics engineers",
+        "genomics students",
+        "research data curators"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "Graph-based haplotype comparison verifies local sequence equivalence instead of relying only on left-alignment heuristics.",
+      "architecture": [
+        "reference sequence store",
+        "variant parser",
+        "repeat-aware normalizer",
+        "local haplotype graph",
+        "equivalence witness generator"
+      ],
+      "technically_hard_parts": [
+        "repeat-region ambiguity",
+        "multi-allelic decomposition",
+        "reference mismatch handling",
+        "minimal canonical representation"
+      ],
+      "local_first_mvp": "Normalize a bundled synthetic chromosome callset, merge equivalent records, and show the exact haplotype witness for each change. Milestones: 1) parse variant records; 2) implement baseline normalization; 3) compare local haplotypes; 4) emit and verify equivalence witnesses.",
+      "stretch_goals": [
+        "structural variants",
+        "graph genomes",
+        "streaming callset merge"
+      ],
+      "demo_story": "Three differently encoded indels collapse to one canonical allele while a superficially similar non-equivalent call stays separate.",
+      "test_strategy": "Synthetic reference/variants; exhaustive short-haplotype cases; round-trip properties; malformed-record fuzzing.",
+      "data_and_api_constraints": "Data plan: Generated nonhuman reference segments and synthetic variants. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The tool is for representation research and must not interpret disease risk or patient significance. Risk: Incorrect equivalence merging biologically distinct variants. Non-goal: clinical interpretation, ancestry inference, or patient reporting.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.25,
+      "build_wave_1": false,
+      "rank": 161
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "medication-schedule-verifier",
+      "name": "Medication Schedule Verifier",
+      "one_sentence": "A temporal constraint checker that detects impossible, ambiguous, or internally conflicting medication schedule instructions offline.",
+      "concrete_problem": "Complex schedules combine intervals, meals, tapers, and maximum doses in ways that are easy to misread or encode inconsistently.",
+      "target_users": [
+        "health-software engineers",
+        "caregiving-tool researchers",
+        "temporal-logic students"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A calendar automaton generates counterexample timelines for contradictions without recommending or changing treatment.",
+      "architecture": [
+        "schedule DSL",
+        "temporal constraint compiler",
+        "calendar/timezone engine",
+        "bounded model checker",
+        "counterexample renderer"
+      ],
+      "technically_hard_parts": [
+        "recurrence semantics",
+        "taper phase boundaries",
+        "daylight-saving transitions",
+        "minimal conflict explanations"
+      ],
+      "local_first_mvp": "Verify a fictional taper across a daylight-saving change, find an interval/max-count contradiction, and render the smallest failing day. Milestones: 1) define schedule language; 2) compile recurrences; 3) check temporal constraints; 4) render seeded contradiction.",
+      "stretch_goals": [
+        "multilingual controlled language",
+        "FHIR schedule importer",
+        "proof-carrying calendar export"
+      ],
+      "demo_story": "The verifier identifies that a six-hour interval permits five doses on one long day despite a stated maximum of four.",
+      "test_strategy": "Hand-derived calendars; timezone transition corpus; bounded exhaustive schedules; parser and contradiction mutation tests.",
+      "data_and_api_constraints": "Data plan: Fictional medication names and synthetic instructions only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Never provide dosing advice; findings are syntax and consistency checks that require a pharmacist or clinician. Risk: Users mistaking internal consistency for medical safety or appropriateness. Non-goal: prescribing, reminders for real patients, or drug-interaction advice.",
+      "estimated_build_days": 20,
+      "usefulness_score": 10,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.35,
+      "build_wave_1": false,
+      "rank": 162
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "physiological-signal-quality-lab",
+      "name": "Physiological Signal Quality Lab",
+      "one_sentence": "A signal-quality engine that separates sensor detachment, motion artifact, saturation, and timing faults from plausible physiology.",
+      "concrete_problem": "Algorithms often produce confident metrics from corrupted wearable signals because artifact handling is evaluated only on average noise.",
+      "target_users": [
+        "biomedical-signal students",
+        "wearable researchers",
+        "device test engineers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A generative artifact state machine produces sample-level labels and calibrated abstention instead of health conclusions.",
+      "architecture": [
+        "multichannel signal generator",
+        "artifact injector",
+        "streaming feature bank",
+        "quality-state decoder",
+        "calibration evaluator"
+      ],
+      "technically_hard_parts": [
+        "artifact/physiology ambiguity",
+        "cross-channel timing",
+        "online state transitions",
+        "abstention calibration"
+      ],
+      "local_first_mvp": "Replay generated pulse and motion channels, inject four artifact types, and prove downstream metrics are suppressed during bad segments. Milestones: 1) generate clean signals; 2) inject labeled artifacts; 3) decode quality states; 4) calibrate abstention and metric gating.",
+      "stretch_goals": [
+        "ECG morphology artifacts",
+        "device-domain adaptation",
+        "quality provenance export"
+      ],
+      "demo_story": "The engine distinguishes a dropped sensor from a rapid synthetic pulse and refuses to score both ambiguous transition windows.",
+      "test_strategy": "Known artifact labels; time-warp and saturation sweeps; calibration curves; streaming chunk-boundary tests.",
+      "data_and_api_constraints": "Data plan: Generated physiological-like waveforms only; no patient data. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Quality classification is not diagnosis and should not trigger care decisions. Risk: A plausible pathological pattern being dismissed as sensor artifact. Non-goal: detecting disease, emergencies, identity, or emotional state.",
+      "estimated_build_days": 19,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 163
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "clinical-timeline-reconciler",
+      "name": "Clinical Timeline Reconciler",
+      "one_sentence": "A provenance-preserving temporal engine that reconciles duplicated, delayed, corrected, and partially ordered synthetic health events.",
+      "concrete_problem": "Records copied between systems can make one encounter appear multiple times or place results before the specimen that produced them.",
+      "target_users": [
+        "health-data engineers",
+        "medical-informatics students",
+        "audit-tool builders"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "Probabilistic entity linkage is constrained by causal event types and never discards conflicting source evidence.",
+      "architecture": [
+        "event/provenance schema",
+        "temporal constraint graph",
+        "duplicate candidate index",
+        "constrained linkage solver",
+        "conflict explanation engine"
+      ],
+      "technically_hard_parts": [
+        "uncertain timestamps",
+        "correction/version semantics",
+        "causal ordering",
+        "conservative record linkage"
+      ],
+      "local_first_mvp": "Reconcile three fictional source feeds, merge one duplicate encounter, preserve one disagreement, and explain an impossible ordering. Milestones: 1) normalize source events; 2) build temporal constraints; 3) link conservative duplicates; 4) render reconciled and conflicting evidence.",
+      "stretch_goals": [
+        "uncertain interval algebra",
+        "selective disclosure",
+        "human adjudication patches"
+      ],
+      "demo_story": "Two copied lab results merge through shared provenance while a similar value from another specimen remains distinct.",
+      "test_strategy": "Synthetic ground truth; duplication/correction mutations; temporal invariant checks; precision-first linkage evaluation.",
+      "data_and_api_constraints": "Data plan: Fully synthetic patient identities and events. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Health timelines are sensitive; the design must minimize data and never infer diagnoses from sequence patterns. Risk: False merges corrupting provenance or separating evidence that belongs together. Non-goal: clinical charting, diagnosis, or real patient identity resolution.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 164
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "pedigree-consistency-checker",
+      "name": "Pedigree Consistency Checker",
+      "one_sentence": "A constraint engine that detects sample swaps, impossible inheritance, and ambiguous family relationships in synthetic genotype data.",
+      "concrete_problem": "Sample labels and stated family relationships can be inconsistent, but missing calls and genotyping error make naive Mendelian checks unreliable.",
+      "target_users": [
+        "bioinformatics engineers",
+        "genetics students",
+        "research quality teams"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A factor graph separates likely label errors from de novo events and returns the smallest set of relationship edits that explains the evidence.",
+      "architecture": [
+        "synthetic genotype store",
+        "inheritance factor graph",
+        "error and missingness model",
+        "relationship repair search",
+        "evidence explanation engine"
+      ],
+      "technically_hard_parts": [
+        "uncertain genotype likelihoods",
+        "linked-marker dependence",
+        "minimal relationship correction",
+        "calibrated de novo classification"
+      ],
+      "local_first_mvp": "Analyze a generated three-generation family, find one swapped sample, and preserve one genuinely ambiguous relationship. Milestones: 1) generate inheritance-consistent markers; 2) score pedigree factors; 3) search minimal repairs; 4) calibrate explanations on seeded errors.",
+      "stretch_goals": [
+        "sex-chromosome inheritance",
+        "copy-number events",
+        "privacy-preserving summary export"
+      ],
+      "demo_story": "A mislabeled sibling is identified by a compact marker witness while a low-quality sample is reported inconclusive instead of force-fit.",
+      "test_strategy": "Generated pedigree truth; inheritance-enumeration oracles; swap/missingness/error sweeps; repair minimality and confidence calibration tests.",
+      "data_and_api_constraints": "Data plan: Artificial nonhuman-style marker panels and fictional pedigrees only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Family and genotype data are exceptionally sensitive; the project uses only generated records and makes no ancestry or health claims. Risk: A quality-control signal being treated as proof of biological relationship or identity. Non-goal: paternity testing, ancestry inference, disease interpretation, or real-person identification.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 165
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "sequencing-error-simulator",
+      "name": "Sequencing Error Simulator",
+      "one_sentence": "A read-generation engine that models context-dependent substitutions, indels, quality scores, and coverage bias with exact provenance.",
+      "concrete_problem": "Bioinformatics tools are often tested on simplistic independent errors that do not resemble correlated platform failure modes.",
+      "target_users": [
+        "genomics pipeline developers",
+        "bioinformatics students",
+        "benchmark designers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "Composable finite-state error channels retain a truth ledger linking every observed base to its template event.",
+      "architecture": [
+        "reference/read sampler",
+        "context error transducer",
+        "quality-score calibrator",
+        "coverage-bias model",
+        "truth ledger"
+      ],
+      "technically_hard_parts": [
+        "context-correlated errors",
+        "indel coordinate tracking",
+        "coverage distribution control",
+        "deterministic parallel generation"
+      ],
+      "local_first_mvp": "Generate reads from a synthetic genome, replay two error profiles, and score a toy aligner against exact error provenance. Milestones: 1) sample template fragments; 2) implement error transducer; 3) calibrate scores and coverage; 4) export truth-aligned benchmark.",
+      "stretch_goals": [
+        "long-read chimeras",
+        "paired-end fragments",
+        "empirical profile importer"
+      ],
+      "demo_story": "A homopolymer profile creates clustered indels while every read still maps back to an auditable template path.",
+      "test_strategy": "Distribution-fit tests; exact provenance round trips; seed/worker determinism; edge cases at contig boundaries.",
+      "data_and_api_constraints": "Data plan: Generated genomes and synthetic error parameters. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Simulated performance must not be represented as clinical validation or a real platform benchmark without empirical calibration. Risk: Unrealistic error models overstating downstream algorithm accuracy. Non-goal: generating identifiable human genomes or clinical benchmark claims.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 166
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "protein-motif-search-engine",
+      "name": "Protein Motif Search Engine",
+      "one_sentence": "A local sequence search engine for ambiguous motifs, profile models, and structural constraints with calibrated null scores.",
+      "concrete_problem": "Exact substring search misses biologically meaningful variation, while raw profile scores create many chance matches.",
+      "target_users": [
+        "computational-biology students",
+        "protein researchers",
+        "algorithm engineers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "Automata and profile dynamic programming share one indexed scan, with decoy-based false-discovery calibration.",
+      "architecture": [
+        "compressed sequence store",
+        "motif automaton",
+        "profile-HMM subset",
+        "constraint-aware DP",
+        "decoy calibration engine"
+      ],
+      "technically_hard_parts": [
+        "ambiguous residue semantics",
+        "fast profile scanning",
+        "gap-state optimization",
+        "score calibration under composition bias"
+      ],
+      "local_first_mvp": "Search a generated proteome for three seeded motif families, rank true insertions, and expose one high-scoring composition artifact. Milestones: 1) index sequences; 2) compile ambiguous motifs; 3) add profile alignment; 4) calibrate against deterministic decoys.",
+      "stretch_goals": [
+        "domain architecture search",
+        "SIMD scanning",
+        "structure-contact constraints"
+      ],
+      "demo_story": "The engine recovers remote seeded variants while downgrading a low-complexity false hit after null calibration.",
+      "test_strategy": "Seeded-motif recovery; DP oracle cases; decoy calibration checks; composition and malformed-model fuzzing.",
+      "data_and_api_constraints": "Data plan: Generated protein-like sequences and small open model fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Matches are hypotheses for research and must not be presented as functional or medical conclusions. Risk: Uncalibrated scores leading to false biological claims. Non-goal: pathogen design, clinical interpretation, or remote database scraping.",
+      "estimated_build_days": 22,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 167
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "medical-image-deid-auditor",
+      "name": "Medical Image De-Identification Auditor",
+      "one_sentence": "A defensive offline auditor that finds identity leakage in metadata, pixel overlays, burned-in text, and derivative image geometry.",
+      "concrete_problem": "Removing obvious metadata does not catch identifiers rendered into pixels or preserved in private format fields.",
+      "target_users": [
+        "health privacy engineers",
+        "imaging-software students",
+        "data-governance reviewers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A format-aware taint graph tracks synthetic identity tokens through metadata transforms and rendered overlays without exporting images.",
+      "architecture": [
+        "safe image-format parser",
+        "metadata policy engine",
+        "synthetic token seeder",
+        "local OCR/region detector",
+        "taint/provenance graph"
+      ],
+      "technically_hard_parts": [
+        "hostile file parsing",
+        "private-tag semantics",
+        "pixel-text detection",
+        "derivative provenance tracking"
+      ],
+      "local_first_mvp": "Audit a synthetic imaging study, catch one private tag and one burned-in identifier, then verify a redacted derivative locally. Milestones: 1) parse constrained format; 2) apply metadata rules; 3) detect seeded pixel tokens; 4) verify redaction and provenance.",
+      "stretch_goals": [
+        "video/cine frames",
+        "structured reports",
+        "policy proof manifests"
+      ],
+      "demo_story": "The auditor traces a visible identifier to a rendering step even after its source metadata tag was deleted.",
+      "test_strategy": "Malformed-file fuzzing; seeded leak recall; false-positive image fixtures; no-network and redaction round-trip checks.",
+      "data_and_api_constraints": "Data plan: Fully synthetic images, names, and identifiers. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Redaction should require review; the tool must never claim regulatory compliance or process real data by default. Risk: A missed identifier causing an unsafe disclosure or over-redaction damaging data utility. Non-goal: certifying compliance, diagnosing images, or uploading studies.",
+      "estimated_build_days": 23,
+      "usefulness_score": 10,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.15,
+      "build_wave_1": false,
+      "rank": 168
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "outbreak-nowcast-simulator",
+      "name": "Outbreak Nowcast Simulator",
+      "one_sentence": "A delayed-reporting simulator that estimates current incidence while exposing revisions, uncertainty, and model misspecification.",
+      "concrete_problem": "Recent case counts are incomplete because reporting delays vary by weekday, backlog, and system load.",
+      "target_users": [
+        "epidemiology students",
+        "public-health modeling researchers",
+        "statistical-software engineers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A revision-cube and generative delay model let users backtest each historical nowcast exactly as it would have appeared then.",
+      "architecture": [
+        "versioned count cube",
+        "delay distribution model",
+        "nowcast inference engine",
+        "backtest runner",
+        "calibration evaluator"
+      ],
+      "technically_hard_parts": [
+        "right truncation",
+        "time-varying delays",
+        "overdispersion",
+        "honest retrospective evaluation"
+      ],
+      "local_first_mvp": "Generate a fictional outbreak with a reporting backlog, nowcast each day, and compare intervals with later finalized truth. Milestones: 1) build revision cube; 2) fit delay baseline; 3) infer truncated counts; 4) backtest coverage under regime shift.",
+      "stretch_goals": [
+        "hierarchical regions",
+        "wastewater delay model",
+        "ensemble calibration"
+      ],
+      "demo_story": "The model widens uncertainty during a backlog and avoids interpreting a reporting dip as a real decline.",
+      "test_strategy": "Synthetic generative recovery; interval coverage; regime-shift stress tests; revision snapshot determinism.",
+      "data_and_api_constraints": "Data plan: Fictional aggregate counts generated locally. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "This educational simulator must not issue public-health guidance or forecast real communities. Risk: Model misspecification creating false confidence about current disease trends. Non-goal: real outbreak prediction, policy advice, or individual risk estimation.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 169
+    },
+    {
+      "domain": "health/bioinformatics systems",
+      "repo_slug": "wearable-anomaly-explainer",
+      "name": "Wearable Anomaly Explainer",
+      "one_sentence": "A personal offline time-series engine that distinguishes sensor, routine, and statistical anomalies without labeling medical conditions.",
+      "concrete_problem": "Generic anomaly alerts conflate changed routines, missing wear time, and sensor faults with meaningful personal deviations.",
+      "target_users": [
+        "wearable-platform researchers",
+        "personal-informatics students",
+        "privacy-focused developers"
+      ],
+      "why_now": "Privacy-sensitive biological and health data benefits from inspectable offline algorithms, provided projects clearly avoid diagnosis and clinical decision-making.",
+      "differentiator": "A causal segmentation model combines missingness, device-state, and routine context to produce counterfactual explanations and abstentions.",
+      "architecture": [
+        "local time-series store",
+        "change-point detector",
+        "routine model",
+        "sensor-state inference",
+        "counterfactual explainer"
+      ],
+      "technically_hard_parts": [
+        "irregular sampling",
+        "concept drift",
+        "missing-not-at-random data",
+        "calibrated alert suppression"
+      ],
+      "local_first_mvp": "Replay a year of generated wearable data, detect a schedule shift, and explain why a sensor dropout should not count as a physiological anomaly. Milestones: 1) model clean routines; 2) detect change points; 3) infer sensor-state anomalies; 4) generate and calibrate explanations.",
+      "stretch_goals": [
+        "user-authored context events",
+        "federated aggregate research model",
+        "energy-aware streaming"
+      ],
+      "demo_story": "The engine labels a step-count drop as missing wear time while preserving a sustained unexplained deviation for user review.",
+      "test_strategy": "Seeded anomaly recovery; drift scenarios; missingness mutations; false-alert and calibration tests.",
+      "data_and_api_constraints": "Data plan: Generated nonclinical wearable streams only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Keep all data local and avoid diagnosis, emergency alerts, emotion inference, or normative health judgments. Risk: A user interpreting a statistical deviation as a medical finding. Non-goal: medical diagnosis, treatment advice, or remote monitoring.",
+      "estimated_build_days": 20,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 170
     }
   ]
 }
