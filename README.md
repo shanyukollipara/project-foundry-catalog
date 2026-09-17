@@ -77,6 +77,7 @@ The following repositories have passed an independent Codex review, their declar
 - [`screen-reader-regression-lab`](https://github.com/shanyukollipara/screen-reader-regression-lab) — 26 semantic interaction tests plus format, lint, type, build, and two-regression demo gates.
 - [`counterfactual-market-amm`](https://github.com/shanyukollipara/counterfactual-market-amm) — 29 mechanism/accounting tests plus deterministic 5,000-event data, type, lint, and counterfactual replay gates.
 - [`verifiable-agent-trail`](https://github.com/shanyukollipara/verifiable-agent-trail) — 30 integrity and replay tests plus format, lint, type, selective-disclosure, and tamper-detection demo gates.
+- [`agent-tool-permission-broker`](https://github.com/shanyukollipara/agent-tool-permission-broker) — 35 capability, revocation, replay, path-hardening, concurrency, and end-to-end enforcement tests plus lint, type, and demo gates.
 
 ## Full ranking
 
