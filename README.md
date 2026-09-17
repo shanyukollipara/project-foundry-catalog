@@ -1,6 +1,6 @@
 # Project Foundry Catalog
 
-An offline-curated catalog of **170 technically deep, useful CS student projects**: exactly 10 projects in each of 17 domains. These are scoped as buildable systems with a concrete local vertical slice—not CRUD shells, generic dashboards, product clones, shallow model wrappers, or concepts that need a paid API to become demonstrable.
+An offline-curated catalog of **200 technically deep, useful CS student projects**: exactly 10 projects in each of 20 domains. These are scoped as buildable systems with a concrete local vertical slice—not CRUD shells, generic dashboards, product clones, shallow model wrappers, or concepts that need a paid API to become demonstrable.
 
 The machine-readable source of truth is [`catalog/projects.json`](catalog/projects.json). No application code is included in this repository.
 
@@ -24,7 +24,7 @@ weighted_score = 0.35 × usefulness_score
                + 0.15 × portfolio_signal_score
 ```
 
-Ranks are append-only publication identifiers. The original 1–100 cohort retains its published order (which used descending weighted score and ascending `repo_slug` as its deterministic tiebreaker); the seven-domain extension occupies ranks 101–170 in stable ten-project domain cohorts and does not renumber the original catalog. Scores remain directly comparable across all entries, but rank is not a global score sort after the extension. The weights reward software worth keeping while preserving a hard technical bar. A lower-ranked project can still be the better choice for a particular student's background or intended specialty.
+Ranks are append-only publication identifiers. The original 1–100 cohort retains its published order (which used descending weighted score and ascending `repo_slug` as its deterministic tiebreaker); the ten-domain extension occupies ranks 101–200 in stable ten-project domain cohorts and does not renumber the original catalog. Scores remain directly comparable across all entries, but rank is not a global score sort after the extension. The weights reward software worth keeping while preserving a hard technical bar. A lower-ranked project can still be the better choice for a particular student's background or intended specialty.
 
 ## Domain coverage
 
@@ -45,6 +45,9 @@ Ranks are append-only publication identifiers. The original 1–100 cohort retai
 - **Media/graphics systems:** codecs, color, procedural geometry, text shaping, audio restoration, GPU scheduling, spatial audio, and causal rendering diffs.
 - **Geospatial systems:** offline map matching, terrain visibility, topology repair, robust routing, raster storage, positioning, generalization, and uncertain geometry.
 - **Health/bioinformatics systems:** variant representation, temporal schedule verification, signal quality, provenance-safe timelines, private queries, and synthetic biological benchmarks.
+- **Formal methods/verification:** linearizability, temporal logic, probabilistic and hybrid reachability, invariant synthesis, proof checking, and model-based conformance.
+- **Storage/preservation systems:** erasure repair, format migration evidence, corruption triage, durable exports, media recovery, fixity planning, and software closure preservation.
+- **Operations research/manufacturing systems:** disruption scheduling, cutting yield, inventory uncertainty, line balancing, repairable spares, quality drift, reverse logistics, and energy-aware production.
 
 ## Build Wave 1
 
@@ -85,6 +88,14 @@ The following repositories have passed an independent Codex review, their declar
 - [`counterfactual-market-amm`](https://github.com/shanyukollipara/counterfactual-market-amm) — 29 mechanism/accounting tests plus deterministic 5,000-event data, type, lint, and counterfactual replay gates.
 - [`verifiable-agent-trail`](https://github.com/shanyukollipara/verifiable-agent-trail) — 30 integrity and replay tests plus format, lint, type, selective-disclosure, and tamper-detection demo gates.
 - [`agent-tool-permission-broker`](https://github.com/shanyukollipara/agent-tool-permission-broker) — 35 capability, revocation, replay, path-hardening, concurrency, and end-to-end enforcement tests plus lint, type, and demo gates.
+- [`semantic-merge-engine`](https://github.com/shanyukollipara/semantic-merge-engine) — independently reviewed semantic merge engine with deterministic fixtures and declared local quality gates.
+- [`home-energy-tariff-simulator`](https://github.com/shanyukollipara/home-energy-tariff-simulator) — independently reviewed tariff simulation engine with deterministic fixtures and declared local quality gates.
+- [`citation-claim-graph`](https://github.com/shanyukollipara/citation-claim-graph) — independently reviewed evidence graph with deterministic fixtures and declared local quality gates.
+- [`hybrid-retrieval-engine`](https://github.com/shanyukollipara/hybrid-retrieval-engine) — independently reviewed local retrieval engine with deterministic fixtures and declared local quality gates.
+- [`network-policy-model-checker`](https://github.com/shanyukollipara/network-policy-model-checker) — independently reviewed layered-policy verifier with deterministic fixtures and declared local quality gates.
+- [`agent-regression-simulator`](https://github.com/shanyukollipara/agent-regression-simulator) — independently reviewed agent environment simulator with deterministic fixtures and declared local quality gates.
+- [`deterministic-chaos-cluster`](https://github.com/shanyukollipara/deterministic-chaos-cluster) — independently reviewed replicated-system simulator with deterministic fault injection and declared local quality gates.
+- [`reproducible-paper-runner`](https://github.com/shanyukollipara/reproducible-paper-runner) — independently reviewed artifact-reproduction harness with deterministic fixtures and declared local quality gates.
 
 ## Full ranking
 
@@ -260,27 +271,57 @@ The following repositories have passed an independent Codex review, their declar
 | 168 | `medical-image-deid-auditor` | health/bioinformatics systems | 9.15 | |
 | 169 | `outbreak-nowcast-simulator` | health/bioinformatics systems | 8.80 | |
 | 170 | `wearable-anomaly-explainer` | health/bioinformatics systems | 9.00 | |
+| 171 | `linearizability-witness-checker` | formal methods/verification | 9.10 | |
+| 172 | `temporal-monitor-compiler` | formal methods/verification | 9.10 | |
+| 173 | `probabilistic-model-checker` | formal methods/verification | 8.75 | |
+| 174 | `hybrid-reachability-workbench` | formal methods/verification | 8.70 | |
+| 175 | `refinement-invariant-synthesizer` | formal methods/verification | 8.90 | |
+| 176 | `smt-theory-solver-lab` | formal methods/verification | 8.70 | |
+| 177 | `proof-carrying-transform-pipeline` | formal methods/verification | 8.80 | |
+| 178 | `stateful-conformance-explorer` | formal methods/verification | 9.00 | |
+| 179 | `separation-logic-heap-lab` | formal methods/verification | 8.55 | |
+| 180 | `unsat-proof-stream-verifier` | formal methods/verification | 8.75 | |
+| 181 | `erasure-archive-scrubber` | storage/preservation systems | 9.00 | |
+| 182 | `format-migration-evidence-lab` | storage/preservation systems | 8.80 | |
+| 183 | `filesystem-corruption-triage` | storage/preservation systems | 9.05 | |
+| 184 | `reproducible-export-capsule` | storage/preservation systems | 9.00 | |
+| 185 | `optical-media-recovery-planner` | storage/preservation systems | 8.65 | |
+| 186 | `metadata-roundtrip-conformance` | storage/preservation systems | 8.65 | |
+| 187 | `tape-restore-scheduler` | storage/preservation systems | 9.00 | |
+| 188 | `archive-fixity-sampling-planner` | storage/preservation systems | 8.50 | |
+| 189 | `versioned-dataset-compactor` | storage/preservation systems | 8.80 | |
+| 190 | `dependency-closure-vault` | storage/preservation systems | 8.95 | |
+| 191 | `job-shop-disruption-rescheduler` | operations research/manufacturing systems | 9.00 | |
+| 192 | `cutting-stock-yield-optimizer` | operations research/manufacturing systems | 8.80 | |
+| 193 | `inventory-service-level-simulator` | operations research/manufacturing systems | 8.85 | |
+| 194 | `assembly-line-balance-verifier` | operations research/manufacturing systems | 9.00 | |
+| 195 | `maintenance-spares-allocator` | operations research/manufacturing systems | 8.80 | |
+| 196 | `quality-drift-control-engine` | operations research/manufacturing systems | 9.00 | |
+| 197 | `reverse-logistics-network-planner` | operations research/manufacturing systems | 8.80 | |
+| 198 | `warehouse-slotting-simulator` | operations research/manufacturing systems | 9.00 | |
+| 199 | `cold-chain-excursion-reconciler` | operations research/manufacturing systems | 9.00 | |
+| 200 | `production-energy-load-shaper` | operations research/manufacturing systems | 8.80 | |
 
 ## Data shape
 
-`catalog/projects.json` contains catalog metadata, the canonical 17-domain list, Wave 1 slugs, and the append-only ranked `projects` array. Every project contains all requested narrative, architecture, MVP, safety, estimate, score, rank, and selection fields. Array fields are used for target users, components, hard parts, and stretch goals so downstream tools do not need to parse comma-separated prose. To preserve the exact established object schema, extension milestones live in `local_first_mvp`, dependency policies and data plans live in `data_and_api_constraints`, and risks/non-goals live in `misuse_or_safety_notes`.
+`catalog/projects.json` contains catalog metadata, the canonical 20-domain list, Wave 1 slugs, and the append-only ranked `projects` array. Every project contains all requested narrative, architecture, MVP, safety, estimate, score, rank, and selection fields. Array fields are used for target users, components, hard parts, and stretch goals so downstream tools do not need to parse comma-separated prose. To preserve the exact established object schema, extension milestones live in `local_first_mvp`, dependency policies and data plans live in `data_and_api_constraints`, and risks/non-goals live in `misuse_or_safety_notes`.
 
 ## Validation contract
 
 The catalog is intended to satisfy these machine-checkable invariants:
 
-- valid JSON with exactly 170 project objects;
-- exactly 17 canonical domains and exactly 10 projects in each;
-- unique project names, slugs, and ranks, with contiguous ranks 1–170;
-- the original ranks 1–100 matching the committed semantic SHA-256 baseline;
+- valid JSON with exactly 200 project objects;
+- exactly 20 canonical domains and exactly 10 projects in each;
+- unique project names, slugs, and ranks, with contiguous ranks 1–200;
+- the original ranks 1–170 matching the committed semantic SHA-256 baseline;
 - the exact canonical field set on every project and populated required values;
 - globally unique lowercase kebab-case repository slugs;
 - 3–6 architecture components and at least 3 technically hard parts per project;
 - integer component scores from 1 through 10 and positive integer build-day estimates;
 - weighted scores equal to the published formula;
-- 3–5 numbered milestones, explicit dependency policy, risk, non-goal, and `build_wave_1=false` on every extension entry;
+- 3–5 numbered milestones, explicit dependency policy, deterministic tests, risk, failure mode, non-goal, and `build_wave_1=false` on every rank 171–200 entry;
 - no forbidden shallow project categories;
-- a 170-row README ranking synchronized to the JSON while all published implementation links remain present; and
+- a 200-row README ranking synchronized to the JSON while all published implementation links remain present; and
 - exactly four Wave 1 entries, matching the top-level Wave 1 slug list.
 
 Run the dependency-free deterministic check with:

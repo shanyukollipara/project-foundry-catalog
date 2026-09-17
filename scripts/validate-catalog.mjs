@@ -13,9 +13,11 @@ const check = (condition, message) => {
   if (!condition) errors.push(message);
 };
 
-const EXPECTED_TOTAL = 170;
-const LEGACY_TOTAL = 100;
-const LEGACY_SEMANTIC_SHA256 = "6f22253fc0bde5a44c32dcc459c4673d6becb9aa2e449cbb33126ced5daebf37";
+const EXPECTED_TOTAL = 200;
+const EXPECTED_DOMAIN_TOTAL = 20;
+const EXPECTED_PROJECTS_PER_DOMAIN = 10;
+const LEGACY_TOTAL = 170;
+const LEGACY_SEMANTIC_SHA256 = "4c31140e51fdaa1b45f569d9acda1c1e77254c6f1b6554a2c957f2fc21936f9e";
 const EXPECTED_FIELDS = [
   "domain", "repo_slug", "name", "one_sentence", "concrete_problem",
   "target_users", "why_now", "differentiator", "architecture",
@@ -32,6 +34,12 @@ const SCORE_FIELDS = [
 const ARRAY_FIELDS = [
   "target_users", "architecture", "technically_hard_parts", "stretch_goals",
 ];
+const INTEGER_FIELDS = ["estimated_build_days", ...SCORE_FIELDS, "rank"];
+const BOOLEAN_FIELDS = ["build_wave_1"];
+const STRING_FIELDS = EXPECTED_FIELDS.filter(
+  (field) => !ARRAY_FIELDS.includes(field) && !INTEGER_FIELDS.includes(field) &&
+    !BOOLEAN_FIELDS.includes(field) && field !== "weighted_score",
+);
 const SHALLOW_CATEGORY = /\b(?:crud\s+(?:app|wrapper)|dashboard\s+app|product\s+clone|application\s+clone|prompt\s+collection|thin\s+api\s+client|generic\s+api\s+wrapper)\b/i;
 const PUBLISHED_LINKS = [
   "https://github.com/shanyukollipara/entitlement-aware-ai-router",
@@ -40,15 +48,25 @@ const PUBLISHED_LINKS = [
   "https://github.com/shanyukollipara/counterfactual-market-amm",
   "https://github.com/shanyukollipara/verifiable-agent-trail",
   "https://github.com/shanyukollipara/agent-tool-permission-broker",
+  "https://github.com/shanyukollipara/semantic-merge-engine",
+  "https://github.com/shanyukollipara/home-energy-tariff-simulator",
+  "https://github.com/shanyukollipara/citation-claim-graph",
+  "https://github.com/shanyukollipara/hybrid-retrieval-engine",
+  "https://github.com/shanyukollipara/network-policy-model-checker",
+  "https://github.com/shanyukollipara/agent-regression-simulator",
+  "https://github.com/shanyukollipara/deterministic-chaos-cluster",
+  "https://github.com/shanyukollipara/reproducible-paper-runner",
 ];
 
 check(Array.isArray(catalog.projects), "projects must be an array");
 check(catalog.projects.length === EXPECTED_TOTAL, `expected ${EXPECTED_TOTAL} projects, found ${catalog.projects.length}`);
 check(Array.isArray(catalog.domains), "domains must be an array");
-check(catalog.domains.length === 17, `expected 17 domains, found ${catalog.domains.length}`);
-check(new Set(catalog.domains).size === 17, "domain names must be unique");
+check(catalog.domains.length === EXPECTED_DOMAIN_TOTAL, `expected ${EXPECTED_DOMAIN_TOTAL} domains, found ${catalog.domains.length}`);
+check(new Set(catalog.domains).size === EXPECTED_DOMAIN_TOTAL, "domain names must be unique");
+check(catalog.domains.every((domain) => typeof domain === "string" && domain.trim()), "domain names must be populated strings");
 check(catalog.generated_without_external_services === true, "catalog must require no external services");
 check(/append-only publication rank/.test(catalog.ranking_tiebreaker ?? ""), "ranking metadata must describe append-only ranks");
+check(catalog.score_scale?.minimum === 1 && catalog.score_scale?.maximum === 10, "score scale must remain 1 through 10");
 
 const semanticDigest = crypto
   .createHash("sha256")
@@ -77,8 +95,8 @@ for (const [index, item] of catalog.projects.entries()) {
   check(!ranks.has(item.rank), `${label} has duplicate rank ${item.rank}`);
   ranks.add(item.rank);
 
-  const normalizedName = typeof item.name === "string" ? item.name.trim().toLowerCase() : "";
-  const normalizedSlug = typeof item.repo_slug === "string" ? item.repo_slug.trim().toLowerCase() : "";
+  const normalizedName = typeof item.name === "string" ? item.name.normalize("NFKC").trim().toLowerCase() : "";
+  const normalizedSlug = typeof item.repo_slug === "string" ? item.repo_slug.normalize("NFKC").trim().toLowerCase() : "";
   check(normalizedName.length > 0, `${label} name must be populated`);
   check(!names.has(normalizedName), `${label} has duplicate name ${item.name}`);
   names.add(normalizedName);
@@ -90,11 +108,16 @@ for (const [index, item] of catalog.projects.entries()) {
   if (domainCounts.has(item.domain)) domainCounts.set(item.domain, domainCounts.get(item.domain) + 1);
 
   for (const field of EXPECTED_FIELDS) {
+    check(Object.hasOwn(item, field), `${label}.${field} must be present`);
     const value = item[field];
     if (typeof value === "string") check(value.trim().length > 0, `${label}.${field} must be populated`);
     else if (Array.isArray(value)) check(value.length > 0, `${label}.${field} must be populated`);
     else check(value !== null && value !== undefined, `${label}.${field} must be populated`);
   }
+  for (const field of STRING_FIELDS) check(typeof item[field] === "string", `${label}.${field} must be a string`);
+  for (const field of INTEGER_FIELDS) check(Number.isInteger(item[field]), `${label}.${field} must be an integer`);
+  for (const field of BOOLEAN_FIELDS) check(typeof item[field] === "boolean", `${label}.${field} must be a boolean`);
+  check(typeof item.weighted_score === "number" && Number.isFinite(item.weighted_score), `${label}.weighted_score must be a finite number`);
   for (const field of ARRAY_FIELDS) {
     check(Array.isArray(item[field]), `${label}.${field} must be an array`);
     if (Array.isArray(item[field])) {
@@ -125,13 +148,15 @@ for (const [index, item] of catalog.projects.entries()) {
     check(/Dependency policy:/i.test(item.data_and_api_constraints), `${label} needs an explicit dependency policy`);
     check(/no paid APIs or credentials/i.test(item.data_and_api_constraints), `${label} must require no paid APIs or credentials`);
     check(/Risk:/i.test(item.misuse_or_safety_notes), `${label} needs an explicit risk`);
+    check(/Failure mode:/i.test(item.misuse_or_safety_notes), `${label} needs an explicit failure mode`);
     check(/Non-goal:/i.test(item.misuse_or_safety_notes), `${label} needs an explicit non-goal`);
+    check(/Deterministic/i.test(item.test_strategy), `${label} needs an explicit deterministic test strategy`);
     check(item.build_wave_1 === false, `${label} must set build_wave_1=false`);
   }
 }
 
 for (const [domain, count] of domainCounts) {
-  check(count === 10, `domain ${domain} must contain 10 projects, found ${count}`);
+  check(count === EXPECTED_PROJECTS_PER_DOMAIN, `domain ${domain} must contain ${EXPECTED_PROJECTS_PER_DOMAIN} projects, found ${count}`);
 }
 check(ranks.size === EXPECTED_TOTAL, `expected ${EXPECTED_TOTAL} unique ranks, found ${ranks.size}`);
 check(names.size === EXPECTED_TOTAL, `expected ${EXPECTED_TOTAL} unique names, found ${names.size}`);
@@ -144,12 +169,24 @@ check(
 );
 check(catalog.build_wave_1.length === 4, "exactly four projects must be in Build Wave 1");
 
-check(/\*\*170 technically deep, useful CS student projects\*\*/.test(readme), "README total must say 170 projects");
-check(/17 domains/.test(readme), "README methodology must mention 17 domains");
+check(/\*\*200 technically deep, useful CS student projects\*\*/.test(readme), "README total must say 200 projects");
+check(/20 domains/.test(readme), "README methodology must mention 20 domains");
 for (const domain of catalog.domains) {
   check(readme.includes(`**${domain[0].toUpperCase()}${domain.slice(1)}:**`), `README domain coverage missing ${domain}`);
 }
-for (const link of PUBLISHED_LINKS) check(readme.includes(link), `README lost published implementation link ${link}`);
+
+const implementationSection = readme.match(/## Published implementations\n([\s\S]*?)\n## /)?.[1] ?? "";
+const implementationRows = [...implementationSection.matchAll(/^- \[`([^`]+)`\]\((https:\/\/github\.com\/[^)]+)\)/gm)]
+  .map((match) => ({ slug: match[1], link: match[2] }));
+check(implementationRows.length === PUBLISHED_LINKS.length, `README must contain exactly ${PUBLISHED_LINKS.length} published implementation links, found ${implementationRows.length}`);
+check(
+  JSON.stringify(implementationRows.map((row) => row.link)) === JSON.stringify(PUBLISHED_LINKS),
+  "README published implementation links or order changed",
+);
+for (const row of implementationRows) {
+  check(row.link.endsWith(`/${row.slug}`), `README implementation link does not match slug ${row.slug}`);
+  check(slugs.has(row.slug), `README implementation slug ${row.slug} is absent from the catalog`);
+}
 
 const tableRows = [...readme.matchAll(/^\| (\d+) \| `([^`]+)` \| ([^|]+?) \| (\d+\.\d{2}) \|([^|]*)\|$/gm)]
   .map((match) => ({ rank: Number(match[1]), slug: match[2], domain: match[3].trim(), score: Number(match[4]), wave: match[5].trim() }));
@@ -170,6 +207,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Catalog validation passed: ${EXPECTED_TOTAL} projects, 17 domains, 10 projects per domain.`);
+console.log(`Catalog validation passed: ${EXPECTED_TOTAL} projects, ${EXPECTED_DOMAIN_TOTAL} domains, ${EXPECTED_PROJECTS_PER_DOMAIN} projects per domain.`);
 console.log(`Legacy semantic digest verified for ranks 1-${LEGACY_TOTAL}: ${LEGACY_SEMANTIC_SHA256}`);
-console.log(`README ranking verified: ${tableRows.length} rows and ${PUBLISHED_LINKS.length} published links preserved.`);
+console.log(`README ranking verified: ${tableRows.length} rows and ${implementationRows.length} published links preserved.`);

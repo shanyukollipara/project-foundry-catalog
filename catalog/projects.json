@@ -6,7 +6,7 @@
     "maximum": 10
   },
   "weighting_formula": "weighted_score = 0.35 * usefulness_score + 0.30 * technical_depth_score + 0.20 * feasibility_score + 0.15 * portfolio_signal_score",
-  "ranking_tiebreaker": "append-only publication rank; ranks 1-100 retain their original weighted_score descending then repo_slug ascending order; ranks 101-170 are stable ten-project domain cohorts",
+  "ranking_tiebreaker": "append-only publication rank; ranks 1-100 retain their original weighted_score descending then repo_slug ascending order; ranks 101-200 are stable ten-project domain cohorts",
   "domains": [
     "distributed systems",
     "security/privacy",
@@ -24,7 +24,10 @@
     "computational science/engineering",
     "media/graphics systems",
     "geospatial systems",
-    "health/bioinformatics systems"
+    "health/bioinformatics systems",
+    "formal methods/verification",
+    "storage/preservation systems",
+    "operations research/manufacturing systems"
   ],
   "build_wave_1": [
     "entitlement-aware-ai-router",
@@ -7690,6 +7693,1356 @@
       "weighted_score": 9,
       "build_wave_1": false,
       "rank": 170
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "linearizability-witness-checker",
+      "name": "Linearizability Witness Checker",
+      "one_sentence": "An offline verifier that decides whether concurrent operation histories admit a legal sequential explanation and emits a compact witness or minimal violation.",
+      "concrete_problem": "Concurrent services can pass ordinary tests while returning histories that violate their documented atomic object semantics.",
+      "target_users": [
+        "distributed-systems engineers",
+        "concurrency researchers",
+        "advanced systems students"
+      ],
+      "why_now": "Highly concurrent storage and coordination code needs reproducible correctness evidence that does not depend on production tracing services.",
+      "differentiator": "A partial-order search combines real-time precedence, object semantics, memoized frontier states, and delta-debugging to explain exactly why a history is or is not linearizable.",
+      "architecture": [
+        "history schema and validator",
+        "object-specification DSL",
+        "partial-order search engine",
+        "symmetry and state cache",
+        "witness visualizer"
+      ],
+      "technically_hard_parts": [
+        "pruning exponential interleavings",
+        "handling incomplete operations",
+        "canonicalizing equivalent states",
+        "minimizing violation histories"
+      ],
+      "local_first_mvp": "Check generated register and queue histories, prove one valid schedule, and reduce one seeded stale-read violation. Milestones: 1) validate histories and specs; 2) implement precedence-constrained search; 3) add memoization and symmetry reduction; 4) emit replayable witnesses.",
+      "stretch_goals": [
+        "partitioned-object decomposition",
+        "relaxed consistency specifications",
+        "history sampling bounds"
+      ],
+      "demo_story": "A 60-operation queue trace is rejected with a six-operation core showing that no dequeue ordering can explain the observed value.",
+      "test_strategy": "Deterministic exhaustive enumeration of small histories against a brute-force oracle; seeded valid and invalid traces; permutation invariance; timeout and malformed-history failure tests.",
+      "data_and_api_constraints": "Data plan: generated histories and bundled object specifications only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "A bounded successful check is not a proof that an implementation is always correct. Risk: Unsound pruning could accept an impossible history. Failure mode: resource limits must return unknown rather than success. Non-goal: collecting production user traces or controlling live services.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 171
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "temporal-monitor-compiler",
+      "name": "Temporal Monitor Compiler",
+      "one_sentence": "A compiler that turns bounded temporal requirements into deterministic streaming monitors with explicit three-valued verdicts and bounded memory.",
+      "concrete_problem": "Operational requirements such as eventual acknowledgment or bounded cooldown are often tested with ad hoc timers that mishandle missing and out-of-order events.",
+      "target_users": [
+        "reliability engineers",
+        "embedded-software teams",
+        "formal-methods students"
+      ],
+      "why_now": "Event-driven systems increasingly need inspectable runtime assurance at the edge without sending telemetry to a hosted rules engine.",
+      "differentiator": "The compiler derives a minimized monitor automaton, proves a memory horizon for bounded formulas, and preserves inconclusive outcomes instead of forcing premature pass or fail verdicts.",
+      "architecture": [
+        "temporal requirement parser",
+        "formula normalization pass",
+        "monitor automaton compiler",
+        "watermark and reorder buffer",
+        "trace explanation renderer"
+      ],
+      "technically_hard_parts": [
+        "temporal formula progression",
+        "late-event semantics",
+        "automaton minimization",
+        "bounded-memory guarantees"
+      ],
+      "local_first_mvp": "Compile requirements for a synthetic pump controller and replay traces with delayed acknowledgments and missing shutdowns. Milestones: 1) parse a bounded temporal logic; 2) progress formulas over events; 3) compile and minimize monitors; 4) explain verdict transitions.",
+      "stretch_goals": [
+        "parametric monitors",
+        "verified code generation",
+        "hardware event adapters"
+      ],
+      "demo_story": "The same late event changes an apparent violation into an inconclusive verdict until the configured watermark closes the observation window.",
+      "test_strategy": "Deterministic truth-table and trace fixtures; differential checks against direct formula interpretation; automaton equivalence properties; overflow, late-event, and crash-restart failure tests.",
+      "data_and_api_constraints": "Data plan: synthetic timestamped event traces generated locally. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Runtime monitors supplement design assurance and must not be the sole safety mechanism. Risk: Incorrect clock or watermark assumptions can hide a real violation. Failure mode: ambiguous or truncated traces must remain inconclusive. Non-goal: direct control of physical equipment or certification claims.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9.1,
+      "build_wave_1": false,
+      "rank": 172
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "probabilistic-model-checker",
+      "name": "Probabilistic Model Checker",
+      "one_sentence": "A local model checker for finite Markov chains and decision processes that computes reachability probabilities, expected costs, and adversarial schedulers.",
+      "concrete_problem": "Testing cannot reliably expose rare probabilistic failures or quantify how nondeterministic choices change their likelihood.",
+      "target_users": [
+        "reliability researchers",
+        "probabilistic-systems students",
+        "protocol designers"
+      ],
+      "why_now": "Randomized backoff, retry, and redundancy policies are widespread, yet their tail risks are difficult to reason about from simulations alone.",
+      "differentiator": "Exact rational arithmetic on small models and interval-bounded iterative solving on larger models provide checkable error bounds plus a concrete maximizing scheduler.",
+      "architecture": [
+        "probabilistic model DSL",
+        "sparse transition builder",
+        "property parser",
+        "exact and interval solvers",
+        "scheduler witness exporter"
+      ],
+      "technically_hard_parts": [
+        "state-space generation",
+        "end-component analysis",
+        "numerically sound convergence",
+        "scheduler reconstruction"
+      ],
+      "local_first_mvp": "Analyze bundled retry and redundant-storage models, then produce the policy that maximizes data-loss probability. Milestones: 1) parse chains and MDPs; 2) build reachable state spaces; 3) solve reachability with certified bounds; 4) export scheduler witnesses.",
+      "stretch_goals": [
+        "reward-bounded properties",
+        "symbolic decision diagrams",
+        "statistical cross-check mode"
+      ],
+      "demo_story": "A retry policy that looks safe in 10,000 simulations is shown to exceed its failure budget under one legal scheduler.",
+      "test_strategy": "Deterministic hand-solved models; exact-versus-interval differential checks; probability-mass invariants; non-convergence, singular-system, and state-explosion failure tests.",
+      "data_and_api_constraints": "Data plan: bundled finite models and generated transition systems only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Results are only as faithful as the model and probability assumptions. Risk: Omitting a transition can create misleadingly strong safety bounds. Failure mode: unresolved numerical intervals must be reported, never rounded into a proof. Non-goal: forecasting people or optimizing live high-stakes decisions.",
+      "estimated_build_days": 25,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 173
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "hybrid-reachability-workbench",
+      "name": "Hybrid Reachability Workbench",
+      "one_sentence": "An offline analyzer that over-approximates reachable states of piecewise-linear hybrid systems and returns safety certificates or uncertainty regions.",
+      "concrete_problem": "Controllers that mix discrete modes with continuous dynamics can cross unsafe boundaries between sampled test points.",
+      "target_users": [
+        "controls students",
+        "cyber-physical systems researchers",
+        "safety engineers"
+      ],
+      "why_now": "Small autonomous and energy systems need accessible tools for reasoning about continuous envelopes without relying on proprietary simulation suites.",
+      "differentiator": "Zonotope propagation, guard intersection, and adaptive time splitting produce conservative reach tubes whose approximation error remains visible.",
+      "architecture": [
+        "hybrid automaton parser",
+        "set representation kernel",
+        "flowpipe propagator",
+        "guard and reset engine",
+        "certificate viewer"
+      ],
+      "technically_hard_parts": [
+        "sound set over-approximation",
+        "guard crossing detection",
+        "wrapping-error control",
+        "branch explosion management"
+      ],
+      "local_first_mvp": "Verify a synthetic thermostat and braking controller, isolating one unsafe parameter interval. Milestones: 1) parse linear modes and guards; 2) propagate interval boxes; 3) add zonotopes and adaptive splitting; 4) emit checkable reach-tube certificates.",
+      "stretch_goals": [
+        "nonlinear remainder bounds",
+        "counterexample-guided refinement",
+        "controller synthesis hooks"
+      ],
+      "demo_story": "Ordinary time-step simulation misses a brief unsafe temperature region that the conservative reach tube exposes and narrows.",
+      "test_strategy": "Deterministic analytic systems with known envelopes; containment properties across step refinement; certificate replay; NaN, branch-limit, and inconclusive-bound failure tests.",
+      "data_and_api_constraints": "Data plan: synthetic low-dimensional plant models only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "A workbench result is educational evidence, not a certified controller approval. Risk: Numerical unsoundness could exclude reachable unsafe states. Failure mode: exhausted refinement budgets must yield unknown. Non-goal: deployment to vehicles, medical devices, or industrial controllers.",
+      "estimated_build_days": 26,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 174
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "refinement-invariant-synthesizer",
+      "name": "Refinement Invariant Synthesizer",
+      "one_sentence": "A counterexample-guided engine that learns loop invariants for a small imperative language and checks each candidate with an SMT-backed verifier.",
+      "concrete_problem": "Program verifiers often fail on simple loops because the necessary inductive invariant is not written down and weak templates give opaque errors.",
+      "target_users": [
+        "verification students",
+        "static-analysis researchers",
+        "safety-critical software engineers"
+      ],
+      "why_now": "Explainable synthesis can make formal verification practical for bounded kernels while keeping every learned claim independently checkable.",
+      "differentiator": "An ICE-style learner separates positive, negative, and implication examples, while the verifier emits a proof obligation or concrete counterexample for every candidate.",
+      "architecture": [
+        "small-language frontend",
+        "verification-condition generator",
+        "candidate grammar",
+        "counterexample-guided learner",
+        "proof-obligation reporter"
+      ],
+      "technically_hard_parts": [
+        "inductiveness encoding",
+        "candidate search",
+        "counterexample classification",
+        "solver result validation"
+      ],
+      "local_first_mvp": "Synthesize invariants for array bounds, counters, and Euclidean division fixtures, then reject an insufficient grammar honestly. Milestones: 1) interpret and symbolically encode the language; 2) generate loop obligations; 3) implement ICE learning; 4) replay candidates and counterexamples.",
+      "stretch_goals": [
+        "octagonal templates",
+        "ranking-function synthesis",
+        "proof certificate export"
+      ],
+      "demo_story": "The engine strengthens a plausible bound through three counterexamples until the loop proof closes, showing every learning step.",
+      "test_strategy": "Deterministic benchmark fixtures with known invariants; interpreter-versus-encoding differential tests; mutation checks that break inductiveness; solver-timeout and unrealizable-grammar failure tests.",
+      "data_and_api_constraints": "Data plan: bundled toy programs and generated counterexamples only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The supported language and theories must be displayed with every result. Risk: Trusting an unchecked solver model or incomplete encoding. Failure mode: timeout or unsupported syntax must return unknown, not verified. Non-goal: silently certifying arbitrary production code.",
+      "estimated_build_days": 24,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.9,
+      "build_wave_1": false,
+      "rank": 175
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "smt-theory-solver-lab",
+      "name": "SMT Theory Solver Lab",
+      "one_sentence": "A from-scratch satisfiability-modulo-theories laboratory combining a CDCL SAT core with congruence closure and difference logic.",
+      "concrete_problem": "Solver APIs hide the conflict clauses, theory propagation, and proof obligations that determine whether symbolic analysis is trustworthy.",
+      "target_users": [
+        "formal-methods students",
+        "solver engineers",
+        "static-analysis developers"
+      ],
+      "why_now": "More developer tools depend on SMT solvers, yet few builders understand how Boolean search and theory reasoning interact.",
+      "differentiator": "Every theory conflict is translated into an inspectable learned clause and independently replayed against a small trusted checker.",
+      "architecture": [
+        "SMT-LIB subset parser",
+        "CDCL Boolean core",
+        "equality theory solver",
+        "difference-logic solver",
+        "proof trace checker"
+      ],
+      "technically_hard_parts": [
+        "watched-literal propagation",
+        "non-chronological backtracking",
+        "incremental congruence closure",
+        "theory lemma validation"
+      ],
+      "local_first_mvp": "Solve bundled equality and scheduling constraints and detect one deliberately invalid theory lemma. Milestones: 1) parse and bit-blast Boolean structure; 2) implement CDCL; 3) integrate two theory solvers; 4) check proof traces independently.",
+      "stretch_goals": [
+        "incremental push/pop",
+        "unsat-core minimization",
+        "linear arithmetic simplex"
+      ],
+      "demo_story": "A scheduling instance becomes unsatisfiable only after equality propagation, and the lab shows the exact cross-theory conflict clause.",
+      "test_strategy": "Deterministic DIMACS and SMT fixtures; differential results against a bundled reference output set; clause and model property checks; malformed proof, resource-limit, and incremental-state failure tests.",
+      "data_and_api_constraints": "Data plan: small permissively licensed benchmarks and generated formulas. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The educational solver must expose its supported fragment and never imply industrial completeness. Risk: An unsound theory lemma can corrupt all downstream answers. Failure mode: unsupported constructs or resource exhaustion must be explicit. Non-goal: replacing audited production solvers.",
+      "estimated_build_days": 27,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.7,
+      "build_wave_1": false,
+      "rank": 176
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "proof-carrying-transform-pipeline",
+      "name": "Proof-Carrying Transform Pipeline",
+      "one_sentence": "A local data-transformation engine whose operators emit compact certificates that a separate checker uses to verify row conservation and declared invariants.",
+      "concrete_problem": "Data pipelines can silently drop, duplicate, or mispartition records even when the output shape and aggregate totals look plausible.",
+      "target_users": [
+        "data engineers",
+        "research data stewards",
+        "verification students"
+      ],
+      "why_now": "Local analytical workflows need stronger reproducibility evidence than logs, especially when transformations are rerun months later.",
+      "differentiator": "Sort, filter, join, and aggregate operators produce Merkle commitments plus algebraic witnesses checked by a deliberately smaller independent verifier.",
+      "architecture": [
+        "typed pipeline DSL",
+        "streaming transform runtime",
+        "commitment and witness generator",
+        "independent certificate checker",
+        "provenance manifest"
+      ],
+      "technically_hard_parts": [
+        "canonical row encoding",
+        "multiset conservation proofs",
+        "join multiplicity accounting",
+        "bounded-memory verification"
+      ],
+      "local_first_mvp": "Transform a synthetic ledger through joins and aggregates, then catch a seeded dropped row with the independent checker. Milestones: 1) define canonical typed rows; 2) implement deterministic operators; 3) generate conservation witnesses; 4) verify manifests in a separate process.",
+      "stretch_goals": [
+        "external-memory proofs",
+        "range-proof aggregates",
+        "cross-language verifier"
+      ],
+      "demo_story": "Two outputs have identical totals, but only one certificate reveals that a duplicate offset a missing record.",
+      "test_strategy": "Deterministic fixture pipelines; property tests for multiset identities; certificate mutation suite; crash-resume, duplicate-key, overflow, and verifier-version failure tests.",
+      "data_and_api_constraints": "Data plan: generated nonpersonal tabular datasets only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Certificates establish declared transformations, not source truth or ethical data use. Risk: Ambiguous serialization can let different rows share a commitment. Failure mode: missing evidence must invalidate the run. Non-goal: processing personal dossiers or claiming regulatory compliance.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 177
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "stateful-conformance-explorer",
+      "name": "Stateful Conformance Explorer",
+      "one_sentence": "A model-based testing engine that explores stateful command sequences, compares implementation behavior with a reference machine, and shrinks divergent traces.",
+      "concrete_problem": "APIs often fail only after a particular sequence of retries, invalidations, and restarts that example-based tests never compose.",
+      "target_users": [
+        "library maintainers",
+        "protocol implementers",
+        "test-infrastructure engineers"
+      ],
+      "why_now": "Stateful local services and SDKs need reproducible behavioral testing that remains useful without hosted fuzzing infrastructure.",
+      "differentiator": "Coverage-guided command generation tracks abstract states, preserves preconditions during shrinking, and separates specification ambiguity from implementation divergence.",
+      "architecture": [
+        "reference-state-machine DSL",
+        "command sequence generator",
+        "implementation adapter",
+        "state coverage tracker",
+        "precondition-aware shrinker"
+      ],
+      "technically_hard_parts": [
+        "valid sequence generation",
+        "abstract state canonicalization",
+        "state-preserving shrinking",
+        "crash and restart modeling"
+      ],
+      "local_first_mvp": "Test a bundled lease cache and transactional queue, discovering and minimizing a restart-only defect. Milestones: 1) define machines and adapters; 2) generate legal command traces; 3) compare observations and abstract states; 4) shrink failures deterministically.",
+      "stretch_goals": [
+        "parallel command histories",
+        "adaptive exploration policies",
+        "coverage corpus exchange"
+      ],
+      "demo_story": "A 400-step random run collapses to seven commands that reproduce a stale lease after a simulated process restart.",
+      "test_strategy": "Deterministic seeded exploration; exhaustive small-state comparison; known-bug fixtures; shrink idempotence; adapter crash, nondeterminism, and invalid-precondition failure tests.",
+      "data_and_api_constraints": "Data plan: bundled in-memory services and generated commands only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Adapters must default to disposable local fixtures and bounded resources. Risk: Pointing destructive commands at a real service. Failure mode: nondeterministic observations must be quarantined rather than treated as model violations. Non-goal: probing third-party systems or bypassing authorization.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 178
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "separation-logic-heap-lab",
+      "name": "Separation Logic Heap Lab",
+      "one_sentence": "An interactive verifier for pointer-manipulating programs that checks separation-logic contracts and visualizes heap entailment and frame inference.",
+      "concrete_problem": "Pointer proofs fail opaquely when aliasing, ownership transfer, or a missing frame invalidates otherwise plausible local reasoning.",
+      "target_users": [
+        "systems-programming students",
+        "verification researchers",
+        "memory-safety educators"
+      ],
+      "why_now": "Ownership-oriented languages have made heap reasoning mainstream, but the proof mechanics remain difficult to learn and debug.",
+      "differentiator": "A small symbolic executor exposes heaplets, permissions, unfolding choices, and failed entailments rather than presenting a black-box verified badge.",
+      "architecture": [
+        "pointer-language interpreter",
+        "assertion parser",
+        "symbolic heap engine",
+        "entailment and frame solver",
+        "proof-state visualizer"
+      ],
+      "technically_hard_parts": [
+        "alias-sensitive symbolic execution",
+        "inductive predicate unfolding",
+        "frame inference",
+        "countermodel construction"
+      ],
+      "local_first_mvp": "Verify linked-list append and in-place reversal, then visualize a seeded aliasing bug. Milestones: 1) execute the concrete heap language; 2) parse symbolic assertions; 3) implement entailment and framing; 4) produce proof steps and countermodels.",
+      "stretch_goals": [
+        "fractional permissions",
+        "bi-abduction",
+        "Rust ownership examples"
+      ],
+      "demo_story": "A single shared tail invalidates the reversal proof, and the visualizer shows the two predicates competing for the same heap cell.",
+      "test_strategy": "Deterministic concrete-versus-symbolic fixtures; entailment law properties; mutation tests for aliasing and leaks; unfolding-limit, unsupported arithmetic, and countermodel failure tests.",
+      "data_and_api_constraints": "Data plan: bundled toy programs and generated heaps only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Only programs within the modeled memory semantics can be reasoned about. Risk: An incomplete frame solver may report a misleading proof failure or, worse, an unsound success. Failure mode: proof search limits must remain explicit. Non-goal: auditing arbitrary unsafe binaries.",
+      "estimated_build_days": 25,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.55,
+      "build_wave_1": false,
+      "rank": 179
+    },
+    {
+      "domain": "formal methods/verification",
+      "repo_slug": "unsat-proof-stream-verifier",
+      "name": "Unsat Proof Stream Verifier",
+      "one_sentence": "A memory-bounded checker for clausal unsatisfiability proofs that validates every derived clause and pinpoints the first invalid inference.",
+      "concrete_problem": "A solver's unsatisfiable answer is difficult to trust when the proof artifact is huge, malformed, or checked only by the solver itself.",
+      "target_users": [
+        "solver users",
+        "hardware-verification teams",
+        "formal-methods students"
+      ],
+      "why_now": "SAT-backed verification is embedded in more build and hardware flows, increasing the value of small independent proof checkers.",
+      "differentiator": "Streaming clause storage, deletion-aware indexing, and a strict LRAT-style mode keep the trusted core small while providing localized diagnostics.",
+      "architecture": [
+        "CNF and proof parser",
+        "clause arena",
+        "watched propagation checker",
+        "deletion-aware index",
+        "diagnostic and metrics reporter"
+      ],
+      "technically_hard_parts": [
+        "streaming proof validation",
+        "reverse unit propagation",
+        "clause deletion correctness",
+        "resource-safe hostile parsing"
+      ],
+      "local_first_mvp": "Verify bundled satisfiable and unsatisfiable formulas, then reject a proof with one corrupted antecedent. Milestones: 1) parse bounded CNF and proof streams; 2) implement propagation checking; 3) honor additions and deletions; 4) report minimal invalid prefixes.",
+      "stretch_goals": [
+        "parallel segment checking",
+        "proof compression analysis",
+        "machine-checkable checker model"
+      ],
+      "demo_story": "The verifier processes a proof larger than memory and identifies the exact clause whose claimed implication cannot be reconstructed.",
+      "test_strategy": "Deterministic proof corpus; differential verdicts against published expected results; proof-byte mutation suite; truncation, duplicate-id, memory-limit, and disk-corruption failure tests.",
+      "data_and_api_constraints": "Data plan: small generated CNF instances and permissively licensed proof fixtures. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "A valid unsat proof establishes only the encoded formula, not that the encoding matches reality. Risk: Parser disagreement or unchecked integer overflow can admit an invalid proof. Failure mode: truncated streams must fail closed. Non-goal: solving formulas, exploiting solver services, or certifying an external design.",
+      "estimated_build_days": 22,
+      "usefulness_score": 8,
+      "technical_depth_score": 10,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.75,
+      "build_wave_1": false,
+      "rank": 180
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "erasure-archive-scrubber",
+      "name": "Erasure-Coded Archive Scrubber",
+      "one_sentence": "A local archival store that stripes objects with erasure codes, schedules integrity scrubs, and reconstructs damaged shards with auditable repair evidence.",
+      "concrete_problem": "Long-lived offline collections can accumulate silent corruption that ordinary checksums detect only after every intact copy is gone.",
+      "target_users": [
+        "digital archivists",
+        "self-hosted backup operators",
+        "storage-systems students"
+      ],
+      "why_now": "Affordable disks make large personal and institutional archives possible, but durable repair workflows remain difficult to test before real media fails.",
+      "differentiator": "A Reed-Solomon implementation couples deterministic shard placement with risk-ranked scrubbing and a repair journal that distinguishes detection from verified reconstruction.",
+      "architecture": [
+        "content-addressed object layer",
+        "finite-field erasure codec",
+        "shard placement manifest",
+        "scrub scheduler",
+        "repair journal and verifier"
+      ],
+      "technically_hard_parts": [
+        "finite-field coding",
+        "atomic repair commits",
+        "correlated-failure modeling",
+        "bounded-memory streaming"
+      ],
+      "local_first_mvp": "Store a generated corpus across simulated volumes, corrupt selected shards, and recover every object within the configured fault bound. Milestones: 1) chunk and hash objects; 2) encode and place shards; 3) schedule deterministic scrubs; 4) reconstruct and verify crash-safe repairs.",
+      "stretch_goals": [
+        "locally repairable codes",
+        "removable-media manifests",
+        "scrub energy budgeting"
+      ],
+      "demo_story": "Two simulated disks lose different sectors, and the scrubber reconstructs the affected objects while proving which source shards participated.",
+      "test_strategy": "Deterministic fault matrices across all recoverable shard combinations; codec property tests; byte-flip mutation corpus; interrupted repair, insufficient-shard, stale-manifest, and full-volume failure tests.",
+      "data_and_api_constraints": "Data plan: generated binary objects and simulated local volumes only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Repair must never overwrite the only remaining shard before verification. Risk: Correlated loss beyond the code's bound or a defective codec can destroy recoverability. Failure mode: insufficient evidence must quarantine the object. Non-goal: claiming that redundancy replaces geographically separate backups.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 181
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "format-migration-evidence-lab",
+      "name": "Format Migration Evidence Lab",
+      "one_sentence": "An offline workbench that migrates constrained legacy documents and measures semantic, structural, and rendering loss with replayable evidence.",
+      "concrete_problem": "File conversion can produce outputs that open successfully while silently losing formulas, annotations, links, fonts, or ordering.",
+      "target_users": [
+        "digital preservation teams",
+        "records managers",
+        "document-tool developers"
+      ],
+      "why_now": "Organizations must preserve aging born-digital material while conversion tools and rendering environments change underneath them.",
+      "differentiator": "A typed feature inventory, normalized intermediate representation, and metamorphic comparison separate intentional representation changes from preservation loss.",
+      "architecture": [
+        "safe format parsers",
+        "feature inventory model",
+        "normalized document IR",
+        "migration adapter sandbox",
+        "semantic and render comparator"
+      ],
+      "technically_hard_parts": [
+        "hostile input parsing",
+        "cross-format feature mapping",
+        "layout-tolerant comparison",
+        "loss provenance attribution"
+      ],
+      "local_first_mvp": "Migrate bundled synthetic rich-text and vector fixtures, catching a lost footnote and substituted glyph. Milestones: 1) inventory source features; 2) normalize two safe formats; 3) run sandboxed migrations; 4) score and explain preservation loss.",
+      "stretch_goals": [
+        "multi-hop migration planning",
+        "font substitution proofs",
+        "accessibility-tree comparison"
+      ],
+      "demo_story": "Two conversions look similar as thumbnails, but the evidence report exposes that one dropped a formula and broke reading order.",
+      "test_strategy": "Deterministic golden feature inventories; round-trip metamorphic tests; seeded omission and substitution mutations; malformed input, adapter crash, nondeterministic render, and unsupported-feature failure tests.",
+      "data_and_api_constraints": "Data plan: purpose-built nonpersonal fixture files with redistribution-friendly fonts. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Originals must remain immutable and active content disabled. Risk: A parser vulnerability or lossy adapter could damage trust in the preserved copy. Failure mode: unsupported features must remain explicit and retain the source. Non-goal: bulk conversion of untrusted real archives without review.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 182
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "filesystem-corruption-triage",
+      "name": "Filesystem Corruption Triage",
+      "one_sentence": "A read-only forensic simulator that reconstructs allocation and namespace invariants from a toy filesystem image and proposes evidence-ranked repairs.",
+      "concrete_problem": "Filesystem repair tools often mutate damaged media before users understand which invariants failed or which files a repair may orphan.",
+      "target_users": [
+        "storage engineers",
+        "digital forensics students",
+        "systems reliability teams"
+      ],
+      "why_now": "Local storage remains essential, yet safe recovery skills are hard to practice without sacrificing real disks or relying on opaque utilities.",
+      "differentiator": "The analyzer builds competing recovery hypotheses from superblocks, allocation maps, inodes, and journal fragments, then scores each by preserved evidence without writing the source image.",
+      "architecture": [
+        "bounded disk-image parser",
+        "filesystem invariant engine",
+        "journal replay simulator",
+        "repair hypothesis search",
+        "copy-on-write preview"
+      ],
+      "technically_hard_parts": [
+        "partial metadata recovery",
+        "conflicting evidence resolution",
+        "namespace reconstruction",
+        "safe hostile-image parsing"
+      ],
+      "local_first_mvp": "Triage generated images with duplicate blocks, orphaned inodes, and a torn journal, then preview two recovery plans. Milestones: 1) parse a documented toy filesystem; 2) check structural invariants; 3) replay bounded journal states; 4) rank copy-on-write repairs.",
+      "stretch_goals": [
+        "sector confidence maps",
+        "cross-image differential recovery",
+        "read-only real-format adapter"
+      ],
+      "demo_story": "The tool explains why reconnecting one orphan preserves more directory evidence than clearing it, without touching the original image.",
+      "test_strategy": "Deterministic image generator with seeded corruption; invariant and parser fuzz tests; recovery-oracle fixtures; truncated image, cyclic directory, conflicting journal, and exhausted-search failure tests.",
+      "data_and_api_constraints": "Data plan: generated toy filesystem images with no personal content. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The default and MVP must be strictly read-only with repairs applied only to copies. Risk: A wrong hypothesis could make recoverable data harder to retrieve. Failure mode: ambiguous evidence must yield multiple plans or abstention. Non-goal: bypassing encryption or examining devices without authorization.",
+      "estimated_build_days": 25,
+      "usefulness_score": 9,
+      "technical_depth_score": 10,
+      "feasibility_score": 7,
+      "portfolio_signal_score": 10,
+      "weighted_score": 9.05,
+      "build_wave_1": false,
+      "rank": 183
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "reproducible-export-capsule",
+      "name": "Reproducible Data Export Capsule",
+      "one_sentence": "A local packager that turns a relational dataset into a canonical, query-verifiable preservation capsule with schema, constraints, and deterministic restore evidence.",
+      "concrete_problem": "Database exports often omit collation, constraints, encoding, or ordering details, so a nominal restore does not reproduce the source semantics.",
+      "target_users": [
+        "research data managers",
+        "database administrators",
+        "civic records teams"
+      ],
+      "why_now": "Long-term access increasingly depends on portable exports rather than keeping a specific database server alive indefinitely.",
+      "differentiator": "Canonical table streams, declarative schema semantics, and a suite of source-versus-restored query fingerprints verify more than row counts.",
+      "architecture": [
+        "schema introspection adapter",
+        "canonical row encoder",
+        "constraint and collation manifest",
+        "chunked capsule writer",
+        "restore and query verifier"
+      ],
+      "technically_hard_parts": [
+        "canonical type encoding",
+        "foreign-key ordering",
+        "collation preservation",
+        "streaming verification"
+      ],
+      "local_first_mvp": "Capsule and restore a bundled SQLite fixture containing cycles, Unicode, nulls, and decimals, then detect one altered collation. Milestones: 1) inventory schema semantics; 2) stream canonical table chunks; 3) write integrity manifests; 4) restore and compare query fingerprints.",
+      "stretch_goals": [
+        "incremental capsules",
+        "multiple database adapters",
+        "format obsolescence reports"
+      ],
+      "demo_story": "Two restores contain the same rows, but the verifier catches that one now sorts accented names differently and violates a uniqueness assumption.",
+      "test_strategy": "Deterministic pathological database fixtures; export byte-reproducibility; source-versus-restore query oracles; interruption, cycle, encoding, unsupported-type, and corrupted-chunk failure tests.",
+      "data_and_api_constraints": "Data plan: generated nonpersonal databases only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Capsules may contain sensitive source records and require explicit local encryption outside the public fixtures. Risk: Canonicalization can erase meaningful database semantics. Failure mode: unsupported types or constraints must block a completeness claim. Non-goal: exfiltrating databases or promising indefinite format readability.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 184
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "optical-media-recovery-planner",
+      "name": "Optical Media Recovery Planner",
+      "one_sentence": "An offline imaging planner that fuses repeated sector reads, confidence scores, and error-code evidence into a reproducible recovery map.",
+      "concrete_problem": "Aging optical media returns inconsistent reads, and naive retries waste time while obscuring which bytes are reliable or reconstructed.",
+      "target_users": [
+        "community archivists",
+        "media preservation labs",
+        "storage recovery students"
+      ],
+      "why_now": "Collections created on CDs and DVDs are reaching ages where weak sectors and disappearing drive support make planned migration urgent.",
+      "differentiator": "A simulated drive adapter enables deterministic development of retry scheduling, majority evidence, and sector provenance without requiring damaged physical media.",
+      "architecture": [
+        "drive trace adapter",
+        "sector confidence model",
+        "adaptive retry scheduler",
+        "error-code analyzer",
+        "image map and manifest writer"
+      ],
+      "technically_hard_parts": [
+        "noisy read fusion",
+        "retry budget allocation",
+        "error correction interpretation",
+        "uncertainty-preserving output"
+      ],
+      "local_first_mvp": "Recover a simulated disc with intermittent and permanent bad sectors while preserving a byte-level confidence map. Milestones: 1) replay deterministic drive traces; 2) fuse repeated reads; 3) schedule retries by expected gain; 4) emit an image and evidence manifest.",
+      "stretch_goals": [
+        "multiple-drive evidence fusion",
+        "filesystem-aware prioritization",
+        "real read-only drive adapter"
+      ],
+      "demo_story": "The planner spends its final retries on sectors whose alternate reads can repair a directory, while marking irrecoverable content honestly.",
+      "test_strategy": "Deterministic simulated drive traces; exhaustive small retry-budget oracle; confidence calibration checks; contradictory reads, disappearing device, permanent-error, and incomplete-image failure tests.",
+      "data_and_api_constraints": "Data plan: generated disc images and synthetic read-error traces only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Real adapters must be read-only and used only on owned or authorized media. Risk: Excessive retries can stress fragile discs or drives. Failure mode: uncertain sectors must remain marked, never silently filled. Non-goal: defeating copy protection or recovering unauthorized content.",
+      "estimated_build_days": 21,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 185
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "metadata-roundtrip-conformance",
+      "name": "Metadata Round-Trip Conformance Lab",
+      "one_sentence": "A test harness that tracks metadata semantics through import, edit, export, and re-import cycles across local media tools.",
+      "concrete_problem": "Dates, orientation, color intent, authorship, and accessibility descriptions can be silently rewritten or dropped as files move between tools.",
+      "target_users": [
+        "digital asset managers",
+        "media-tool developers",
+        "preservation engineers"
+      ],
+      "why_now": "Metadata interoperability matters more as people move collections between local applications and formats over decades.",
+      "differentiator": "A semantic field ontology distinguishes acceptable representation changes from information loss and generates the shortest pipeline that reproduces each divergence.",
+      "architecture": [
+        "synthetic fixture generator",
+        "safe metadata parsers",
+        "semantic field ontology",
+        "sandboxed tool adapter",
+        "pipeline reducer and report"
+      ],
+      "technically_hard_parts": [
+        "cross-format semantic mapping",
+        "timezone and precision handling",
+        "minimal failing pipeline search",
+        "active-metadata neutralization"
+      ],
+      "local_first_mvp": "Round-trip synthetic image and audio fixtures through bundled adapters, detecting a timezone shift and lost description. Milestones: 1) generate edge-case metadata; 2) normalize semantic fields; 3) execute adapter pipelines; 4) reduce and classify divergences.",
+      "stretch_goals": [
+        "document accessibility metadata",
+        "tool-version bisecting",
+        "policy-specific preservation profiles"
+      ],
+      "demo_story": "A five-step workflow reduces to one export command that changes an uncertain local date into a false UTC timestamp.",
+      "test_strategy": "Deterministic fixture matrix; semantic round-trip properties; adapter version snapshots; malformed tags, hostile payload, timeout, precision-loss, and nondeterministic-output failure tests.",
+      "data_and_api_constraints": "Data plan: generated media with fictional metadata and local fixture adapters only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Fixtures must contain no real identities, locations, or executable metadata. Risk: Normalization can erase ambiguity that archivists need to preserve. Failure mode: parser disagreement must retain raw fields and flag uncertainty. Non-goal: extracting metadata from other people's collections.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.65,
+      "build_wave_1": false,
+      "rank": 186
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "tape-restore-scheduler",
+      "name": "Tape Restore Scheduler",
+      "one_sentence": "A deterministic optimizer for restoring archival objects from sequential media under mount, seek, drive, staging-space, and deadline constraints.",
+      "concrete_problem": "Large tape restores are dominated by media mounts and seek order, so naive request ordering can miss recovery deadlines by hours or days.",
+      "target_users": [
+        "archive operators",
+        "storage reliability engineers",
+        "operations research students"
+      ],
+      "why_now": "Cold storage remains economically important, while ransomware recovery and institutional migrations make restore planning a first-class reliability problem.",
+      "differentiator": "A discrete-event simulator evaluates exact schedules, and a hybrid batching heuristic exposes tradeoffs between deadline lateness, mount count, and staging pressure.",
+      "architecture": [
+        "archive catalog model",
+        "request and deadline planner",
+        "batching and route optimizer",
+        "discrete-event drive simulator",
+        "schedule explanation report"
+      ],
+      "technically_hard_parts": [
+        "sequence-dependent setup costs",
+        "multi-drive scheduling",
+        "staging capacity constraints",
+        "online request insertion"
+      ],
+      "local_first_mvp": "Schedule a generated 10,000-object restore across two virtual drives and beat FIFO while meeting urgent-object deadlines. Milestones: 1) model tape geometry and requests; 2) build the event simulator; 3) implement batching heuristics; 4) compare schedules against small exact optima.",
+      "stretch_goals": [
+        "robust schedules under drive failure",
+        "energy-aware mounting",
+        "incremental replanning"
+      ],
+      "demo_story": "One urgent file moves earlier without causing two extra mounts, cutting maximum lateness while preserving total throughput.",
+      "test_strategy": "Deterministic event simulation; exhaustive optimal oracle for small catalogs; capacity and no-duplicate invariants; drive failure, missing tape, staging exhaustion, and late-request failure tests.",
+      "data_and_api_constraints": "Data plan: generated catalogs, tape layouts, and request streams only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The planner must not issue commands to real libraries in the MVP. Risk: A bad estimate can produce a schedule that misses critical recovery objectives. Failure mode: absent media and failed drives must trigger replanning, not silent skipping. Non-goal: operating hardware or representing simulated timing as a service guarantee.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 187
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "archive-fixity-sampling-planner",
+      "name": "Archive Fixity Sampling Planner",
+      "one_sentence": "A risk-aware planner that chooses which archival objects to verify under limited read budgets and quantifies detection confidence without replacing full fixity checks.",
+      "concrete_problem": "Petabyte-scale archives cannot always read every object frequently, yet uniform sampling ignores media age, copy correlation, and object value.",
+      "target_users": [
+        "digital repository operators",
+        "storage risk analysts",
+        "applied statistics students"
+      ],
+      "why_now": "Growing offline collections need transparent ways to allocate integrity-check bandwidth while avoiding false claims of complete verification.",
+      "differentiator": "Stratified finite-population sampling, Bayesian defect-rate updates, and correlated-copy penalties produce an explainable plan plus explicit undetected-risk bounds.",
+      "architecture": [
+        "archive inventory model",
+        "risk stratifier",
+        "sampling optimizer",
+        "defect belief updater",
+        "confidence and audit reporter"
+      ],
+      "technically_hard_parts": [
+        "unequal-probability sampling",
+        "correlated failure modeling",
+        "adaptive allocation",
+        "honest uncertainty reporting"
+      ],
+      "local_first_mvp": "Plan monthly checks for a generated archive, inject clustered corruption, and compare detection delay with uniform sampling. Milestones: 1) model strata and budgets; 2) implement reproducible samplers; 3) update defect beliefs; 4) backtest confidence under clustered faults.",
+      "stretch_goals": [
+        "sequential stopping rules",
+        "media replacement optimization",
+        "multi-copy inspection planning"
+      ],
+      "demo_story": "The planner detects a bad media batch earlier than uniform sampling and shows how much risk still remains unobserved.",
+      "test_strategy": "Deterministic seeded Monte Carlo backtests; exact inclusion-probability checks on small inventories; calibration tests; empty strata, biased metadata, clustered-loss, and zero-budget failure tests.",
+      "data_and_api_constraints": "Data plan: generated anonymous archive inventories and corruption scenarios. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Sampling never proves uninspected objects are intact. Risk: Miscalibrated priors or missing correlation can understate undetected loss. Failure mode: invalid inventory or zero coverage must suppress confidence claims. Non-goal: replacing checksums, redundancy, or full verification when required.",
+      "estimated_build_days": 20,
+      "usefulness_score": 8,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 8,
+      "weighted_score": 8.5,
+      "build_wave_1": false,
+      "rank": 188
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "versioned-dataset-compactor",
+      "name": "Versioned Dataset Compactor",
+      "one_sentence": "A local compaction engine that rewrites immutable dataset versions while preserving snapshot semantics, retention rules, and verifiable reachability.",
+      "concrete_problem": "Append-only analytical datasets accumulate small files and obsolete versions, but unsafe cleanup can break historical snapshots or legal retention holds.",
+      "target_users": [
+        "data platform engineers",
+        "research computing teams",
+        "storage engine students"
+      ],
+      "why_now": "Versioned table formats are common beyond large cloud platforms, creating a need for inspectable offline maintenance algorithms.",
+      "differentiator": "A manifest graph computes live object reachability across snapshots and holds, while a two-phase rewrite protocol proves semantic equivalence before garbage collection.",
+      "architecture": [
+        "snapshot manifest graph",
+        "retention policy evaluator",
+        "compaction planner",
+        "two-phase rewrite engine",
+        "reachability and equivalence verifier"
+      ],
+      "technically_hard_parts": [
+        "multi-version reachability",
+        "atomic manifest swaps",
+        "sort and partition preservation",
+        "safe garbage collection"
+      ],
+      "local_first_mvp": "Compact a generated columnar dataset with branches and holds, then survive a crash before manifest commit without losing any snapshot. Milestones: 1) model immutable snapshots; 2) compute reachability and retention; 3) plan deterministic rewrites; 4) verify and collect unreachable objects.",
+      "stretch_goals": [
+        "incremental bloom summaries",
+        "cross-dataset references",
+        "cost-based compaction scheduling"
+      ],
+      "demo_story": "The compactor removes 80 percent of tiny files but preserves a held historical snapshot that a date-only cleanup would have deleted.",
+      "test_strategy": "Deterministic snapshot DAG fixtures; query equivalence before and after compaction; crash-point injection at every commit step; corrupt manifest, cyclic reference, concurrent reader, and disk-full failure tests.",
+      "data_and_api_constraints": "Data plan: generated local tabular datasets and manifests only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Deletion must be disabled by default and simulated until verification succeeds. Risk: Incorrect reachability can destroy the only copy of a retained snapshot. Failure mode: ambiguity, corruption, or concurrent mutation must halt collection. Non-goal: managing cloud buckets or bypassing records-retention policy.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 189
+    },
+    {
+      "domain": "storage/preservation systems",
+      "repo_slug": "dependency-closure-vault",
+      "name": "Dependency Closure Preservation Vault",
+      "one_sentence": "An offline vault builder that resolves a software artifact's complete build and runtime dependency closure, preserves source evidence, and rehearses reconstruction.",
+      "concrete_problem": "Archived source code becomes unbuildable when transitive packages, toolchains, generated files, or license evidence disappear.",
+      "target_users": [
+        "software preservation teams",
+        "open-source maintainers",
+        "reproducible-build engineers"
+      ],
+      "why_now": "Modern software depends on deep ecosystems whose availability and compatibility can change faster than institutional retention horizons.",
+      "differentiator": "A typed dependency graph separates source, build, toolchain, and runtime edges, then validates closure through a network-disabled reconstruction rehearsal.",
+      "architecture": [
+        "lockfile and manifest adapters",
+        "dependency graph resolver",
+        "content-addressed vault",
+        "license and source manifest",
+        "offline reconstruction runner"
+      ],
+      "technically_hard_parts": [
+        "conditional dependency resolution",
+        "toolchain capture boundaries",
+        "cycle and platform handling",
+        "network-isolated rebuild verification"
+      ],
+      "local_first_mvp": "Vault a bundled multi-package fixture for two target platforms and rebuild it with networking disabled. Milestones: 1) parse a constrained package format; 2) resolve target-specific closures; 3) store canonical artifacts and evidence; 4) rehearse and compare offline outputs.",
+      "stretch_goals": [
+        "multiple ecosystem adapters",
+        "emulated legacy toolchains",
+        "closure risk scoring"
+      ],
+      "demo_story": "The vault catches an undeclared code generator that a normal lockfile omitted and prevents a false preservation-complete claim.",
+      "test_strategy": "Deterministic synthetic registries and package graphs; closure and hash properties; network-denied rebuilds; missing source, platform conflict, dependency cycle, license gap, and corrupted artifact failure tests.",
+      "data_and_api_constraints": "Data plan: bundled synthetic packages and locally generated registries only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The vault must preserve licensing and access boundaries and never fetch private packages implicitly. Risk: Archived executable dependencies can contain vulnerable or malicious code. Failure mode: incomplete provenance must block a closure-complete label. Non-goal: redistributing third-party artifacts without permission or executing untrusted packages on the host.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 10,
+      "weighted_score": 8.95,
+      "build_wave_1": false,
+      "rank": 190
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "job-shop-disruption-rescheduler",
+      "name": "Job-Shop Disruption Rescheduler",
+      "one_sentence": "A local constraint optimizer that repairs production schedules after machine failures while minimizing lateness, setup churn, and deviation from released work.",
+      "concrete_problem": "Static factory schedules become infeasible after downtime or material delay, but complete reoptimization can create operationally impossible plan churn.",
+      "target_users": [
+        "manufacturing systems engineers",
+        "operations research students",
+        "small production planners"
+      ],
+      "why_now": "Smaller facilities need transparent scheduling tools that can run on-site and explain tradeoffs without uploading operational data.",
+      "differentiator": "A disjunctive-graph repair model freezes committed operations, prices sequence-dependent setups, and returns a Pareto set rather than one opaque optimum.",
+      "architecture": [
+        "job and machine model",
+        "disjunctive constraint graph",
+        "incremental repair optimizer",
+        "discrete-event schedule simulator",
+        "tradeoff explanation viewer"
+      ],
+      "technically_hard_parts": [
+        "precedence and resource propagation",
+        "sequence-dependent setup costs",
+        "warm-started repair search",
+        "multi-objective Pareto pruning"
+      ],
+      "local_first_mvp": "Reschedule a generated two-shift job shop after one machine outage and beat dispatch-rule baselines without moving frozen work. Milestones: 1) validate jobs and calendars; 2) simulate baseline schedules; 3) implement repair search; 4) produce Pareto alternatives and explanations.",
+      "stretch_goals": [
+        "uncertain repair durations",
+        "operator skill constraints",
+        "interactive what-if locks"
+      ],
+      "demo_story": "A machine failure forces three jobs to move, and the planner finds a lower-lateness repair that changes only one released sequence.",
+      "test_strategy": "Deterministic benchmark instances; exhaustive optimal oracle on small shops; precedence, capacity, and frozen-operation invariants; infeasible calendar, repeated outage, timeout, and bad-duration failure tests.",
+      "data_and_api_constraints": "Data plan: generated job routes, calendars, and disruption events only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Schedules require human review and must not infer worker productivity. Risk: An incorrect or stale machine model can create unsafe or impossible work sequences. Failure mode: infeasibility must be explained rather than hidden by dropping jobs. Non-goal: automated machine control or employee surveillance.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 191
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "cutting-stock-yield-optimizer",
+      "name": "Cutting Stock Yield Optimizer",
+      "one_sentence": "An offline optimizer for one- and two-dimensional cutting plans that balances material yield, kerf, grain, defect regions, and reusable offcuts.",
+      "concrete_problem": "Naive nesting wastes sheet and roll material because real cuts include blade width, orientation rules, defects, and inventory-valued remnants.",
+      "target_users": [
+        "fabrication shops",
+        "industrial engineering students",
+        "makerspace operators"
+      ],
+      "why_now": "Material costs and waste goals make explainable optimization valuable to small shops that cannot justify proprietary cloud nesting software.",
+      "differentiator": "Column generation for one-dimensional patterns and a deterministic guillotine search for sheets share an offcut ledger that values future usability, not just current scrap.",
+      "architecture": [
+        "order and stock model",
+        "pattern generator",
+        "master allocation optimizer",
+        "geometric feasibility checker",
+        "offcut inventory ledger"
+      ],
+      "technically_hard_parts": [
+        "column generation pricing",
+        "kerf-aware geometry",
+        "defect and grain constraints",
+        "offcut value estimation"
+      ],
+      "local_first_mvp": "Optimize generated bar and plywood orders, then compare material use with first-fit decreasing. Milestones: 1) validate stock and cut constraints; 2) implement one-dimensional pattern pricing; 3) add guillotine sheet search; 4) track and reuse offcuts.",
+      "stretch_goals": [
+        "non-guillotine nesting",
+        "robust demand batches",
+        "machine-specific cut sequencing"
+      ],
+      "demo_story": "The optimizer accepts slightly more current scrap to preserve a rectangular offcut that fulfills tomorrow's seeded order.",
+      "test_strategy": "Deterministic known-optimum instances; geometric non-overlap and dimension invariants; exhaustive small-pattern oracle; impossible part, precision, defect collision, and solver-limit failure tests.",
+      "data_and_api_constraints": "Data plan: generated dimensions, defects, and orders only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Plans must include tolerances and require operator validation before cutting. Risk: Unit, kerf, or machine-envelope errors can waste material or damage equipment. Failure mode: uncertain geometry must reject the plan. Non-goal: direct control of saws, lasers, or other machinery.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 192
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "inventory-service-level-simulator",
+      "name": "Inventory Service-Level Simulator",
+      "one_sentence": "A local stochastic simulator that compares reorder policies under intermittent demand, uncertain lead times, substitutions, and censored stockout observations.",
+      "concrete_problem": "Simple safety-stock formulas fail when demand is sparse, lead times vary, and recorded sales hide demand lost during stockouts.",
+      "target_users": [
+        "inventory planners",
+        "operations analytics students",
+        "repair-parts coordinators"
+      ],
+      "why_now": "Organizations need resilient inventory decisions without exposing commercially sensitive histories to hosted forecasting services.",
+      "differentiator": "A censored-demand inference layer and common-random-number simulation compare policies fairly across service level, holding cost, and shortage risk.",
+      "architecture": [
+        "demand and lead-time generator",
+        "censored-demand estimator",
+        "inventory event simulator",
+        "policy optimizer",
+        "service-level calibration report"
+      ],
+      "technically_hard_parts": [
+        "lost-demand inference",
+        "correlated lead-time modeling",
+        "variance-reduced policy comparison",
+        "multi-item substitution state"
+      ],
+      "local_first_mvp": "Compare base-stock and reorder-point policies on a generated spare-parts catalog with intermittent demand. Milestones: 1) model inventory event state; 2) generate censored histories; 3) simulate policies with shared randomness; 4) optimize and backtest service targets.",
+      "stretch_goals": [
+        "multi-echelon inventory",
+        "perishable stock",
+        "distributionally robust policies"
+      ],
+      "demo_story": "The tool shows that a low-sales item is frequently stocked out rather than low-demand, changing its recommended reorder threshold.",
+      "test_strategy": "Deterministic seeded simulations; conservation and no-negative-stock invariants; analytic single-item cases; zero demand, endless lead time, simultaneous events, and infeasible-service-target failure tests.",
+      "data_and_api_constraints": "Data plan: generated products, demand, and supplier events only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Outputs are planning scenarios, not guarantees, and must not encode discriminatory customer priorities. Risk: Misspecified demand or lead-time tails can understock critical items. Failure mode: unattainable service levels must be reported explicitly. Non-goal: dynamic price manipulation or automatic purchasing.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 8,
+      "weighted_score": 8.85,
+      "build_wave_1": false,
+      "rank": 193
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "assembly-line-balance-verifier",
+      "name": "Assembly Line Balance Verifier",
+      "one_sentence": "A constraint-based line balancer that assigns tasks to stations while checking precedence, zoning, ergonomic exposure, and cycle-time robustness.",
+      "concrete_problem": "A nominally balanced line can violate task dependencies or overload a station when operation times vary or incompatible tasks are colocated.",
+      "target_users": [
+        "industrial engineers",
+        "manufacturing education labs",
+        "process improvement teams"
+      ],
+      "why_now": "Transparent local optimization can help teams evaluate line changes without turning worker monitoring data into a cloud analytics product.",
+      "differentiator": "The solver verifies every proposed balance against precedence and zoning constraints, then stress-tests station loads under bounded task-time uncertainty.",
+      "architecture": [
+        "task precedence graph",
+        "station constraint model",
+        "balance optimizer",
+        "robustness scenario engine",
+        "assignment proof report"
+      ],
+      "technically_hard_parts": [
+        "precedence-constrained bin packing",
+        "incompatibility encoding",
+        "robust cycle-time bounds",
+        "symmetry breaking"
+      ],
+      "local_first_mvp": "Balance a generated assembly with 40 tasks, then expose a station that fails under allowed duration variation. Milestones: 1) validate precedence DAGs; 2) construct feasible assignments; 3) optimize station count and smoothness; 4) verify robust cycle time.",
+      "stretch_goals": [
+        "mixed-model lines",
+        "parallel stations",
+        "user-authored ergonomic constraints"
+      ],
+      "demo_story": "Two balances use the same station count, but only one remains feasible when a high-variance task runs long.",
+      "test_strategy": "Deterministic benchmark graphs; exact optimum oracle for small lines; precedence and assignment invariants; cyclic graph, impossible zoning, uncertainty breach, and optimizer-timeout failure tests.",
+      "data_and_api_constraints": "Data plan: generated task graphs and synthetic duration ranges, never individual worker measurements. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Ergonomic limits require domain review and must not be inferred from worker tracking. Risk: Treating synthetic duration bounds as safe physical work standards. Failure mode: infeasible safety constraints must never be relaxed silently. Non-goal: employee scoring, pace enforcement, or machine control.",
+      "estimated_build_days": 21,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 194
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "maintenance-spares-allocator",
+      "name": "Maintenance Spares Allocator",
+      "one_sentence": "An offline planner that allocates repairable spare parts across sites using failure uncertainty, repair queues, transshipment, and service-criticality constraints.",
+      "concrete_problem": "Repairable components circulate between sites and depots, making static min-max rules expensive while still leaving critical assets waiting.",
+      "target_users": [
+        "maintenance planners",
+        "reliability engineering students",
+        "public infrastructure operators"
+      ],
+      "why_now": "Supply variability makes repairable-parts pooling valuable, while operational inventories are often too sensitive for external optimization services.",
+      "differentiator": "A closed-loop discrete-event model captures installed, failed, in-repair, in-transit, and spare states, then optimizes allocations against downtime rather than sales alone.",
+      "architecture": [
+        "multi-site part-state model",
+        "failure and repair simulator",
+        "transshipment policy engine",
+        "allocation optimizer",
+        "criticality and uncertainty report"
+      ],
+      "technically_hard_parts": [
+        "repairable inventory state",
+        "queue-dependent turnaround",
+        "rare failure estimation",
+        "multi-site allocation search"
+      ],
+      "local_first_mvp": "Allocate a generated fleet's spares across three sites and compare downtime with equal splitting. Milestones: 1) model part lifecycles; 2) simulate failures and repair queues; 3) evaluate transfer policies; 4) optimize allocations under a fixed budget.",
+      "stretch_goals": [
+        "common-cause failures",
+        "supplier disruption scenarios",
+        "robust budget frontiers"
+      ],
+      "demo_story": "Moving one spare away from the busiest site lowers total expected downtime because the repair depot, not local stock, is the true bottleneck.",
+      "test_strategy": "Deterministic seeded event simulations; population conservation invariants; exact small-state Markov comparison; repair deadlock, zero-stock, transfer delay, common-cause, and budget-infeasible failure tests.",
+      "data_and_api_constraints": "Data plan: generated fleets, part classes, and failure processes only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Criticality weights require accountable human policy and cannot be inferred from affected populations. Risk: Underestimated correlated failures can leave essential equipment unsupported. Failure mode: unstable simulation estimates must widen uncertainty. Non-goal: automatic procurement or rationing life-critical repairs.",
+      "estimated_build_days": 23,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 195
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "quality-drift-control-engine",
+      "name": "Quality Drift Control Engine",
+      "one_sentence": "A local statistical process-control engine that separates common-cause variation, measurement drift, and real process shifts across multistage production.",
+      "concrete_problem": "Fixed control limits create alert fatigue and can confuse a drifting measurement system with a changing manufacturing process.",
+      "target_users": [
+        "quality engineers",
+        "metrology teams",
+        "applied statistics students"
+      ],
+      "why_now": "Low-cost sensors produce more local quality data, but reliable drift detection still requires transparent assumptions and calibrated false-alarm control.",
+      "differentiator": "Hierarchical change-point models combine gauge checks, batch structure, and process signals, with abstention when measurement and process drift are not identifiable.",
+      "architecture": [
+        "versioned measurement stream",
+        "gauge error model",
+        "sequential change detector",
+        "multistage dependency model",
+        "alarm calibration and explainer"
+      ],
+      "technically_hard_parts": [
+        "online change-point inference",
+        "false discovery control",
+        "measurement-process identifiability",
+        "autocorrelated batch handling"
+      ],
+      "local_first_mvp": "Replay a generated production line with gauge drift and a later true mean shift, correctly separating the two. Milestones: 1) ingest deterministic streams; 2) calibrate baseline variation; 3) add gauge-aware sequential detection; 4) attribute and backtest alarms.",
+      "stretch_goals": [
+        "multivariate quality signals",
+        "adaptive sampling plans",
+        "causal stage localization"
+      ],
+      "demo_story": "The engine suppresses a false process alarm after a reference gauge check, then detects a genuine upstream shift with controlled delay.",
+      "test_strategy": "Deterministic seeded time series; null-run false-alarm calibration; known change-point recovery; missing gauge, autocorrelation, sensor reset, short baseline, and ambiguous-attribution failure tests.",
+      "data_and_api_constraints": "Data plan: generated nonpersonal measurements and calibration events only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Signals must assess processes and instruments, never rank individual workers. Risk: A missed shift can allow defects while a false alarm can prompt wasteful adjustments. Failure mode: unidentifiable causes must be labeled ambiguous. Non-goal: automated shutdown or personnel evaluation.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 196
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "reverse-logistics-network-planner",
+      "name": "Reverse Logistics Network Planner",
+      "one_sentence": "An offline network-flow planner for repair, refurbishment, parts harvesting, recycling, and disposal under capacity and uncertainty constraints.",
+      "concrete_problem": "Returned products take different recovery paths, and routing everything to the nearest site can overload inspection while destroying reusable value.",
+      "target_users": [
+        "circular economy planners",
+        "remanufacturing engineers",
+        "operations research students"
+      ],
+      "why_now": "Repairability and waste reduction goals create a need for transparent recovery-network decisions that do not depend on vendor platforms.",
+      "differentiator": "A scenario-based multi-commodity flow model tracks uncertain item condition, component yields, facility capacities, and material conservation across recovery stages.",
+      "architecture": [
+        "recovery network schema",
+        "condition and yield scenario generator",
+        "multi-commodity flow optimizer",
+        "capacity stress simulator",
+        "material balance auditor"
+      ],
+      "technically_hard_parts": [
+        "uncertain recovery yields",
+        "multi-stage material conservation",
+        "facility capacity coupling",
+        "scenario decomposition"
+      ],
+      "local_first_mvp": "Route a generated appliance return stream through inspection, repair, harvest, and recycling while preserving every mass balance. Milestones: 1) model facilities and recovery states; 2) implement deterministic flow optimization; 3) add yield scenarios; 4) stress and audit recommended plans.",
+      "stretch_goals": [
+        "facility location decisions",
+        "carbon uncertainty accounting",
+        "repair-parts feedback loops"
+      ],
+      "demo_story": "A plan shifts inspection capacity instead of sending more units to recycling, increasing recovered components without violating plant limits.",
+      "test_strategy": "Deterministic generated networks; exact small-flow oracle; mass, capacity, and state-transition invariants; impossible yield, closed facility, disconnected network, and infeasible demand failure tests.",
+      "data_and_api_constraints": "Data plan: generated product classes, facilities, and condition scenarios only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Environmental and labor impacts omitted by the model must remain visible. Risk: Bad yield assumptions can divert hazardous or reusable material incorrectly. Failure mode: conservation violations must invalidate a plan. Non-goal: tracking individual consumers or automating regulated waste decisions.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 197
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "warehouse-slotting-simulator",
+      "name": "Warehouse Slotting Simulator",
+      "one_sentence": "A privacy-preserving local simulator that assigns products to storage locations using travel, replenishment, congestion, compatibility, and change-cost models.",
+      "concrete_problem": "Fast-moving products placed only by popularity can create aisle congestion, unsafe incompatibilities, and excessive replenishment moves.",
+      "target_users": [
+        "warehouse systems students",
+        "inventory layout planners",
+        "operations engineering teams"
+      ],
+      "why_now": "Facilities need adaptable layout planning without turning worker movement into persistent surveillance data.",
+      "differentiator": "A synthetic order-wave simulator evaluates robust product-location assignments using aggregate flows, explicitly excluding individual worker tracking.",
+      "architecture": [
+        "warehouse topology model",
+        "aggregate order-wave generator",
+        "slot compatibility engine",
+        "assignment optimizer",
+        "congestion and replenishment simulator"
+      ],
+      "technically_hard_parts": [
+        "quadratic co-pick interactions",
+        "capacity and compatibility constraints",
+        "congestion feedback",
+        "low-disruption re-slotting"
+      ],
+      "local_first_mvp": "Slot a generated catalog in a small warehouse and compare travel, congestion, and move count with popularity ordering. Milestones: 1) model topology and slots; 2) generate aggregate waves; 3) optimize assignments; 4) simulate and explain robust re-slotting.",
+      "stretch_goals": [
+        "seasonal layouts",
+        "uncertain demand sets",
+        "multi-zone replenishment"
+      ],
+      "demo_story": "Moving a frequently co-picked pair apart slightly reduces raw distance but prevents a congestion hotspot and cuts total completion time.",
+      "test_strategy": "Deterministic seeded order waves; capacity, uniqueness, and incompatibility invariants; exact small assignment oracle; blocked aisle, demand shift, oversized item, and no-feasible-slot failure tests.",
+      "data_and_api_constraints": "Data plan: generated products, aggregate orders, and facility graphs only; no worker identities or traces. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The simulator must not ingest or infer individual productivity, routes, or biometric data. Risk: Simplified congestion assumptions can recommend unsafe layouts. Failure mode: safety incompatibilities are hard constraints and must never be traded for speed. Non-goal: employee monitoring or autonomous equipment control.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 198
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "cold-chain-excursion-reconciler",
+      "name": "Cold-Chain Excursion Reconciler",
+      "one_sentence": "A local event-reconciliation engine that reconstructs temperature exposure from disagreeing sensors, custody gaps, and uncertain clocks without deciding product safety.",
+      "concrete_problem": "Shipment sensors can disagree or drift in time, making it difficult to determine the duration and uncertainty of temperature excursions.",
+      "target_users": [
+        "cold-chain quality teams",
+        "sensor systems engineers",
+        "supply chain analytics students"
+      ],
+      "why_now": "More shipments carry inexpensive loggers, but uploading sensitive route and product data is unnecessary for evidence reconciliation.",
+      "differentiator": "A factor-graph timeline aligns clocks, custody events, and redundant sensors, then outputs exposure intervals with uncertainty and source provenance rather than a binary disposition.",
+      "architecture": [
+        "signed event and sensor importer",
+        "clock alignment graph",
+        "sensor reliability estimator",
+        "exposure interval integrator",
+        "provenance and uncertainty report"
+      ],
+      "technically_hard_parts": [
+        "clock offset and drift estimation",
+        "robust sensor fusion",
+        "missing interval bounds",
+        "custody-event consistency"
+      ],
+      "local_first_mvp": "Reconcile a generated shipment with two drifting loggers and a custody gap, recovering bounded excursion duration. Milestones: 1) validate event provenance; 2) estimate clock models; 3) fuse readings robustly; 4) integrate and report exposure intervals.",
+      "stretch_goals": [
+        "thermal inertia models",
+        "tamper-evident logger manifests",
+        "multi-package correlation"
+      ],
+      "demo_story": "The reconciler shows that an apparent 40-minute excursion could only have lasted 12 to 18 minutes after clock alignment, while leaving disposition to a qualified reviewer.",
+      "test_strategy": "Deterministic synthetic sensor and custody traces; known offset recovery; interval containment properties; sensor freeze, clock reset, signature mismatch, long gap, and irreconcilable-source failure tests.",
+      "data_and_api_constraints": "Data plan: generated routes, products, custody events, and sensor streams only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "The tool must not determine food, medicine, or product safety. Risk: Overconfident fusion could understate harmful exposure. Failure mode: irreconcilable evidence must widen bounds or abstain. Non-goal: tracking people, live shipment surveillance, or automated release decisions.",
+      "estimated_build_days": 22,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 9,
+      "portfolio_signal_score": 9,
+      "weighted_score": 9,
+      "build_wave_1": false,
+      "rank": 199
+    },
+    {
+      "domain": "operations research/manufacturing systems",
+      "repo_slug": "production-energy-load-shaper",
+      "name": "Production Energy Load Shaper",
+      "one_sentence": "An offline scheduler that shifts flexible production loads around demand peaks while preserving process precedence, thermal state, deadlines, and restart costs.",
+      "concrete_problem": "Factories face high peak demand and carbon-intensive periods, but pausing equipment blindly can violate process windows or increase total energy through restarts.",
+      "target_users": [
+        "industrial energy managers",
+        "production planning engineers",
+        "optimization students"
+      ],
+      "why_now": "Interval meters and variable grid conditions make coordinated production-energy planning practical without sending plant schedules to a third party.",
+      "differentiator": "A stateful mixed-integer model captures machine warm-up, thermal carryover, minimum runs, and production commitments, then verifies schedules in a discrete-event energy model.",
+      "architecture": [
+        "process and energy model",
+        "time-indexed constraint builder",
+        "load-shaping optimizer",
+        "stateful plant simulator",
+        "peak and schedule auditor"
+      ],
+      "technically_hard_parts": [
+        "coupled process-energy constraints",
+        "machine state transitions",
+        "peak demand linearization",
+        "schedule robustness"
+      ],
+      "local_first_mvp": "Schedule a generated batch plant against a synthetic tariff and emissions trace, reducing peak load without missing orders. Milestones: 1) model process and machine states; 2) simulate a baseline; 3) optimize flexible loads; 4) verify deadlines, state transitions, and energy totals.",
+      "stretch_goals": [
+        "on-site storage and generation",
+        "uncertain processing times",
+        "rolling-horizon replanning"
+      ],
+      "demo_story": "The optimizer delays a flexible wash cycle but keeps an oven warm, avoiding a restart spike and cutting the monthly peak.",
+      "test_strategy": "Deterministic synthetic plant fixtures; energy and production conservation invariants; exact small-horizon oracle; outage, tariff gap, thermal-limit, infeasible deadline, and solver-timeout failure tests.",
+      "data_and_api_constraints": "Data plan: generated plant states, orders, tariffs, and grid-intensity traces only. Dependency policy: use standard-library or permissively licensed, lockfile-pinned packages; the runtime must work offline; no paid APIs or credentials.",
+      "misuse_or_safety_notes": "Safety and product-quality limits must be immutable hard constraints supplied by qualified users. Risk: An incomplete thermal or restart model can damage equipment or product. Failure mode: missing constraints or infeasibility must block schedule export. Non-goal: direct equipment control, real-time grid trading, or weakening safety interlocks.",
+      "estimated_build_days": 24,
+      "usefulness_score": 9,
+      "technical_depth_score": 9,
+      "feasibility_score": 8,
+      "portfolio_signal_score": 9,
+      "weighted_score": 8.8,
+      "build_wave_1": false,
+      "rank": 200
     }
   ]
 }
